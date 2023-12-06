@@ -16,9 +16,8 @@ class PrepareData:
         self.model = None
         self.data_path = args.data_path
         self.label_type = args.label_type
-        self.original_order = ['Fp1', 'AF3', 'F3', 'F7', 'FC5', 'FC1', 'C3', 'T7', 'CP5', 'CP1', 'P3', 'P7', 'PO3',
-                               'O1', 'Oz', 'Pz', 'Fp2', 'AF4', 'Fz', 'F4', 'F8', 'FC6', 'FC2', 'Cz', 'C4', 'T8', 'CP6',
-                               'CP2', 'P4', 'P8', 'PO4', 'O2']
+        self.original_order = ['Fp1', 'Fp2', 'AF3', 'AF4', 'Fz', 'F3', 'F4', 'F7', 'F8', 'FC1', 'FC2', 'FC5', 'FC6', 'Cz', 'C3', 'C4', 'T7', 'T8',
+                               'CP1', 'CP2', 'CP5', 'CP6', 'Pz', 'P3', 'P4', 'P7', 'P8', 'PO3', 'PO4', 'Oz', 'O1', 'O2']
         self.graph_fro_DEAP = [['Fp1', 'AF3'], ['Fp2', 'AF4'], ['F3', 'F7'], ['F4', 'F8'],
                                ['Fz'],
                                ['FC5', 'FC1'], ['FC6', 'FC2'], ['C3', 'Cz', 'C4'], ['CP5', 'CP1', 'CP2', 'CP6'],
@@ -79,15 +78,12 @@ class PrepareData:
         data: (40, 32, 7680) label: (40, 4)
         """
         sub += 1
-        if (sub < 10):
-            sub_code = str('s0' + str(sub) + '.dat')
-        else:
-            sub_code = str('s' + str(sub) + '.dat')
+        sub_code = str('sample_' + str(sub) + '.dat')
 
         subject_path = os.path.join(self.data_path, sub_code)
         subject = cPickle.load(open(subject_path, 'rb'), encoding='latin1')
         label = subject['labels']
-        data = subject['data'][:, 0:32, 3 * 128:]  # Excluding the first 3s of baseline
+        data = subject['data'][:, 0:32, :]  # Excluding the first 3s of baseline
         #   data: 40 x 32 x 7680
         #   label: 40 x 4
         # reorder the EEG channel to build the local-global graphs

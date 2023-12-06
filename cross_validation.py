@@ -158,14 +158,15 @@ class CrossValidation:
 
         return train, train_label, val, val_label
 
-
-    def n_fold_CV(self, subject=[0], fold=10, shuffle=True):
+    def n_fold_CV(self, subject=None, fold=4, shuffle=True):
         """
         this function achieves n-fold cross-validation
         :param subject: how many subject to load
         :param fold: how many fold
         """
         # Train and evaluate the model subject by subject
+        if subject is None:
+            subject = [0]
         tta = []  # total test accuracy
         tva = []  # total validation accuracy
         ttf = []  # total test f1
@@ -230,9 +231,8 @@ class CrossValidation:
         print('Final: val mean ACC:{} std:{}'.format(mACC_val, std_val))
         print('Final: val mean F1:{}'.format(mF1_val))
         results = 'test mAcc={} mF1={} val mAcc={} val F1={}'.format(mACC,
-        mF1, mACC_val, mF1_val)
+                                                                     mF1, mACC_val, mF1_val)
         self.log2txt(results)
-
 
     def first_stage(self, data, label, subject, fold):
         """
@@ -289,4 +289,3 @@ class CrossValidation:
         file = open(self.text_file, 'a')
         file.write(str(content) + '\n')
         file.close()
-
