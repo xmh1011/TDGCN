@@ -7,7 +7,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     ######## Data ########
     parser.add_argument('--dataset', type=str, default='DEAP')
-    parser.add_argument('--data-path', type=str, default='/Users/xiaominghao/code/EEG-Music/deap_format/')
+    parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg/')
     parser.add_argument('--subjects', type=int, default=19)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='L', choices=['A', 'V', 'D', 'L'])
@@ -33,14 +33,14 @@ if __name__ == '__main__':
     parser.add_argument('--save-path', default='./save/')
     parser.add_argument('--load-path', default='./save/max-acc.pth')
     parser.add_argument('--load-path-final', default='./save/final_model.pth')
-    parser.add_argument('--gpu', default='0')
+    parser.add_argument('--gpu', default='2')
     parser.add_argument('--save-model', type=bool, default=True)
     ######## Model Parameters ########
     parser.add_argument('--model', type=str, default='LGGNet')
     parser.add_argument('--pool', type=int, default=16)
     parser.add_argument('--pool-step-rate', type=float, default=0.25)
     parser.add_argument('--T', type=int, default=64)
-    parser.add_argument('--graph-type', type=str, default='hem', choices=['fro', 'gen', 'hem', 'BL'])
+    parser.add_argument('--graph-type', type=str, default='gen', choices=['fro', 'gen', 'hem', 'BL'])
     parser.add_argument('--hidden', type=int, default=32)
 
     ######## Reproduce the result using the saved model ######

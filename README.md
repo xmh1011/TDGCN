@@ -49,7 +49,7 @@ pip3 install -r requirements.txt
 Please download the DEAP dataset at [this website](http://www.eecs.qmul.ac.uk/mmv/datasets/deap/). Please place the "data_preprocessed_python" folder in the same location as the script. To run the code for the emotion (valence) classification, please type the following command in the terminal:
 
 ```shell
-python3 main-DEAP.py --data-path '/Users/xiaominghao/code/EEG-Music/deap_format/' --label-type 'V' --graph-type 'gen'
+python3 main-DEAP.py --data-path '/Users/xiaominghao/code/EEG-Music/eeg/' --label-type 'V' --graph-type 'gen'
 ```
 
 To run the code for preference (liking) classification, please type the following command in the terminal:
