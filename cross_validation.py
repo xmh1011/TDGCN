@@ -5,7 +5,7 @@ from train_model import *
 from utils import Averager, ensure_path
 
 ROOT = os.getcwd()
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
 
 class CrossValidation:

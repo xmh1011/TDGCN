@@ -1,11 +1,12 @@
 import math
 import os
 import torch
+import config
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 from torch.nn.modules.module import Module
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
 
 class GraphConvolution(Module):

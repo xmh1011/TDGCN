@@ -1,11 +1,12 @@
 # This is the networks script
+import os
 import torch
+import config
 import torch.nn as nn
 import torch.nn.functional as F
 from layers import GraphConvolution
-import os
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 

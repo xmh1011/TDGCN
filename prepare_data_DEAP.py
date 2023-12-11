@@ -1,9 +1,7 @@
-# This is the processing script of DEAP dataset
-
 import _pickle as cPickle
 from train_model import *
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
 
 class PrepareData:
