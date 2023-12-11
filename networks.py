@@ -1,9 +1,9 @@
 # This is the networks script
 import torch
-import math
 import torch.nn as nn
 import torch.nn.functional as F
 from layers import GraphConvolution
+
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 

@@ -74,10 +74,10 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
 
 
     def save_model(name):
-        previous_model = osp.join(args.save_path, '{}.pth'.format(name))
+        previous_model = os.path.join(args.save_path, '{}.pth'.format(name))
         if os.path.exists(previous_model):
             os.remove(previous_model)
-        torch.save(model.state_dict(), osp.join(args.save_path, '{}.pth'.format(name)))
+        torch.save(model.state_dict(), os.path.join(args.save_path, '{}.pth'.format(name)))
 
     trlog = {}
     trlog['args'] = vars(args)
@@ -129,9 +129,9 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
     # save the training log file
     save_name = 'trlog' + save_name
     experiment_setting = 'T_{}_pool_{}'.format(args.T, args.pool)
-    save_path = osp.join(args.save_path, experiment_setting, 'log_train')
+    save_path = os.path.join(args.save_path, experiment_setting, 'log_train')
     ensure_path(save_path)
-    torch.save(trlog, osp.join(save_path, save_name))
+    torch.save(trlog, os.path.join(save_path, save_name))
 
     return trlog['max_acc'], trlog['F1']
 
@@ -150,7 +150,7 @@ def test(args, data, label, reproduce, subject, fold):
         model_name_reproduce = 'sub' + str(subject) + '_fold' + str(fold) + '.pth'
         data_type = 'model_{}_{}'.format(args.data_format, args.label_type)
         experiment_setting = 'T_{}_pool_{}'.format(args.T, args.pool)
-        load_path_final = osp.join(args.save_path, experiment_setting, data_type, model_name_reproduce)
+        load_path_final = os.path.join(args.save_path, experiment_setting, data_type, model_name_reproduce)
         model.load_state_dict(torch.load(load_path_final))
     else:
         model.load_state_dict(torch.load(args.load_path_final))
@@ -180,10 +180,10 @@ def combine_train(args, data, label, subject, fold, target_acc):
         loss_fn = nn.CrossEntropyLoss()
 
     def save_model(name):
-        previous_model = osp.join(args.save_path, '{}.pth'.format(name))
+        previous_model = os.path.join(args.save_path, '{}.pth'.format(name))
         if os.path.exists(previous_model):
             os.remove(previous_model)
-        torch.save(model.state_dict(), osp.join(args.save_path, '{}.pth'.format(name)))
+        torch.save(model.state_dict(), os.path.join(args.save_path, '{}.pth'.format(name)))
 
     trlog = {}
     trlog['args'] = vars(args)
@@ -210,9 +210,9 @@ def combine_train(args, data, label, subject, fold, target_acc):
             model_name_reproduce = 'sub' + str(subject) + '_fold' + str(fold) + '.pth'
             data_type = 'model_{}_{}'.format(args.data_format, args.label_type)
             experiment_setting = 'T_{}_pool_{}'.format(args.T, args.pool)
-            save_path = osp.join(args.save_path, experiment_setting, data_type)
+            save_path = os.path.join(args.save_path, experiment_setting, data_type)
             ensure_path(save_path)
-            model_name_reproduce = osp.join(save_path, model_name_reproduce)
+            model_name_reproduce = os.path.join(save_path, model_name_reproduce)
             torch.save(model.state_dict(), model_name_reproduce)
             break
 
@@ -224,6 +224,6 @@ def combine_train(args, data, label, subject, fold, target_acc):
 
     save_name = 'trlog_comb' + save_name
     experiment_setting = 'T_{}_pool_{}'.format(args.T, args.pool)
-    save_path = osp.join(args.save_path, experiment_setting, 'log_train_cmb')
+    save_path = os.path.join(args.save_path, experiment_setting, 'log_train_cmb')
     ensure_path(save_path)
-    torch.save(trlog, osp.join(save_path, save_name))
+    torch.save(trlog, os.path.join(save_path, save_name))

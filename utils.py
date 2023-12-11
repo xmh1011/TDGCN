@@ -1,13 +1,11 @@
 import os
-import time
-import h5py
-import numpy as np
 import pprint
 import random
-from networks import *
-from eeg_dataset import *
-from torch.utils.data import DataLoader
+import time
 from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
+from torch.utils.data import DataLoader
+from eeg_dataset import *
+from networks import *
 
 
 def set_gpu(x):
@@ -67,7 +65,10 @@ class Timer():
             return '{}m'.format(round(x / 60))
         return '{}s'.format(x)
 
+
 _utils_pp = pprint.PrettyPrinter()
+
+
 def pprint(x):
     _utils_pp.pprint(x)
 
@@ -79,7 +80,7 @@ def get_model(args):
         input_size = (args.input_shape[0], channels, args.input_shape[2])
         model = LGGNet(
             num_classes=args.num_class, input_size=input_size,
-            sampling_rate=int(args.sampling_rate*args.scale_coefficient),
+            sampling_rate=int(args.sampling_rate * args.scale_coefficient),
             num_T=args.T, out_graph=args.hidden,
             dropout_rate=args.dropout,
             pool=args.pool, pool_step_rate=args.pool_step_rate,
@@ -126,6 +127,7 @@ class LabelSmoothing(nn.Module):
     """NLL loss with label smoothing.
        refer to: https://github.com/NVIDIA/DeepLearningExamples/blob/8d8b21a933fff3defb692e0527fca15532da5dc6/PyTorch/Classification/ConvNets/image_classification/smoothing.py#L18
     """
+
     def __init__(self, smoothing=0.0):
         """Constructor for the LabelSmoothing module.
         :param smoothing: label smoothing factor
@@ -141,9 +143,3 @@ class LabelSmoothing(nn.Module):
         smooth_loss = -logprobs.mean(dim=-1)
         loss = self.confidence * nll_loss + self.smoothing * smooth_loss
         return loss.mean()
-
-
-
-
-
-

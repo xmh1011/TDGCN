@@ -1,14 +1,8 @@
-import numpy as np
-import datetime
-import os
-import csv
-import h5py
 import copy
-import os.path as osp
+import datetime
+from sklearn.model_selection import KFold
 from train_model import *
 from utils import Averager, ensure_path
-from sklearn.model_selection import KFold
-import pickle
 
 ROOT = os.getcwd()
 
@@ -20,9 +14,9 @@ class CrossValidation:
         self.label = None
         self.model = None
         # Log the results per subject
-        result_path = osp.join(args.save_path, 'result')
+        result_path = os.path.join(args.save_path, 'result')
         ensure_path(result_path)
-        self.text_file = osp.join(result_path,
+        self.text_file = os.path.join(result_path,
                                   "results_{}.txt".format(args.dataset))
         file = open(self.text_file, 'a')
         file.write("\n" + str(datetime.datetime.now()) +
@@ -50,7 +44,7 @@ class CrossValidation:
         save_path = os.getcwd()
         data_type = 'data_{}_{}_{}'.format(self.args.data_format, self.args.dataset, self.args.label_type)
         sub_code = 'sub' + str(sub) + '.hdf'
-        path = osp.join(save_path, data_type, sub_code)
+        path = os.path.join(save_path, data_type, sub_code)
         dataset = h5py.File(path, 'r')
         data = np.array(dataset['data'])
         label = np.array(dataset['label'])
@@ -270,8 +264,8 @@ class CrossValidation:
             if acc_val >= maxAcc:
                 maxAcc = acc_val
                 # choose the model with higher val acc as the model to second stage
-                old_name = osp.join(self.args.save_path, 'candidate.pth')
-                new_name = osp.join(self.args.save_path, 'max-acc.pth')
+                old_name = os.path.join(self.args.save_path, 'candidate.pth')
+                new_name = os.path.join(self.args.save_path, 'max-acc.pth')
                 if os.path.exists(new_name):
                     os.remove(new_name)
                 os.rename(old_name, new_name)

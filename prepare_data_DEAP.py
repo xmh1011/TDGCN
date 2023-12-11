@@ -1,9 +1,9 @@
 # This is the processing script of DEAP dataset
 
 import _pickle as cPickle
-
+import h5py
+import numpy as np
 from train_model import *
-from scipy import signal
 
 
 class PrepareData:
@@ -169,13 +169,13 @@ class PrepareData:
         """
         save_path = os.getcwd()
         data_type = 'data_{}_{}_{}'.format(self.args.data_format, self.args.dataset, self.args.label_type)
-        save_path = osp.join(save_path, data_type)
+        save_path = os.path.join(save_path, data_type)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
         else:
             pass
         name = 'sub' + str(sub) + '.hdf'
-        save_path = osp.join(save_path, name)
+        save_path = os.path.join(save_path, name)
         dataset = h5py.File(save_path, 'w')
         dataset['data'] = data
         dataset['label'] = label

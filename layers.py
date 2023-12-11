@@ -31,5 +31,3 @@ class GraphConvolution(Module):
         output = torch.matmul(x, self.weight)-self.bias
         output = F.relu(torch.matmul(adj, output))
         return output
-
-    

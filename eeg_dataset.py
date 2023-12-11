@@ -1,10 +1,3 @@
-# tested 8/9/2020
-import os.path as osp
-import scipy.io as sio
-import numpy as np
-import torch
-import h5py
-
 from torch.utils.data import Dataset
 
 
