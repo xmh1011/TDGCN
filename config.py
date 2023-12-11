@@ -42,7 +42,7 @@ def set_config():
     parser.add_argument('--hidden', type=int, default=32)
 
     # Reproduce the result using the saved model
-    parser.add_argument('--reproduce', type=bool, action='store_true', default=False)
+    parser.add_argument('--reproduce', action='store_true')
 
     args = parser.parse_args()
     gpu = args.gpu
