@@ -18,7 +18,7 @@ class CrossValidation:
         result_path = os.path.join(args.save_path, 'result')
         ensure_path(result_path)
         self.text_file = os.path.join(result_path,
-                                  "results_{}.txt".format(args.dataset))
+                                      "results_{}.txt".format(args.dataset))
         file = open(self.text_file, 'a')
         file.write("\n" + str(datetime.datetime.now()) +
                    "\nTrain:Parameter setting for " + str(args.model) + ' on ' + str(args.dataset) +
@@ -133,7 +133,7 @@ class CrossValidation:
         # for class 1
         index_random_1 = copy.deepcopy(index_1)
 
-        if random == True:
+        if random:
             np.random.shuffle(index_random_0)
             np.random.shuffle(index_random_1)
 
