@@ -1,11 +1,15 @@
-import os
 import pprint
 import random
 import time
+import h5py
+import numpy as np
 from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from torch.utils.data import DataLoader
+
 from eeg_dataset import *
 from networks import *
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 
 def set_gpu(x):

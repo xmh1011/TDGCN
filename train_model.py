@@ -1,8 +1,10 @@
 
 from utils import *
 import torch.nn as nn
+import os
 
 CUDA = torch.cuda.is_available()
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 
 def train_one_epoch(data_loader, net, loss_fn, optimizer):

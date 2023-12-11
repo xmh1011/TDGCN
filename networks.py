@@ -3,7 +3,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from layers import GraphConvolution
+import os
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 

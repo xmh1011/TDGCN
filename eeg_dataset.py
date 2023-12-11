@@ -1,4 +1,7 @@
+import os
 from torch.utils.data import Dataset
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 
 class eegDataset(Dataset):
