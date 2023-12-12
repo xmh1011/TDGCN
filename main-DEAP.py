@@ -1,4 +1,3 @@
-import config
 from cross_validation import *
 from prepare_data_DEAP import *
 

@@ -1,5 +1,6 @@
 import _pickle as cPickle
 from train_model import *
+from scipy.signal import resample
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
@@ -54,6 +55,12 @@ class PrepareData:
             if expand:
                 # expand one dimension for deep learning(CNNs)
                 data_ = np.expand_dims(data_, axis=-3)
+
+            if self.args.sampling_rate != self.args.target_rate:
+                data_, label_ = self.downsample_data(
+                    data=data_, label=label_, sampling_rate=self.args.sampling_rate,
+                    target_rate=self.args.target_rate)
+                self.args.sampling_rate = self.args.target_rate
 
             if split:
                 data_, label_ = self.split(
@@ -210,3 +217,21 @@ class PrepareData:
         data = data_split_array
         assert len(data) == len(label)
         return data, label
+
+    def downsample_data(self, data, label, sampling_rate, target_rate):
+        """
+        This function downsample the data to target length
+        Parameters
+        ----------
+        data: (trial, channel, data)
+        label: (trial,)
+        sampling_rate: original sampling rate
+        target_rate: target sampling rate
+        Returns
+        -------
+        downsampled data: (trial, channel, target_length)
+        label: (trial,)
+        """
+        target_length = int(data.shape[-1] * target_rate / sampling_rate)
+        downsampled_data = resample(data, target_length, axis=-1)
+        return downsampled_data, label

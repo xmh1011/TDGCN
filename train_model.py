@@ -71,7 +71,6 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
     else:
         loss_fn = nn.CrossEntropyLoss()
 
-
     def save_model(name):
         previous_model = os.path.join(args.save_path, '{}.pth'.format(name))
         if os.path.exists(previous_model):
@@ -124,7 +123,7 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
         trlog['val_acc'].append(acc_val)
 
         print('ETA:{}/{} SUB:{} FOLD:{}'.format(timer.measure(), timer.measure(epoch / args.max_epoch),
-                                                 subject, fold))
+                                                subject, fold))
     # save the training log file
     save_name = 'trlog' + save_name
     experiment_setting = 'T_{}_pool_{}'.format(args.T, args.pool)
@@ -171,7 +170,7 @@ def combine_train(args, data, label, subject, fold, target_acc):
         model = model.cuda()
     model.load_state_dict(torch.load(args.load_path))
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate*1e-1)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate * 1e-1)
 
     if args.LS:
         loss_fn = LabelSmoothing(args.LS_rate)

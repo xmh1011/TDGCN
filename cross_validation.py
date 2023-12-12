@@ -39,8 +39,8 @@ class CrossValidation:
     def load_per_subject(self, sub):
         """
         load data for sub
-        :param sub: which subject's data to load
-        :return: data and label
+        param sub: which subject's data to load
+        return: data and label
         """
         save_path = os.getcwd()
         data_type = 'data_{}_{}_{}'.format(self.args.data_format, self.args.dataset, self.args.label_type)
@@ -56,11 +56,11 @@ class CrossValidation:
         """
         1. get training and testing data according to the index
         2. numpy.array-->torch.tensor
-        :param idx_train: index of training data
-        :param idx_test: index of testing data
-        :param data: (segments, 1, channel, data)
-        :param label: (segments,)
-        :return: data and label
+        param idx_train: index of training data
+        param idx_test: index of testing data
+        param data: (segments, 1, channel, data)
+        param label: (segments,)
+        return: data and label
         """
         data_train = data[idx_train]
         label_train = label[idx_train]
@@ -112,11 +112,11 @@ class CrossValidation:
     def split_balance_class(self, data, label, train_rate, random):
         """
         Get the validation set using the same percentage of the two classe samples
-        :param data: training data (segment, 1, channel, data)
-        :param label: (segments,)
-        :param train_rate: the percentage of trianing data
-        :param random: bool, whether to shuffle the training data before get the validation data
-        :return: data_trian, label_train, and data_val, label_val
+        param data: training data (segment, 1, channel, data)
+        param label: (segments,)
+        param train_rate: the percentage of trianing data
+        param random: bool, whether to shuffle the training data before get the validation data
+        return: data_trian, label_train, and data_val, label_val
         """
         # Data dimension: segment x 1 x channel x data
         # Label dimension: segment x 1
@@ -156,8 +156,8 @@ class CrossValidation:
     def n_fold_CV(self, subject=None, fold=4, shuffle=True):
         """
         this function achieves n-fold cross-validation
-        :param subject: how many subject to load
-        :param fold: how many fold
+        param subject: how many subjects to load
+        param fold: how many fold.
         """
         # Train and evaluate the model subject by subject
         if subject is None:
@@ -234,11 +234,11 @@ class CrossValidation:
         this function achieves n-fold-CV to:
             1. select hyper-parameters on training data
             2. get the model for evaluation on testing data
-        :param data: (segments, 1, channel, data)
-        :param label: (segments,)
-        :param subject: which subject the data belongs to
-        :param fold: which fold the data belongs to
-        :return: mean validation accuracy
+        param data: (segments, 1, channel, data)
+        param label: (segments,)
+        param subject: which subject the data belongs to
+        param fold: which fold the data belongs to
+        return: mean validation accuracy
         """
         # use n-fold-CV to select hyper-parameters on training data
         # save the best performance model and the corresponding acc for the second stage
@@ -278,8 +278,8 @@ class CrossValidation:
 
     def log2txt(self, content):
         """
-        this function log the content to results.txt
-        :param content: string, the content to log
+        This function log the content to results.txt
+        param content: string, the content to log.
         """
         file = open(self.text_file, 'a')
         file.write(str(content) + '\n')

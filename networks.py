@@ -11,9 +11,9 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class PowerLayer(nn.Module):
-    '''
+    """
     The power layer: calculates the log-transformed power of the data
-    '''
+    """
     def __init__(self, dim, length, step):
         super(PowerLayer, self).__init__()
         self.dim = dim
@@ -40,8 +40,9 @@ class LGGNet(nn.Module):
         self.channel = input_size[1]
         self.brain_area = len(self.idx)
 
-        # by setting the convolutional kernel being (1,lenght) and the strids being 1 we can use conv2d to
-        # achieve the 1d convolution operation
+        # by setting the convolutional kernel being (1,lenght) and the strids being 1, we can use conv2d to
+        # achieve the 1d convolution operation.
+        # TODO
         self.Tception1 = self.temporal_learner(input_size[0], num_T,
                                                (1, int(self.window[0] * sampling_rate)),
                                                self.pool, pool_step_rate)
@@ -57,7 +58,7 @@ class LGGNet(nn.Module):
             nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
             nn.LeakyReLU(),
             nn.AvgPool2d((1, 2)))
-        # diag(W) to assign a weight to each local areas
+        # diag(W) to assign a weight to each local area
         size = self.get_size_temporal(input_size)
         self.local_filter_weight = nn.Parameter(torch.FloatTensor(self.channel, size[-1]),
                                                 requires_grad=True)
