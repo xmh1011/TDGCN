@@ -53,7 +53,8 @@ class LGGNet(nn.Module):
                                                (1, int(self.window[2] * sampling_rate)),
                                                self.pool, pool_step_rate)
         self.BN_t = nn.BatchNorm2d(num_T)
-        self.BN_t_ = nn.BatchNorm2d(num_T)
+        self.BN_s = nn.BatchNorm2d(num_T)
+        self.BN_fusion = nn.BatchNorm2d(num_T)
         self.OneXOneConv = nn.Sequential(
             nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
             nn.LeakyReLU(),
@@ -91,7 +92,7 @@ class LGGNet(nn.Module):
         out = torch.cat((out, y), dim=-1)
         out = self.BN_t(out)
         out = self.OneXOneConv(out)
-        out = self.BN_t_(out)
+        out = self.BN_s(out)
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
         out = self.local_filter_fun(out, self.local_filter_weight)
@@ -115,7 +116,7 @@ class LGGNet(nn.Module):
         out = torch.cat((out, z), dim=-1)
         out = self.BN_t(out)
         out = self.OneXOneConv(out)
-        out = self.BN_t_(out)
+        out = self.BN_s(out)
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
         size = out.size()

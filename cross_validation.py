@@ -68,18 +68,17 @@ class CrossValidation:
         data_test = data[idx_test]
         label_test = label[idx_test]
 
-        if self.args.dataset == 'Att' or self.args.dataset == 'DEAP':
-            # For DEAP we want to do trial-wise 10-fold, so the idx_train/idx_test is for trials.
-            # data: (trial, segment, 1, chan, datapoint)
-            # To use the normalization function, we should change the dimension from
-            # (trial, segment, 1, chan, datapoint) to (trial*segments, 1, chan, datapoint)
-            data_train = np.concatenate(data_train, axis=0)
-            label_train = np.concatenate(label_train, axis=0)
-            if len(data_test.shape) > 4:
-                # When leave one trial out is conducted, the test data will be (segments, 1, chan, datapoint),
-                # hence, no need to concatenate the first dimension to get trial*segments.
-                data_test = np.concatenate(data_test, axis=0)
-                label_test = np.concatenate(label_test, axis=0)
+        # For DEAP we want to do trial-wise 10-fold, so the idx_train/idx_test is for trials.
+        # data: (trial, segment, 1, chan, datapoint)
+        # To use the normalization function, we should change the dimension from
+        # (trial, segment, 1, chan, datapoint) to (trial*segments, 1, chan, datapoint)
+        data_train = np.concatenate(data_train, axis=0)
+        label_train = np.concatenate(label_train, axis=0)
+        if len(data_test.shape) > 4:
+            # When leave one trial out is conducted, the test data will be (segments, 1, chan, datapoint),
+            # hence, no need to concatenate the first dimension to get trial*segments.
+            data_test = np.concatenate(data_test, axis=0)
+            label_test = np.concatenate(label_test, axis=0)
 
         data_train, data_test = self.normalize(train=data_train, test=data_test)
         # Prepare the data format for training the model using PyTorch
@@ -149,15 +148,13 @@ class CrossValidation:
 
         return train, train_label, val, val_label
 
-    def n_fold_CV(self, subject=None, fold=4, shuffle=True):
+    def n_fold_CV(self, subject=None, fold=4, shuffle=True, reproduce=False):
         """
         this function achieves n-fold cross-validation
         param subject: how many subjects to load
         param fold: how many fold.
         """
         # Train and evaluate the model subject by subject
-        if subject is None:
-            subject = [0]
         tta = []  # total test accuracy
         tva = []  # total validation accuracy
         ttf = []  # total test f1
@@ -174,22 +171,15 @@ class CrossValidation:
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
 
-                data_train, label_train, data_val, label_val = self.split_balance_class(
-                    data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
-                )
-
-                if self.args.reproduce:
+                if reproduce:
                     # to reproduce the reported ACC
                     acc_test, pred, act = test(args=self.args, data=data_test, label=label_test,
-                                               reproduce=self.args.reproduce,
+                                               reproduce=reproduce,
                                                subject=sub, fold=idx_fold)
                     acc_val = 0
                     f1_val = 0
                 else:
                     # to train new models
-                    print('Training:', data_train.size(), label_train.size())
-                    print('Validation:', data_val.size(), label_val.size())
-                    print('Test:', data_test.size(), label_test.size())
                     acc_val, f1_val = self.first_stage(data=data_train, label=label_train,
                                                        subject=sub, fold=idx_fold)
 
@@ -198,7 +188,7 @@ class CrossValidation:
                                   subject=sub, fold=idx_fold, target_acc=1)
 
                     acc_test, pred, act = test(args=self.args, data=data_test, label=label_test,
-                                               reproduce=self.args.reproduce,
+                                               reproduce=reproduce,
                                                subject=sub, fold=idx_fold)
                 va_val.add(acc_val)
                 vf_val.add(f1_val)
@@ -251,10 +241,15 @@ class CrossValidation:
         vf = Averager()
         va_item = []
         maxAcc = 0.0
-        for i, (idx_train, idx_val) in enumerate(kf.split(data)):
+        for i, (idx_train, idx_test) in enumerate(kf.split(data)):
             print('Inner 3-fold-CV Fold:{}'.format(i))
             data_train, label_train = data[idx_train], label[idx_train]
-            data_val, label_val = data[idx_val], label[idx_val]
+
+            data_train, label_train, data_val, label_val = self.split_balance_class(
+                data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
+            )
+            print('Training:', data_train.size(), label_train.size())
+            print('Validation:', data_val.size(), label_val.size())
             acc_val, F1_val = train(args=self.args,
                                     data_train=data_train,
                                     label_train=label_train,
@@ -287,3 +282,29 @@ class CrossValidation:
         file = open(self.text_file, 'a')
         file.write(str(content) + '\n')
         file.close()
+
+    def trial_wise_voting(self, act, pred, num_segment_per_trial, trial_in_fold):
+        """
+        this function does voting within each tiral to get the label of entire trial
+        param act: [num_sample] list
+        param pred: [num_sample] list
+        param num_segment_per_trial: how many samples per trial
+        param trial_in_fold: how many trials in this fold
+        return: trial-wise actual label and predicted label.
+        """
+        num_trial = int(len(act)/num_segment_per_trial)
+        assert num_trial == trial_in_fold
+        act_trial = np.reshape(act, (num_trial, num_segment_per_trial))
+        pred_trial = np.reshape(pred, (num_trial, num_segment_per_trial))
+
+        act_trial = np.mean(act_trial, axis=-1).tolist()
+        pred_vote = []
+        for trial in pred_trial:
+            index_0 = np.where(trial == 0)[0]
+            index_1 = np.where(trial == 1)[0]
+            if len(index_1) >= len(index_0):
+                label = 1
+            else:
+                label = 0
+            pred_vote.append(label)
+        return act_trial, pred_vote
