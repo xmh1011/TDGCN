@@ -25,15 +25,16 @@ class CrossValidation:
                    "\n1)number_class:" + str(args.num_class) +
                    "\n2)random_seed:" + str(args.random_seed) +
                    "\n3)learning_rate:" + str(args.learning_rate) +
-                   "\n4)pool:" + str(args.pool) +
-                   "\n5)num_epochs:" + str(args.max_epoch) +
-                   "\n6)batch_size:" + str(args.batch_size) +
-                   "\n7)dropout:" + str(args.dropout) +
-                   "\n8)hidden_node:" + str(args.hidden) +
-                   "\n9)input_shape:" + str(args.input_shape) +
-                   "\n10)class:" + str(args.label_type) +
-                   "\n11)T:" + str(args.T) +
-                   "\n12)graph-type:" + str(args.graph_type) + '\n')
+                   "\n4)training_rate:" + str(args.training_rate) +
+                   "\n5)pool:" + str(args.pool) +
+                   "\n6)num_epochs:" + str(args.max_epoch) +
+                   "\n7)batch_size:" + str(args.batch_size) +
+                   "\n8)dropout:" + str(args.dropout) +
+                   "\n9)hidden_node:" + str(args.hidden) +
+                   "\n10)input_shape:" + str(args.input_shape) +
+                   "\n11)class:" + str(args.label_type) +
+                   "\n12)T:" + str(args.T) +
+                   "\n13)graph-type:" + str(args.graph_type) + '\n')
         file.close()
 
     def load_per_subject(self, sub):
@@ -68,20 +69,15 @@ class CrossValidation:
         label_test = label[idx_test]
 
         if self.args.dataset == 'Att' or self.args.dataset == 'DEAP':
-            """
-            For DEAP we want to do trial-wise 10-fold, so the idx_train/idx_test is for
-            trials.
-            data: (trial, segment, 1, chan, datapoint)
-            To use the normalization function, we should change the dimension from
-            (trial, segment, 1, chan, datapoint) to (trial*segments, 1, chan, datapoint)
-            """
+            # For DEAP we want to do trial-wise 10-fold, so the idx_train/idx_test is for trials.
+            # data: (trial, segment, 1, chan, datapoint)
+            # To use the normalization function, we should change the dimension from
+            # (trial, segment, 1, chan, datapoint) to (trial*segments, 1, chan, datapoint)
             data_train = np.concatenate(data_train, axis=0)
             label_train = np.concatenate(label_train, axis=0)
             if len(data_test.shape) > 4:
-                """
-                When leave one trial out is conducted, the test data will be (segments, 1, chan, datapoint), hence,
-                no need to concatenate the first dimension to get trial*segments
-                """
+                # When leave one trial out is conducted, the test data will be (segments, 1, chan, datapoint),
+                # hence, no need to concatenate the first dimension to get trial*segments.
                 data_test = np.concatenate(data_test, axis=0)
                 label_test = np.concatenate(label_test, axis=0)
 
@@ -97,9 +93,9 @@ class CrossValidation:
     def normalize(self, train, test):
         """
         this function do standard normalization for EEG channel by channel
-        :param train: training data (sample, 1, chan, datapoint)
-        :param test: testing data (sample, 1, chan, datapoint)
-        :return: normalized training and testing data
+        param train: training data (sample, 1, chan, datapoint)
+        param test: testing data (sample, 1, chan, datapoint)
+        return: normalized training and testing data.
         """
         # data: sample x 1 x channel x data
         for channel in range(train.shape[2]):
@@ -178,6 +174,10 @@ class CrossValidation:
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
 
+                data_train, label_train, data_val, label_val = self.split_balance_class(
+                    data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
+                )
+
                 if self.args.reproduce:
                     # to reproduce the reported ACC
                     acc_test, pred, act = test(args=self.args, data=data_test, label=label_test,
@@ -187,6 +187,9 @@ class CrossValidation:
                     f1_val = 0
                 else:
                     # to train new models
+                    print('Training:', data_train.size(), label_train.size())
+                    print('Validation:', data_val.size(), label_val.size())
+                    print('Test:', data_test.size(), label_test.size())
                     acc_val, f1_val = self.first_stage(data=data_train, label=label_train,
                                                        subject=sub, fold=idx_fold)
 

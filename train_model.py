@@ -61,6 +61,7 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
     val_loader = get_dataloader(data_val, label_val, args.batch_size)
 
     model = get_model(args)
+
     if CUDA:
         model = model.cuda()
 
@@ -96,17 +97,17 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
             data_loader=train_loader, net=model, loss_fn=loss_fn, optimizer=optimizer)
 
         acc_train, f1_train, _ = get_metrics(y_pred=pred_train, y_true=act_train)
-        print('epoch {}, loss={:.4f} acc={:.4f} f1={:.4f}'
+        print('epoch {}, for the train set, loss={:.4f} acc={:.4f} f1={:.4f}'
               .format(epoch, loss_train, acc_train, f1_train))
 
         loss_val, pred_val, act_val = predict(
             data_loader=val_loader, net=model, loss_fn=loss_fn
         )
         acc_val, f1_val, _ = get_metrics(y_pred=pred_val, y_true=act_val)
-        print('epoch {}, val, loss={:.4f} acc={:.4f} f1={:.4f}'.
+        print('epoch {}, for the validation set, loss={:.4f} acc={:.4f} f1={:.4f}'.
               format(epoch, loss_val, acc_val, f1_val))
 
-        if acc_val >= trlog['max_acc']:
+        if acc_val > trlog['max_acc']:
             trlog['max_acc'] = acc_val
             trlog['F1'] = f1_val
             save_model('candidate')
@@ -114,6 +115,7 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
         else:
             counter += 1
             if counter >= patient:
+                # deap 数据集在此停止训练
                 print('early stopping')
                 break
 
@@ -202,6 +204,7 @@ def combine_train(args, data, label, subject, fold, target_acc):
               .format(epoch, loss, acc, f1))
 
         if acc >= target_acc or epoch == args.max_epoch_cmb:
+            # eeg 数据集在此停止训练
             print('early stopping!')
             save_model('final_model')
             # save model here for reproduce

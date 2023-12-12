@@ -100,6 +100,15 @@ def get_dataloader(data, label, batch_size):
 
 
 def get_metrics(y_pred, y_true, classes=None):
+    """
+    This function calculates the accuracy, f1 score and confusion matrix
+    Parameters
+    ----------
+    y_pred: the predicted label
+    y_true: the ground truth label
+    classes: the class labels
+    return: the accuracy, f1 score and confusion matrix
+    """
     acc = accuracy_score(y_true, y_pred)
     f1 = f1_score(y_true, y_pred)
     if classes is not None:
