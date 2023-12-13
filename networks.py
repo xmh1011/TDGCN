@@ -149,6 +149,17 @@ class LGGNet(nn.Module):
         s = torch.bmm(x, x_)
         return s
 
+    def compute_l2_regularization(self):
+        l2_reg = torch.tensor(0.0).to(DEVICE)
+        for param in self.parameters():
+            l2_reg += torch.norm(param, p=2)  # 计算每个可优化参数的L2范数
+        return l2_reg
+
+    def loss_fn(self, logits, labels):
+        l2_reg = self.compute_l2_regularization()  # 计算L2正则化项
+        loss = F.cross_entropy(logits, labels) + self.weight_decay * l2_reg  # 将L2正则化项添加到损失函数中
+        return loss
+
 
 class Aggregator():
 
