@@ -59,3 +59,95 @@ Train:Parameter setting for LGGNet on DEAP
 test mAcc=0.7486388384754991 mF1=0.7206213038022418 val mAcc=0.8514715564539922 val F1=0.8171856082317548
 
 
+2023-12-14 13:22:43.886934
+# 用1000hz的数据 四倍交叉验证
+# 该组数据效果不错
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:25
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 4000)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:8
+15)patient-cmb:2
+16)max-epoch-cmb:10
+17)fold:4
+test mAcc=0.6199248120300752 mF1=0.5957851397778507 val mAcc=0.7575085812356979 val F1=0.7419544426321621
+
+2023-12-14 13:59:10.284305
+# 四倍交叉验证 1000hz数据
+# 该组数据效果也不错
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:25
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 4000)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:8
+15)patient-cmb:2
+16)max-epoch-cmb:10
+17)fold:4
+test mAcc=0.6375939849624059 mF1=0.6232135744645787 val mAcc=0.7509614162217136 val F1=0.7486045742172385
+
+
+2023-12-14 13:57:48.575995
+# 用1000hz的数据 十倍交叉验证 修改后的参数
+# 该组数据效果不错
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:25
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 4000)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:8
+15)patient-cmb:2
+16)max-epoch-cmb:10
+17)fold:10
+test mAcc=0.6387218045112781 mF1=0.6325911717389944 val mAcc=0.7656989696463381 val F1=0.7614451138554029
+
+
+2023-12-14 13:11:45.705503
+# 使用原参数，训练多轮，四倍交叉验证
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:25
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 4000)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+test mAcc=0.7259398496240601 mF1=0.6903873187700892 val mAcc=0.8043478260869565 val F1=0.7476088352742052
+

@@ -212,7 +212,7 @@ class PrepareData:
 
         return data, label
 
-    def split(self, data, label, segment_length=1, overlap=0, sampling_rate=256):
+    def split(self, data, label, segment_length, overlap, sampling_rate):
         """
         This function split one trial's data into shorter segments
         Parameters

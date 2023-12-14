@@ -38,6 +38,7 @@ class CrossValidation:
                    "\n14)patient:" + str(args.patient) +
                    "\n15)patient-cmb:" + str(args.patient_cmb) +
                    "\n16)max-epoch-cmb:" + str(args.max_epoch_cmb) +
+                   "\n17)fold:" + str(args.fold) +
                    '\n')
         file.close()
 
