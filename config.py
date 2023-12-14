@@ -13,6 +13,7 @@ def set_config():
     parser.add_argument('--overlap', type=float, default=0)
     parser.add_argument('--sampling-rate', type=int, default=1000)
     parser.add_argument('--target-rate', type=int, default=1000)
+    parser.add_argument('--trial-duration', type=int, default=59, help='trial duration in seconds')
     parser.add_argument('--scale-coefficient', type=float, default=1)  # 比例系数
     parser.add_argument('--input-shape', type=tuple, default=(1, 32, 4000))  # 输入形状 (1, 32, 512)
     parser.add_argument('--data-format', type=str, default='eeg')
