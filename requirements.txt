@@ -1,7 +1,7 @@
 argparse
 torch
 h5py==3.2.0
-numpy==1.20.1
+numpy==1.22.0
 scikit-learn==0.24.1
 scipy==1.6.2
 
