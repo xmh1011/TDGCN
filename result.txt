@@ -1,5 +1,54 @@
+
+# 针对deap数据集的原代码测试结果
+>>> Test:  loss=0.8736 acc=0.5333 f1=0.5679
+Final: test mean ACC:0.5902083333333333 std:0.06953559989514564
+Final: val mean ACC:0.6861979166666667 std:0.05723656599063629
+Final: val mean F1:0.7220541447952742
+
+# 针对deap数据集的原代码测试结果
+2023-12-14 15:02:41.015504
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2021
+3)learning_rate:0.001
+4)pool:16
+5)num_epochs:200
+6)batch_size:64
+7)dropout:0.5
+8)hidden_node:32
+9)input_shape:(1, 32, 512)
+10)class:V
+11)T:64
+12)graph-type:gen
+test mAcc=0.5902083333333333 mF1=0.6391921697562348 val mAcc=0.6861979166666667 val F1=0.7220541447952742
+
+
+
+2023-12-14 14:01:08.514395
+Train:Parameter setting for LGGNet on DEAP
+# 使用原模型参数 1000hz数据 十倍交叉验证
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:25
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 4000)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+test mAcc=0.7015037593984963 mF1=0.6960927552189908 val mAcc=0.8393042792165599 val F1=0.8272734237200412
+
+
 2023-12-13 18:16:32.684523
-# 使用原模型默认参数
+# 使用原模型默认参数 128hz数据
 Train:Parameter setting for LGGNet on DEAP
 
 1)number_class:2
@@ -35,7 +84,6 @@ Train:Parameter setting for LGGNet on DEAP
 12)T:64
 13)graph-type:gen
 test mAcc=0.7450090744101634 mF1=0.7171445372084936 val mAcc=0.8694793281301522 val F1=0.8355562220110752
-42013
 
 2023-12-13 22:02:59.8
 # 修改后增加patient-cmb验证的代码

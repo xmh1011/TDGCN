@@ -165,11 +165,15 @@ class CrossValidation:
         ttf = []  # total test f1
         tvf = []  # total validation f1
 
+        tta_trial = []  # for trial-wise evaluation
+        ttf_trial = []  # for trial-wise evaluation
+
         for sub in subject:
             data, label = self.load_per_subject(sub)
             va_val = Averager()
             vf_val = Averager()
             preds, acts = [], []
+            preds_trial, acts_trial = [], []
             kf = KFold(n_splits=fold, shuffle=shuffle)
             for idx_fold, (idx_train, idx_test) in enumerate(kf.split(data)):
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
@@ -201,16 +205,27 @@ class CrossValidation:
                     acc_test, pred, act = test(args=self.args, data=data_test, label=label_test,
                                                reproduce=reproduce,
                                                subject=sub, fold=idx_fold)
+                # get trial-wise prediction
+                act_trial, pred_trial = self.trial_wise_voting(
+                    act=act, pred=pred,
+                    num_segment_per_trial=int(self.args.trial_duration / self.args.segment),
+                    trial_in_fold=len(idx_test)
+                )
                 va_val.add(acc_val)
                 vf_val.add(f1_val)
                 preds.extend(pred)
                 acts.extend(act)
+                preds_trial.extend(pred_trial)
+                acts_trial.extend(act_trial)
 
             tva.append(va_val.item())
             tvf.append(vf_val.item())
             acc, f1, _ = get_metrics(y_pred=preds, y_true=acts)
+            acc_trial, f1_trial, _ = get_metrics(y_pred=preds_trial, y_true=acts_trial)
             tta.append(acc)
             ttf.append(f1)
+            tta_trial.append(acc_trial)
+            ttf_trial.append(f1_trial)
             result = '{},{}'.format(tta[-1], f1)
             self.log2txt(result)
 
@@ -226,11 +241,17 @@ class CrossValidation:
         std_val = np.std(tva)
         mF1_val = np.mean(tvf)
 
+        mACC_trial = np.mean(tta_trial)
+        mF1_trial = np.mean(ttf_trial)
+
         print('Final: test mean ACC:{} std:{}'.format(mACC, std))
+        print('Final: test mean F1:{}'.format(mF1))
         print('Final: val mean ACC:{} std:{}'.format(mACC_val, std_val))
         print('Final: val mean F1:{}'.format(mF1_val))
-        results = 'test mAcc={} mF1={} val mAcc={} val F1={}'.format(mACC,
-                                                                     mF1, mACC_val, mF1_val)
+        results = ('test mAcc={} mF1={} \n'
+                   'val mAcc={} F1={}').format(mACC, mF1, mACC_val, mF1_val)
+        self.log2txt(results)
+        results = 'test mAcc={} mF1={} (trial-wise)'.format(mACC_trial, mF1_trial)
         self.log2txt(results)
 
     def first_stage(self, data, label, subject, fold):
