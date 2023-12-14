@@ -57,7 +57,6 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
     set_up(args)
 
     train_loader = get_dataloader(data_train, label_train, args.batch_size)
-
     val_loader = get_dataloader(data_val, label_val, args.batch_size)
 
     model = get_model(args)
@@ -162,11 +161,14 @@ def test(args, data, label, reproduce, subject, fold):
     return acc, pred, act
 
 
-def combine_train(args, data, label, subject, fold, target_acc):
+def combine_train(args, data_train, label_train, data_val, label_val, subject, fold, target_acc):
     save_name = '_sub' + str(subject) + '_fold' + str(fold)
     set_up(args)
     seed_all(args.random_seed)
-    train_loader = get_dataloader(data, label, args.batch_size)
+
+    train_loader = get_dataloader(data_train, label_train, args.batch_size)
+    val_loader = get_dataloader(data_val, label_val, args.batch_size)
+
     model = get_model(args)
     if CUDA:
         model = model.cuda()
@@ -192,20 +194,37 @@ def combine_train(args, data, label, subject, fold, target_acc):
     trlog['train_acc'] = []
     trlog['val_acc'] = []
     trlog['max_acc'] = 0.0
+    trlog['F1'] = 0.0
 
     timer = Timer()
+    patient_cmb = args.patient_cmb
+    counter = 0
 
     for epoch in range(1, args.max_epoch_cmb + 1):
         loss, pred, act = train_one_epoch(
             data_loader=train_loader, net=model, loss_fn=loss_fn, optimizer=optimizer
         )
         acc, f1, _ = get_metrics(y_pred=pred, y_true=act)
-        print('Stage 2 : epoch {}, loss={:.4f} acc={:.4f} f1={:.4f}'
+        print('Stage 2 : epoch {}, for train set loss={:.4f} acc={:.4f} f1={:.4f}'
               .format(epoch, loss, acc, f1))
+        loss_val, pred_val, act_val = predict(
+            data_loader=val_loader, net=model, loss_fn=loss_fn
+        )
+        acc_val, f1_val, _ = get_metrics(y_pred=pred_val, y_true=act_val)
+        print('Stage 2 : epoch {}, for validation set, loss={:.4f} acc={:.4f} f1={:.4f}'
+              .format(epoch, loss_val, acc_val, f1_val))
 
-        if acc >= target_acc or epoch == args.max_epoch_cmb:
+        if acc_val > trlog['max_acc']:
+            trlog['max_acc'] = acc_val
+            trlog['F1'] = f1_val
+            save_model('candidate')
+            counter = 0
+        else:
+            counter += 1
+
+        if acc >= target_acc or epoch == args.max_epoch_cmb or counter >= patient_cmb:
             # eeg 数据集在此停止训练
-            print('early stopping!')
+            print('early stopping!!')
             save_model('final_model')
             # save model here for reproduce
             model_name_reproduce = 'sub' + str(subject) + '_fold' + str(fold) + '.pth'

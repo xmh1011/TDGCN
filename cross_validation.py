@@ -34,7 +34,11 @@ class CrossValidation:
                    "\n10)input_shape:" + str(args.input_shape) +
                    "\n11)class:" + str(args.label_type) +
                    "\n12)T:" + str(args.T) +
-                   "\n13)graph-type:" + str(args.graph_type) + '\n')
+                   "\n13)graph-type:" + str(args.graph_type) +
+                   "\n14)patient:" + str(args.patient) +
+                   "\n15)patient-cmb:" + str(args.patient_cmb) +
+                   "\n16)max-epoch-cmb:" + str(args.max_epoch_cmb) +
+                   '\n')
         file.close()
 
     def load_per_subject(self, sub):
@@ -170,6 +174,9 @@ class CrossValidation:
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
+                data_train, label_train, data_val, label_val = self.split_balance_class(
+                    data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
+                )
 
                 if reproduce:
                     # to reproduce the reported ACC
@@ -180,12 +187,15 @@ class CrossValidation:
                     f1_val = 0
                 else:
                     # to train new models
+                    print('Training:', data_train.size(), label_train.size())
+                    print('Validation:', data_val.size(), label_val.size())
+                    print('Test:', data_test.size(), label_test.size())
                     acc_val, f1_val = self.first_stage(data=data_train, label=label_train,
                                                        subject=sub, fold=idx_fold)
 
                     combine_train(args=self.args,
-                                  data=data_train, label=label_train,
-                                  subject=sub, fold=idx_fold, target_acc=1)
+                                  data_train=data_train, label_train=label_train, data_val=data_val,
+                                  label_val=label_val, subject=sub, fold=idx_fold, target_acc=1)
 
                     acc_test, pred, act = test(args=self.args, data=data_test, label=label_test,
                                                reproduce=reproduce,
@@ -244,7 +254,6 @@ class CrossValidation:
         for i, (idx_train, idx_test) in enumerate(kf.split(data)):
             print('Inner 3-fold-CV Fold:{}'.format(i))
             data_train, label_train = data[idx_train], label[idx_train]
-
             data_train, label_train, data_val, label_val = self.split_balance_class(
                 data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
             )
@@ -292,7 +301,7 @@ class CrossValidation:
         param trial_in_fold: how many trials in this fold
         return: trial-wise actual label and predicted label.
         """
-        num_trial = int(len(act)/num_segment_per_trial)
+        num_trial = int(len(act) / num_segment_per_trial)
         assert num_trial == trial_in_fold
         act_trial = np.reshape(act, (num_trial, num_segment_per_trial))
         pred_trial = np.reshape(pred, (num_trial, num_segment_per_trial))

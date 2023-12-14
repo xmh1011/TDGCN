@@ -35,4 +35,27 @@ Train:Parameter setting for LGGNet on DEAP
 12)T:64
 13)graph-type:gen
 test mAcc=0.7450090744101634 mF1=0.7171445372084936 val mAcc=0.8694793281301522 val F1=0.8355562220110752
+42013
+
+2023-12-13 22:02:59.8
+# 修改后增加patient-cmb验证的代码
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:8
+15)patient-cmb:2
+16)max-epoch-cmb:10
+test mAcc=0.7486388384754991 mF1=0.7206213038022418 val mAcc=0.8514715564539922 val F1=0.8171856082317548
+
 
