@@ -22,7 +22,7 @@ def set_config():
     parser.add_argument('--random-seed', type=int, default=2023)
     parser.add_argument('--max-epoch', type=int, default=200)
     parser.add_argument('--patient', type=int, default=8)  # 早停 最开始为20
-    parser.add_argument('--patient-cmb', type=int, default=4)  # 原始值为8
+    parser.add_argument('--patient-cmb', type=int, default=2)  # 原始值为8
     parser.add_argument('--max-epoch-cmb', type=int, default=10)  # 最大迭代次数 原始值为20
     parser.add_argument('--batch-size', type=int, default=25)
     parser.add_argument('--learning-rate', type=float, default=1e-5)  # 学习率 原始值为1e-3
@@ -44,7 +44,7 @@ def set_config():
     parser.add_argument('--pool-step-rate', type=float, default=0.25)
     parser.add_argument('--T', type=int, default=64)
     parser.add_argument('--graph-type', type=str, default='gen', choices=['fro', 'gen', 'hem', 'BL'])
-    parser.add_argument('--hidden', type=int, default=32)
+    parser.add_argument('--hidden', type=int, default=32) # 隐藏层
 
     # Reproduce the result using the saved model
     parser.add_argument('--reproduce', action='store_true', default=False)

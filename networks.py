@@ -54,11 +54,13 @@ class LGGNet(nn.Module):
                                                self.pool, pool_step_rate)
         self.BN_t = nn.BatchNorm2d(num_T)
         self.BN_s = nn.BatchNorm2d(num_T)
-        self.BN_fusion = nn.BatchNorm2d(num_T)
+        self.BN_fusion = nn.BatchNorm2d(num_T) # TODO: add fusion layer
+        # self.fusion_layer = self.conv_block(num_T, num_T, (3, 1), 1, 4)
         self.OneXOneConv = nn.Sequential(
             nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
             nn.LeakyReLU(),
-            nn.AvgPool2d((1, 2)))
+            nn.AvgPool2d((1, 2))
+        )
         # diag(W) to assign a weight to each local area
         size = self.get_size_temporal(input_size)
         self.local_filter_weight = nn.Parameter(torch.FloatTensor(self.channel, size[-1]),
@@ -79,10 +81,13 @@ class LGGNet(nn.Module):
         # learn the global network of networks
         self.GCN = GraphConvolution(size[-1], out_graph)
 
-        self.fc = nn.Sequential(
+        self.fc = nn.Sequential( # 组合神经网络模块
             nn.Dropout(p=dropout_rate),
-            nn.Linear(int(self.brain_area * out_graph), num_classes))
+            nn.ReLU(),
+            nn.Linear(int(self.brain_area * out_graph), num_classes)
+        )
 
+    # 该模块没有被使用
     def forward(self, x):
         y = self.Tception1(x)
         out = y
