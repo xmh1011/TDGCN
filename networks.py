@@ -43,8 +43,8 @@ class LGGNet(nn.Module):
         self.channel = input_size[1]
         self.brain_area = len(self.idx)
 
-        # by setting the convolutional kernel being (1,lenght) and the strids being 1，we can use conv2d to
-        # achieve the 1d convolution operation
+        # by setting the convolutional kernel being (1,lenght) and the strids being 1, we can use conv2d to
+        # achieve the 1d convolution operation.
         self.Tception1 = self.temporal_learner(input_size[0], num_T,
                                                (1, int(self.window[0] * sampling_rate)),
                                                self.pool, pool_step_rate)
@@ -55,6 +55,7 @@ class LGGNet(nn.Module):
                                                (1, int(self.window[2] * sampling_rate)),
                                                self.pool, pool_step_rate)
         self.BN_t = nn.BatchNorm2d(num_T)
+        self.BN_s = nn.BatchNorm2d(num_T)
         self.OneXOneConv = nn.Sequential(
             nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
             nn.LeakyReLU(),
@@ -81,11 +82,13 @@ class LGGNet(nn.Module):
         nn.init.xavier_uniform_(self.global_adj)
         # to be used after local graph embedding
         self.bn = nn.BatchNorm1d(self.brain_area)
+        self.bn_ = nn.BatchNorm1d(self.brain_area)
         # learn the global network of networks
         self.GCN = GraphConvolution(size[-1], out_graph)
 
         self.fc = nn.Sequential(  # 组合神经网络模块
             nn.Dropout(p=dropout_rate),
+            nn.ReLU(),
             nn.Linear(int(self.brain_area * out_graph), num_classes)
         )
 
@@ -98,7 +101,7 @@ class LGGNet(nn.Module):
         out = torch.cat((out, y), dim=-1)
         out = self.BN_t(out)
         out = self.OneXOneConv(out)
-        out = self.BN_t(out)
+        out = self.BN_s(out)
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
         out = self.local_filter_fun(out, self.local_filter_weight)
@@ -106,7 +109,7 @@ class LGGNet(nn.Module):
         adj = self.get_adj(out)
         out = self.bn(out)
         out = self.GCN(out, adj)
-        out = self.bn(out)
+        out = self.bn_(out)
         out = out.view(out.size()[0], -1)
         out = self.fc(out)
         return out
@@ -122,7 +125,7 @@ class LGGNet(nn.Module):
         out = torch.cat((out, z), dim=-1)
         out = self.BN_t(out)
         out = self.OneXOneConv(out)
-        out = self.BN_t(out)
+        out = self.BN_s(out)
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
         size = out.size()
@@ -167,6 +170,17 @@ class LGGNet(nn.Module):
         x_ = x.permute(0, 2, 1)
         s = torch.bmm(x, x_)
         return s
+
+    def compute_l2_regularization(self):
+        l2_reg = torch.tensor(0.0).to(DEVICE)
+        for param in self.parameters():
+            l2_reg += torch.norm(param, p=2)  # 计算每个可优化参数的L2范数
+        return l2_reg
+
+    def loss_fn(self, logits, labels):
+        l2_reg = self.compute_l2_regularization()  # 计算L2正则化项
+        loss = F.cross_entropy(logits, labels) + self.weight_decay * l2_reg  # 将L2正则化项添加到损失函数中
+        return loss
 
 
 class Aggregator():
