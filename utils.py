@@ -8,8 +8,6 @@ from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
 
-_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
-
 
 def set_gpu(x):
     torch.set_num_threads(1)
