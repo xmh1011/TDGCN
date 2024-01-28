@@ -1,3 +1,5 @@
+import sys
+
 from utils import *
 
 CUDA = torch.cuda.is_available()
@@ -102,10 +104,25 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
         loss_val, pred_val, act_val = predict(
             data_loader=val_loader, net=model, loss_fn=loss_fn
         )
+        ######################
+        if pred_val is None or len(pred_val) == 0:
+            print("Error: pred_val is empty.")
+            sys.exit(1)
+        elif act_val is None or len(act_val) == 0:
+            print("Error: act_val is empty.")
+            sys.exit(1)
+        #######################
         acc_val, f1_val, _ = get_metrics(y_pred=pred_val, y_true=act_val)
         print('epoch {}, for the validation set, loss={:.4f} acc={:.4f} f1={:.4f}'.
               format(epoch, loss_val, acc_val, f1_val))
-
+        ######################
+        if acc_val is None or len(acc_val) == 0:
+            print("Error: acc_val is empty.")
+            sys.exit(1)
+        elif f1_val is None or len(f1_val) == 0:
+            print("Error: f1_val is empty.")
+            sys.exit(1)
+        #######################
         if acc_val > trlog['max_acc']:
             trlog['max_acc'] = acc_val
             trlog['F1'] = f1_val

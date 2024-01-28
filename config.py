@@ -21,11 +21,11 @@ def set_config():
     parser.add_argument('--fold', type=int, default=10)
     parser.add_argument('--random-seed', type=int, default=2023)
     parser.add_argument('--max-epoch', type=int, default=200)
-    parser.add_argument('--patient', type=int, default=8)  # 早停 最开始为20
+    parser.add_argument('--patient', type=int, default=6)  # 早停 最开始为20
     parser.add_argument('--patient-cmb', type=int, default=2)  # 原始值为8
     parser.add_argument('--max-epoch-cmb', type=int, default=10)  # 最大迭代次数 原始值为20
     parser.add_argument('--batch-size', type=int, default=25)
-    parser.add_argument('--learning-rate', type=float, default=1e-5)  # 学习率 原始值为1e-3
+    parser.add_argument('--learning-rate', type=float, default=1e-6)  # 学习率 原始值为1e-3
     parser.add_argument('--training-rate', type=float, default=0.8)
     parser.add_argument('--weight-decay', type=float, default=0.001)  # 权重衰减
     parser.add_argument('--step-size', type=int, default=5)
