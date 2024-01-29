@@ -4,6 +4,8 @@ from sklearn.decomposition import FastICA
 from train_model import *
 from scipy.signal import resample
 
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
+
 
 class PrepareData:
     def __init__(self, args):
@@ -55,7 +57,6 @@ class PrepareData:
             data_, label_ = self.preprocess_data(data=data_, label=label_, split=split, expand=expand)
 
             print('Data and label prepared!')
-            print('sample_'+str(sub + 1)+'.dat')
             print('data:' + str(data_.shape) + ' label:' + str(label_.shape))
             print('----------------------')
             self.save(data_, label_, sub)
