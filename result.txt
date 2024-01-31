@@ -228,7 +228,7 @@ test mAcc=0.7259398496240601 mF1=0.6903873187700892 val mAcc=0.8043478260869565 
 Train:Parameter setting for LGGNet on DEAP
 1)number_class:2
 2)random_seed:2023
-3)learning_rate:0.001
+3)learning_rate:1e-05
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:200
@@ -236,12 +236,12 @@ Train:Parameter setting for LGGNet on DEAP
 8)dropout:0.5
 9)hidden_node:32
 10)input_shape:(1, 32, 4000)
-11)class:V
+11)class:A
 12)T:64
 13)graph-type:gen
-14)patient:5
+14)patient:8
 15)patient-cmb:2
 16)max-epoch-cmb:10
 17)fold:10
-test mAcc=0.6238479262672811 mF1=0.6191903668125818 
-val mAcc=0.7405857085964613 F1=0.742604957698549
+test mAcc=0.5 mF1=0.666666666666667
+val mAcc=0.5003271320475622 F1=0.6657260938123838
