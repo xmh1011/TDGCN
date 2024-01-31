@@ -223,31 +223,9 @@ Train:Parameter setting for LGGNet on DEAP
 16)max-epoch-cmb:20
 test mAcc=0.7259398496240601 mF1=0.6903873187700892 val mAcc=0.8043478260869565 val F1=0.7476088352742052
 
-2024-1-26 19:09:36.623502
-# 耗时2小时，怀疑数据处理有问题
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-5
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:10
-test mACC:0.5                     mF1:0.6666666666666666
-val  mACC:0.47777777777777775     mF1:0.6377777777777777
-
-2024-01-27 23:58:09.371187
+2024-01-29 17:10:03.761997
+# 增加数据量到32组
 Train:Parameter setting for LGGNet on DEAP
-# 处理好数据后对A变量进行训练，怀疑数据标签有误
 1)number_class:2
 2)random_seed:2023
 3)learning_rate:1e-05
