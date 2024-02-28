@@ -97,9 +97,9 @@ class CrossValidation:
     def normalize(self, train, test):
         """
         this function do standard normalization for EEG channel by channel
-        param train: training data (sample, 1, chan, datapoint)
-        param test: testing data (sample, 1, chan, datapoint)
-        return: normalized training and testing data.
+        :param train: training data (sample, 1, chan, datapoint)
+        :param test: testing data (sample, 1, chan, datapoint)
+        :return: normalized training and testing data
         """
         # data: sample x 1 x channel x data
         for channel in range(train.shape[2]):
@@ -172,15 +172,11 @@ class CrossValidation:
             va_val = Averager()
             vf_val = Averager()
             preds, acts = [], []
-            preds_trial, acts_trial = [], []
             kf = KFold(n_splits=fold, shuffle=shuffle)
             for idx_fold, (idx_train, idx_test) in enumerate(kf.split(data)):
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
-                data_train, label_train, data_val, label_val = self.split_balance_class(
-                    data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
-                )
 
                 if reproduce:
                     # to reproduce the reported ACC
@@ -192,14 +188,13 @@ class CrossValidation:
                 else:
                     # to train new models
                     print('Training:', data_train.size(), label_train.size())
-                    print('Validation:', data_val.size(), label_val.size())
                     print('Test:', data_test.size(), label_test.size())
                     acc_val, f1_val = self.first_stage(data=data_train, label=label_train,
                                                        subject=sub, fold=idx_fold)
 
                     combine_train(args=self.args,
-                                  data_train=data_train, label_train=label_train, data_val=data_val,
-                                  label_val=label_val, subject=sub, fold=idx_fold, target_acc=1)
+                                  data_train=data_train, label_train=label_train,
+                                  subject=sub, fold=idx_fold, target_acc=1)
 
                     acc_test, pred, act = test(args=self.args, data=data_test, label=label_test,
                                                reproduce=reproduce,
@@ -212,7 +207,6 @@ class CrossValidation:
             tva.append(va_val.item())
             tvf.append(vf_val.item())
             acc, f1, _ = get_metrics(y_pred=preds, y_true=acts)
-            acc_trial, f1_trial, _ = get_metrics(y_pred=preds_trial, y_true=acts_trial)
             tta.append(acc)
             ttf.append(f1)
             result = '{},{}'.format(tta[-1], f1)
@@ -257,14 +251,10 @@ class CrossValidation:
         vf = Averager()
         va_item = []
         maxAcc = 0.0
-        for i, (idx_train, idx_test) in enumerate(kf.split(data)):
+        for i, (idx_train, idx_val) in enumerate(kf.split(data)):
             print('Inner 3-fold-CV Fold:{}'.format(i))
             data_train, label_train = data[idx_train], label[idx_train]
-            data_train, label_train, data_val, label_val = self.split_balance_class(
-                data=data_train, label=label_train, train_rate=self.args.training_rate, random=True
-            )
-            print('Training:', data_train.size(), label_train.size())
-            print('Validation:', data_val.size(), label_val.size())
+            data_val, label_val = data[idx_val], label[idx_val]
             acc_val, F1_val = train(args=self.args,
                                     data_train=data_train,
                                     label_train=label_train,

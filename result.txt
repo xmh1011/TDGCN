@@ -245,3 +245,24 @@ Train:Parameter setting for LGGNet on DEAP
 17)fold:10
 test mAcc=0.5 mF1=0.666666666666667
 val mAcc=0.5003271320475622 F1=0.6657260938123838
+
+
+
+# 原代码验证方式
+2024-02-27 16:45:46.431416
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2023
+3)learning_rate:1e-06
+4)pool:16
+5)num_epochs:200
+6)batch_size:25
+7)dropout:0.5
+8)hidden_node:32
+9)input_shape:(1, 32, 4000)
+10)class:A
+11)T:64
+12)graph-type:gen
+test mAcc=0.5300691244239631 mF1=0.5249115779435374
+val mAcc=0.6338709677419355 F1=0.6517506874159609
+
