@@ -14,6 +14,7 @@ class PowerLayer(nn.Module):
     """
     The power layer: calculates the log-transformed power of the data
     """
+
     def __init__(self, dim, length, step):
         super(PowerLayer, self).__init__()
         self.dim = dim
@@ -27,7 +28,7 @@ class LGGNet(nn.Module):
     def temporal_learner(self, in_chan, out_chan, kernel, pool, pool_step_rate):
         return nn.Sequential(
             nn.Conv2d(in_chan, out_chan, kernel_size=kernel, stride=(1, 1)),
-            PowerLayer(dim=-1, length=pool, step=int(pool_step_rate*pool))
+            PowerLayer(dim=-1, length=pool, step=int(pool_step_rate * pool))
         )
 
     def __init__(self, num_classes, input_size, sampling_rate, num_T,
@@ -54,7 +55,7 @@ class LGGNet(nn.Module):
                                                self.pool, pool_step_rate)
         self.BN_t = nn.BatchNorm2d(num_T)
         self.BN_s = nn.BatchNorm2d(num_T)
-        self.BN_fusion = nn.BatchNorm2d(num_T) # TODO: add fusion layer
+        self.BN_fusion = nn.BatchNorm2d(num_T)  # TODO: add fusion layer
         # self.fusion_layer = self.conv_block(num_T, num_T, (3, 1), 1, 4)
         self.OneXOneConv = nn.Sequential(
             nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
@@ -81,13 +82,14 @@ class LGGNet(nn.Module):
         # learn the global network of networks
         self.GCN = GraphConvolution(size[-1], out_graph)
 
-        self.fc = nn.Sequential( # 组合神经网络模块
+        self.fc = nn.Sequential(  # 组合神经网络模块
             nn.Dropout(p=dropout_rate),
             nn.Linear(int(self.brain_area * out_graph), num_classes)
         )
 
-    # 该模块没有被使用
+    # 前向传播，隐式调用
     def forward(self, x):
+        # 时间特征
         y = self.Tception1(x)
         out = y
         y = self.Tception2(x)
@@ -100,6 +102,7 @@ class LGGNet(nn.Module):
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
         out = self.local_filter_fun(out, self.local_filter_weight)
+        # 空间特征
         out = self.aggregate.forward(out)
         adj = self.get_adj(out)
         out = self.bn(out)
