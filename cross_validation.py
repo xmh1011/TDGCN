@@ -166,8 +166,6 @@ class CrossValidation:
         tvf = []  # total validation f1
 
         for sub in subject:
-            if sub == 20:  # 跳过第21组数据
-                continue
             data, label = self.load_per_subject(sub)
             va_val = Averager()
             vf_val = Averager()

@@ -84,7 +84,7 @@ def get_model(args):
         input_size = (args.input_shape[0], channels, args.input_shape[2])
         model = LGGNet(
             num_classes=args.num_class, input_size=input_size,
-            sampling_rate=int(args.sampling_rate * args.scale_coefficient),
+            sampling_rate=args.target_rate,
             num_T=args.T, out_graph=args.hidden,
             dropout_rate=args.dropout,
             pool=args.pool, pool_step_rate=args.pool_step_rate,
