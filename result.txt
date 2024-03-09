@@ -224,33 +224,9 @@ Train:Parameter setting for LGGNet on DEAP
 test mAcc=0.7259398496240601 mF1=0.6903873187700892 val mAcc=0.8043478260869565 val F1=0.7476088352742052
 
 
-2024-01-29 17:55:45.534100
-# 增加数据量到32组
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.6238479262672811 mF1=0.6191903668125818 
-val mAcc=0.7405857085964613 F1=0.742604957698549
-
-
 2024-02-01 22:35:50.439747
+# 数据增加到32组，降低早停次数和最大迭代次数
 Train:Parameter setting for LGGNet on DEAP
-#降低学习率、早停次数
 1)number_class:2
 2)random_seed:2023
 3)learning_rate:1e-06
@@ -268,12 +244,12 @@ Train:Parameter setting for LGGNet on DEAP
 15)patient-cmb:2
 16)max-epoch-cmb:10
 17)fold:10
-test mAcc=0.5147465437788019 mF1=0.5172486904996064 
+test mAcc=0.5147465437788019 mF1=0.5172486904996064
 val mAcc=0.640983956306537 F1=0.6685076840858057
 
 
 2024-02-02 17:18:54.735885
-#降低学习率、每轮训练次数
+# 减少训练次数，适当提高早停参数
 Train:Parameter setting for LGGNet on DEAP
 1)number_class:2
 2)random_seed:2023
@@ -292,5 +268,5 @@ Train:Parameter setting for LGGNet on DEAP
 15)patient-cmb:5
 16)max-epoch-cmb:10
 17)fold:10
-test mAcc=0.5300691244239631 mF1=0.5323383031566242 
+test mAcc=0.5300691244239631 mF1=0.5323383031566242
 val mAcc=0.6512800819252431 F1=0.6736409012391326
