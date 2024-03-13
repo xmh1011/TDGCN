@@ -153,7 +153,7 @@ class CrossValidation:
 
         return train, train_label, val, val_label
 
-    def n_fold_CV(self, subject=None, fold=4, shuffle=True, reproduce=False):
+    def n_fold_CV(self, subject, fold, reproduce):
         """
         this function achieves n-fold cross-validation
         param subject: how many subjects to load
@@ -170,7 +170,7 @@ class CrossValidation:
             va_val = Averager()
             vf_val = Averager()
             preds, acts = [], []
-            kf = KFold(n_splits=fold, shuffle=shuffle)
+            kf = KFold(n_splits=fold, shuffle=True)
             for idx_fold, (idx_train, idx_test) in enumerate(kf.split(data)):
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
                 data_train, label_train, data_test, label_test = self.prepare_data(
@@ -207,7 +207,7 @@ class CrossValidation:
             acc, f1, _ = get_metrics(y_pred=preds, y_true=acts)
             tta.append(acc)
             ttf.append(f1)
-            result = '{},{}'.format(tta[-1], f1)
+            result = 'total test accuracy {}, f1: {}'.format(tta[-1], f1)
             self.log2txt(result)
 
         # prepare final report
@@ -233,8 +233,8 @@ class CrossValidation:
     def first_stage(self, data, label, subject, fold):
         """
         this function achieves n-fold-CV to:
-            1. select hyper-parameters on training data
-            2. get the model for evaluation on testing data
+        1. select hyper-parameters on training data
+        2. get the model for evaluation on testing data
         param data: (segments, 1, channel, data)
         param label: (segments,)
         param subject: which subject the data belongs to

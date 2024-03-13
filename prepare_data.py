@@ -202,7 +202,7 @@ class PrepareData:
 
         data = self.bandpass_filter(data=data, lowcut=4, highcut=45, fs=self.args.sampling_rate, order=5)
         data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
-        # data = self.remove_eye_artifact(data=data)
+        data = self.remove_eye_artifact(data=data)
 
         if split:
             data, label = self.split(

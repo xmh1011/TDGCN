@@ -1,268 +1,49 @@
+# deap TGCN 训练结果
+2024-03-12 23:08:38.977647
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2021
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:L
+12)T:64
+13)graph-type:hem
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+test mAcc=0.6368229166666667 mF1=0.7293367716342263
+val mAcc=0.6977430555555556 F1=0.78526807253654
 
-# 针对deap数据集的原代码测试结果
->>> Test:  loss=0.8736 acc=0.5333 f1=0.5679
-Final: test mean ACC:0.5902083333333333 std:0.06953559989514564
-Final: val mean ACC:0.6861979166666667 std:0.05723656599063629 mean F1:0.7220541447952742
 
-# 针对deap数据集的原代码测试结果
-2023-12-14 15:02:41.015504
+
+# deap LGGNet 训练结果
+2024-03-12 23:08:07.854055
 Train:Parameter setting for LGGNet on DEAP
 1)number_class:2
 2)random_seed:2021
-3)learning_rate:0.001
-4)pool:16
-5)num_epochs:200
-6)batch_size:64
-7)dropout:0.5
-8)hidden_node:32
-9)input_shape:(1, 32, 512)
-10)class:V
-11)T:64
-12)graph-type:gen
-test mAcc=0.5902083333333333 mF1=0.6391921697562348 val mAcc=0.6861979166666667 val F1=0.7220541447952742
-
-
-
-2023-12-14 14:01:08.514395
-Train:Parameter setting for LGGNet on DEAP
-# 使用原模型参数 1000hz数据 十倍交叉验证
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:0.001
+3)learning_rate:1e-05
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:200
-7)batch_size:25
+7)batch_size:64
 8)dropout:0.5
 9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
+10)input_shape:(1, 32, 512)
+11)class:L
 12)T:64
-13)graph-type:gen
+13)graph-type:hem
 14)patient:20
 15)patient-cmb:8
 16)max-epoch-cmb:20
 17)fold:10
-test mAcc=0.7015037593984963 mF1=0.6960927552189908 val mAcc=0.8393042792165599 val F1=0.8272734237200412
+test mAcc=0.6311979166666667 mF1=0.7225543209629903
+val mAcc=0.6955150462962962 F1=0.783272644747021
 
-
-2023-12-13 18:16:32.684523
-# 使用原模型默认参数 128hz数据
-Train:Parameter setting for LGGNet on DEAP
-
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:0.001
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:64
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 512)
-11)class:V
-12)T:64
-13)graph-type:gen
-test mAcc=0.8486615245009075 mF1=0.8348771544665152 val mAcc=0.9318360626110191 val F1=0.9111514685852575
-
-
-2023-12-13 16:13:28.674232
-# 避免过拟合
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:64
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 512)
-11)class:V
-12)T:64
-13)graph-type:gen
-test mAcc=0.7450090744101634 mF1=0.7171445372084936 val mAcc=0.8694793281301522 val F1=0.8355562220110752
-
-2023-12-13 22:02:59.8
-# 修改后增加patient-cmb验证的代码
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:64
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 512)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-test mAcc=0.7486388384754991 mF1=0.7206213038022418 val mAcc=0.8514715564539922 val F1=0.8171856082317548
-
-
-2023-12-14 13:22:43.886934
-# 用1000hz的数据 四倍交叉验证
-# 该组数据效果不错
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:4
-test mAcc=0.6199248120300752 mF1=0.5957851397778507 val mAcc=0.7575085812356979 val F1=0.7419544426321621
-
-2023-12-14 13:59:10.284305
-# 四倍交叉验证 1000hz数据
-# 该组数据效果也不错
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:4
-test mAcc=0.6375939849624059 mF1=0.6232135744645787 val mAcc=0.7509614162217136 val F1=0.7486045742172385
-
-
-2023-12-14 13:57:48.575995
-# 用1000hz的数据 十倍交叉验证 修改后的参数
-# 该组数据效果不错
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.6387218045112781 mF1=0.6325911717389944 val mAcc=0.7656989696463381 val F1=0.7614451138554029
-
-2023-12-14 21:13:27.831553
-Train:Parameter setting for LGGNet on DEAP
-# 修改后的参数，
-/home/xiaominghao/anaconda3/envs/LGG/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1492: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 due to no true nor predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:4
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.6392857142857143 mF1=0.6430230544708673
-val mAcc=0.7617144713635942 F1=0.7636661668353386
-
-
-2023-12-14 13:11:45.705503
-# 使用原参数，训练多轮，四倍交叉验证
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:0.001
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:20
-15)patient-cmb:8
-16)max-epoch-cmb:20
-test mAcc=0.7259398496240601 mF1=0.6903873187700892 val mAcc=0.8043478260869565 val F1=0.7476088352742052
-
-2024-01-29 17:10:03.761997
-# 增加数据量到32组
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:A
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.5 mF1=0.666666666666667
-val mAcc=0.5003271320475622 F1=0.6657260938123838
-
-
-
-# 原代码验证方式
-2024-02-27 16:45:46.431416
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-06
-4)pool:16
-5)num_epochs:200
-6)batch_size:25
-7)dropout:0.5
-8)hidden_node:32
-9)input_shape:(1, 32, 4000)
-10)class:A
-11)T:64
-12)graph-type:gen
-test mAcc=0.5300691244239631 mF1=0.5249115779435374
-val mAcc=0.6338709677419355 F1=0.6517506874159609
 
