@@ -175,6 +175,8 @@ class CrossValidation:
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
+                data_train, label_train, data_val, label_val = self.split_balance_class(
+                    data=data_train, label=label_train, train_rate=self.args.training_rate, random=True)
 
                 if reproduce:
                     # to reproduce the reported ACC

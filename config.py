@@ -8,7 +8,7 @@ def set_config():
     parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data-shuffled/')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
-    parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
+    parser.add_argument('--label-type', type=str, default='V', choices=['A', 'V', 'D', 'L'])
     parser.add_argument('--segment', type=int, default=4)  # segment length in seconds
     parser.add_argument('--overlap', type=float, default=0)
     parser.add_argument('--sampling-rate', type=int, default=1000)

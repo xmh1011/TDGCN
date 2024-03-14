@@ -77,9 +77,7 @@ class PrepareData:
         subject_path = os.path.join(self.data_path, sub_code)
         subject = cPickle.load(open(subject_path, 'rb'), encoding='latin1')
         label = subject['labels']
-        data = subject['data']   # Excluding the first 3s of baseline
-        #   data: 40 x 32 x 7680
-        #   label: 40 x 4
+        data = subject['data']
         # reorder the EEG channel to build the local-global graphs
         data = self.reorder_channel(data=data, graph=self.graph_type)
         print('data:' + str(data.shape) + ' label:' + str(label.shape))
@@ -200,9 +198,8 @@ class PrepareData:
                 target_rate=self.args.target_rate)
             self.args.sampling_rate = self.args.target_rate
 
-        data = self.bandpass_filter(data=data, lowcut=4, highcut=45, fs=self.args.sampling_rate, order=5)
+        data = self.bandpass_filter(data=data, lowcut=1, highcut=50, fs=self.args.sampling_rate, order=5)
         data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
-        data = self.remove_eye_artifact(data=data)
 
         if split:
             data, label = self.split(
