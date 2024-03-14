@@ -1,10 +1,10 @@
-# This is the networks script
+import math
 import os
 import torch
 import config
 import torch.nn as nn
 import torch.nn.functional as F
-from layers import GraphConvolution
+from torch.nn.parameter import Parameter
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -43,7 +43,6 @@ class LGGNet(nn.Module):
 
         # by setting the convolutional kernel being (1,lenght) and the strids being 1, we can use conv2d to
         # achieve the 1d convolution operation.
-        # TODO
         self.Tception1 = self.temporal_learner(input_size[0], num_T,
                                                (1, int(self.window[0] * sampling_rate)),
                                                self.pool, pool_step_rate)
@@ -55,18 +54,19 @@ class LGGNet(nn.Module):
                                                self.pool, pool_step_rate)
         self.BN_t = nn.BatchNorm2d(num_T)
         self.BN_s = nn.BatchNorm2d(num_T)
-        self.BN_fusion = nn.BatchNorm2d(num_T)  # TODO: add fusion layer
-        # self.fusion_layer = self.conv_block(num_T, num_T, (3, 1), 1, 4)
         self.OneXOneConv = nn.Sequential(
             nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
             nn.LeakyReLU(),
             nn.AvgPool2d((1, 2))
         )
-        # diag(W) to assign a weight to each local area
+        # diag(W) to assign a weight to each local areas
         size = self.get_size_temporal(input_size)
+        # 表示局部滤波器的权重。它被定义为一个形状为(self.channel, size[-1])的浮点型张量，并设置为需要梯度计算（requires_grad=True）
         self.local_filter_weight = nn.Parameter(torch.FloatTensor(self.channel, size[-1]),
                                                 requires_grad=True)
+        # 用来对local_filter_weight进行初始化，采用的是Xavier均匀分布初始化方法
         nn.init.xavier_uniform_(self.local_filter_weight)
+        # 表示局部滤波器的偏置。它被定义为一个形状为(1, self.channel, 1)的浮点型张量，初始值为全零，并设置为需要梯度计算
         self.local_filter_bias = nn.Parameter(torch.zeros((1, self.channel, 1), dtype=torch.float32),
                                               requires_grad=True)
 
@@ -74,7 +74,9 @@ class LGGNet(nn.Module):
         self.aggregate = Aggregator(self.idx)
 
         # trainable adj weight for global network
+        # 表示全局邻接矩阵。它被定义为浮点型张量，并设置为需要梯度计算（requires_grad=True）
         self.global_adj = nn.Parameter(torch.FloatTensor(self.brain_area, self.brain_area), requires_grad=True)
+        # 根据给定的张量的形状和分布进行参数初始化。用来对global_adj进行初始化，采用的是Xavier均匀分布初始化方法。
         nn.init.xavier_uniform_(self.global_adj)
         # to be used after local graph embedding
         self.bn = nn.BatchNorm1d(self.brain_area)
@@ -87,9 +89,7 @@ class LGGNet(nn.Module):
             nn.Linear(int(self.brain_area * out_graph), num_classes)
         )
 
-    # 前向传播，隐式调用
     def forward(self, x):
-        # 时间特征
         y = self.Tception1(x)
         out = y
         y = self.Tception2(x)
@@ -102,7 +102,6 @@ class LGGNet(nn.Module):
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
         out = self.local_filter_fun(out, self.local_filter_weight)
-        # 空间特征
         out = self.aggregate.forward(out)
         adj = self.get_adj(out)
         out = self.bn(out)
@@ -129,6 +128,7 @@ class LGGNet(nn.Module):
         size = out.size()
         return size
 
+    # 定义局部滤波器的前向传播函数
     def local_filter_fun(self, x, w):
         w = w.unsqueeze(0).repeat(x.size()[0], 1, 1)
         x = F.relu(torch.mul(x, w) - self.local_filter_bias)
@@ -209,3 +209,31 @@ class Aggregator():
     def aggr_fun(self, x, dim):
         # return torch.max(x, dim=dim).values
         return torch.mean(x, dim=dim)
+
+
+class GraphConvolution(nn.Module):
+    """
+    Simple GCN layer
+    """
+
+    def __init__(self, in_features, out_features, bias=True):
+        super(GraphConvolution, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.weight = Parameter(torch.FloatTensor(in_features, out_features))
+        torch.nn.init.xavier_uniform_(self.weight, gain=1.414)
+        if bias:
+            self.bias = Parameter(torch.zeros((1, 1, out_features), dtype=torch.float32))
+        else:
+            self.register_parameter('bias', None)
+
+    def reset_parameters(self):
+        stdv = 1. / math.sqrt(self.weight.size(1))
+        self.weight.data.uniform_(-stdv, stdv)
+        if self.bias is not None:
+            self.bias.data.uniform_(-stdv, stdv)
+
+    def forward(self, x, adj):
+        output = torch.matmul(x, self.weight)-self.bias
+        output = F.relu(torch.matmul(adj, output))
+        return output

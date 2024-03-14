@@ -7,6 +7,9 @@ from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
+from network_DGCNN import *
+
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
@@ -78,13 +81,22 @@ def pprint(x):
 
 
 def get_model(args):
+
+    idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
+    channels = sum(idx_local_graph)
+    input_size = (args.input_shape[0], channels, args.input_shape[2])
     if args.model == 'LGGNet':
-        idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
-        channels = sum(idx_local_graph)
-        input_size = (args.input_shape[0], channels, args.input_shape[2])
         model = LGGNet(
             num_classes=args.num_class, input_size=input_size,
-            sampling_rate=int(args.sampling_rate * args.scale_coefficient),
+            sampling_rate=args.target_rate,
+            num_T=args.T, out_graph=args.hidden,
+            dropout_rate=args.dropout,
+            pool=args.pool, pool_step_rate=args.pool_step_rate,
+            idx_graph=idx_local_graph)
+    elif args.model == 'DGCNN':
+        model = DGCNN(
+            num_classes=args.num_class, input_size=input_size,
+            sampling_rate=args.target_rate,
             num_T=args.T, out_graph=args.hidden,
             dropout_rate=args.dropout,
             pool=args.pool, pool_step_rate=args.pool_step_rate,
