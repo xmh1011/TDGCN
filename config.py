@@ -8,7 +8,7 @@ def set_config():
     parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data-shuffled/')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
-    parser.add_argument('--label-type', type=str, default='V', choices=['A', 'V', 'D', 'L'])
+    parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
     parser.add_argument('--segment', type=int, default=4)  # segment length in seconds
     parser.add_argument('--overlap', type=float, default=0)
     parser.add_argument('--sampling-rate', type=int, default=1000)
@@ -16,6 +16,8 @@ def set_config():
     parser.add_argument('--trial-duration', type=int, default=59, help='trial duration in seconds')
     parser.add_argument('--input-shape', type=tuple, default=(1, 32, 800))  # 输入形状 (1, 32, 512)
     parser.add_argument('--data-format', type=str, default='eeg')
+    parser.add_argument('--bandpass', type=tuple, default=(1, 50))
+
     # Training Process
     parser.add_argument('--fold', type=int, default=10)
     parser.add_argument('--random-seed', type=int, default=2024)
@@ -32,6 +34,7 @@ def set_config():
     parser.add_argument('--LS', type=bool, default=True, help="Label smoothing")
     parser.add_argument('--LS-rate', type=float, default=0.1)
     parser.add_argument('--gpu', default='0')
+    parser.add_argument('--balance', type=bool, default=True)
 
     parser.add_argument('--save-path', default='./save/')
     parser.add_argument('--load-path', default='./save/max-acc.pth')

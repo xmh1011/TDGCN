@@ -39,6 +39,10 @@ class CrossValidation:
                    "\n15)patient-cmb:" + str(args.patient_cmb) +
                    "\n16)max-epoch-cmb:" + str(args.max_epoch_cmb) +
                    "\n17)fold:" + str(args.fold) +
+                   "\n18)model:" + str(args.model) +
+                   "\n19)data-path:" + str(args.data_path) +
+                   "\n20balance):" + str(args.balance) +
+                   "\n21)bandpass:" + str(args.bandpass) +
                    '\n')
         file.close()
 
@@ -175,8 +179,11 @@ class CrossValidation:
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
-                data_train, label_train, data_val, label_val = self.split_balance_class(
-                    data=data_train, label=label_train, train_rate=self.args.training_rate, random=True)
+                if self.args.balance:
+                    data_train, label_train, data_val, label_val = self.split_balance_class(
+                        data=data_train, label=label_train, train_rate=self.args.training_rate, random=True)
+                print('Train:', label_train)
+                print('Test:', label_test)
 
                 if reproduce:
                     # to reproduce the reported ACC
