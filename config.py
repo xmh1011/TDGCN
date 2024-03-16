@@ -5,7 +5,7 @@ def set_config():
     parser = argparse.ArgumentParser()
     # Data
     parser.add_argument('--dataset', type=str, default='DEAP')
-    parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data/')
+    parser.add_argument('--data-path', type=str, default='D:/脑机接口/NetCode/data_net')# /home/xiaominghao/eeg-data/
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
@@ -31,7 +31,7 @@ def set_config():
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--LS', type=bool, default=True, help="Label smoothing")
     parser.add_argument('--LS-rate', type=float, default=0.1)
-    parser.add_argument('--gpu', default='0')
+    parser.add_argument('--gpu', default='2')
 
     parser.add_argument('--save-path', default='./save/')
     parser.add_argument('--load-path', default='./save/max-acc.pth')
