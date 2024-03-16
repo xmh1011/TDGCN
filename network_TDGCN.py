@@ -9,7 +9,6 @@ from torch.nn.parameter import Parameter
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-
 class PowerLayer(nn.Module):
     """
     The power layer: calculates the log-transformed power of the data
@@ -24,7 +23,7 @@ class PowerLayer(nn.Module):
         return torch.log(self.pooling(x.pow(2)))
 
 
-class DGCNN(nn.Module):
+class TDGCN(nn.Module):
     """
     提供的代码实现了一个动态图卷积神经网络（DGCNN）的架构，其中包含以下几个关键组件和概念：
 
@@ -60,7 +59,7 @@ class DGCNN(nn.Module):
 
     def __init__(self, num_classes, input_size, sampling_rate, num_T,
                  out_graph, dropout_rate, pool, pool_step_rate, idx_graph):
-        super(DGCNN, self).__init__()
+        super(TDGCN, self).__init__()
 
         self.num_T = num_T
         self.out_graph = out_graph
@@ -71,6 +70,7 @@ class DGCNN(nn.Module):
         self.idx = idx_graph
         self.channel = input_size[1]
         self.brain_area = len(self.idx)
+        hidden_features = input_size[2]
 
         # by setting the convolutional kernel being (1,lenght) and the strids being 1, we can use conv2d to
         # achieve the 1d convolution operation.
@@ -86,20 +86,11 @@ class DGCNN(nn.Module):
         # Batch normalization layers
         self.bn_t = nn.BatchNorm2d(num_T)
         self.bn_s = nn.BatchNorm2d(num_T)
-        # self.OneXOneConv = nn.Sequential(
-        #     nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
-        #     nn.LeakyReLU(),
-        #     nn.AvgPool2d((1, 2))
-        # )
-
-        # TCN模块的配置和实例化
-        num_channels = [num_T, num_T, num_T]  # 示例：保持输入和输出通道数相同
-        self.tcn = TemporalConvNet(num_inputs=num_T, num_channels=num_channels, kernel_size=3, dropout=dropout_rate,
-                                   reduce_halve=False)
-
-        # 添加平均池化层以减半时间序列长度
-        self.avg_pool = nn.AvgPool1d(kernel_size=2, stride=2)
-
+        self.OneXOneConv = nn.Sequential(
+            nn.Conv2d(num_T, num_T, kernel_size=(1, 1), stride=(1, 1)),
+            nn.LeakyReLU(),
+            nn.AvgPool2d((1, 2))
+        )
         # diag(W) to assign a weight to each local areas
         size = self.get_size_temporal(input_size)
         # 表示局部滤波器的权重。它被定义为一个形状为(self.channel, size[-1])的浮点型张量，并设置为需要梯度计算（requires_grad=True）
@@ -114,7 +105,8 @@ class DGCNN(nn.Module):
         self.aggregate = Aggregator(self.idx)
 
         # Dynamic Graph Convolution Layers
-        self.dynamic_gcn = DynamicGraphConvolution(size[-1], out_graph)
+        self.dynamic_gcn = StackedDynamicGraphConvolution(size[-1], hidden_features, out_graph, num_layers=3)
+        # self.dynamic_gcn = DynamicGraphConvolution(size[-1], out_graph)
         # 表示全局邻接矩阵。它被定义为浮点型张量，并设置为需要梯度计算（requires_grad=True）
         self.global_adj = nn.Parameter(torch.FloatTensor(self.brain_area, self.brain_area), requires_grad=True)
         # 根据给定的张量的形状和分布进行参数初始化。用来对global_adj进行初始化，采用的是Xavier均匀分布初始化方法。
@@ -139,23 +131,7 @@ class DGCNN(nn.Module):
         z = self.Tception3(data)
         out = torch.cat((out, z), dim=-1)
         out = self.bn_t(out)
-        # out = self.OneXOneConv(out)
-        # 重组形状以适应逐通道处理
-        batch_size, freq_dim, num_channels, seq_len = out.shape
-        out = out.permute(0, 2, 1, 3).contiguous().view(batch_size * num_channels, freq_dim, seq_len)
-        # 现在x的形状是[64*32, 64, 547]
-
-        # 应用TCN模块
-        out = self.tcn(out)
-
-        # 应用平均池化
-        out = self.avg_pool(out)
-
-        # 重组输出形状回[64, 64, 32, 新序列长度]
-        _, _, new_seq_len = out.shape  # 获取新的序列长度
-        out = out.view(batch_size, num_channels, freq_dim, new_seq_len)
-        out = out.permute(0, 2, 1, 3)
-
+        out = self.OneXOneConv(out)
         out = self.bn_s(out)
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
@@ -212,24 +188,7 @@ class DGCNN(nn.Module):
         y = self.Tception3(x)
         out = torch.cat((out, y), dim=-1)
         out = self.bn_t(out)
-        # out = self.OneXOneConv(out)
-        # out的形状为[64, 64, 32, 547]
-        # 重组形状以适应逐通道处理
-        batch_size, freq_dim, num_channels, seq_len = out.shape
-        out = out.permute(0, 2, 1, 3).contiguous().view(batch_size * num_channels, freq_dim, seq_len)
-        # 现在out的形状是[64*32, 64, 547]
-
-        # 应用TCN模块
-        out = self.tcn(out)
-
-        # 应用平均池化
-        out = self.avg_pool(out)
-
-        # 重组输出形状回[64, 32, 64, 新序列长度]
-        _, _, new_seq_len = out.shape  # 获取新的序列长度
-        out = out.view(batch_size, num_channels, freq_dim, new_seq_len)
-        out = out.permute(0, 2, 1, 3)
-
+        out = self.OneXOneConv(out)
         out = self.bn_s(out)
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
@@ -248,7 +207,6 @@ class GraphConvolution(nn.Module):
     """
     Simple GCN layer
     """
-
     def __init__(self, in_features, out_features, bias=True):
         super(GraphConvolution, self).__init__()
         self.in_features = in_features
@@ -359,6 +317,7 @@ class DynamicGraphConvolution(GraphConvolution):
 
         return similarity
 
+
     def normalize_adjacency_matrix(self, adj):
         """
         Normalize the adjacency matrix (symmetric normalization).
@@ -369,67 +328,20 @@ class DynamicGraphConvolution(GraphConvolution):
         return torch.bmm(torch.bmm(d_mat_inv_sqrt, adj), d_mat_inv_sqrt)
 
 
-class TemporalBlock(nn.Module):
-    """
-        Temporal convolution layers
-    """
+class StackedDynamicGraphConvolution(nn.Module):
+    def __init__(self, in_features, hidden_features, out_features, num_layers=3, bias=True):
+        super(StackedDynamicGraphConvolution, self).__init__()
+        self.layers = nn.ModuleList()
 
-    def __init__(self, n_inputs, n_outputs, kernel_size, stride, dilation, dropout=0.2):
-        super(TemporalBlock, self).__init__()
-        # 计算所需的填充以保持时间维度长度不变
-        padding = (kernel_size - 1) * dilation // 2
+        # First layer
+        self.layers.append(DynamicGraphConvolution(in_features, hidden_features, bias=bias))
+        # Hidden layers
+        for _ in range(num_layers - 2):
+            self.layers.append(DynamicGraphConvolution(hidden_features, hidden_features, bias=bias))
+        # Last layer
+        self.layers.append(DynamicGraphConvolution(hidden_features, out_features, bias=bias))
 
-        self.conv1 = nn.Conv1d(n_inputs, n_outputs, kernel_size,
-                               stride=stride, padding=padding, dilation=dilation)
-        self.bn1 = nn.BatchNorm1d(n_outputs)
-        self.conv2 = nn.Conv1d(n_outputs, n_outputs, kernel_size,
-                               stride=stride, padding=padding, dilation=dilation)
-        self.bn2 = nn.BatchNorm1d(n_outputs)
-
-        self.downsample = nn.Conv1d(n_inputs, n_outputs, 1) if n_inputs != n_outputs else None
-        self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(dropout)
-
-    def forward(self, x):
-        res = x if self.downsample is None else self.downsample(x)
-
-        out = self.conv1(x)
-        out = self.relu(out)
-        out = self.bn1(out)
-        out = self.dropout(out)
-
-        out = self.conv2(out)
-        out = self.relu(out)
-        out = self.bn2(out)
-
-        return self.relu(out + res)
-
-
-class TemporalConvNet(nn.Module):
-    """
-    Temporal convolution network with average pooling to reduce temporal dimension.
-    """
-
-    def __init__(self, num_inputs, num_channels, kernel_size=2, dropout=0.2, reduce_halve=False):
-        super(TemporalConvNet, self).__init__()
-        self.reduce_halve = reduce_halve
-
-        layers = []
-        num_levels = len(num_channels)
-        for i in range(num_levels):
-            dilation_size = 2 ** i
-            in_channels = num_inputs if i == 0 else num_channels[i - 1]
-            out_channels = num_channels[i]
-            layers.append(TemporalBlock(in_channels, out_channels, kernel_size, stride=1, dilation=dilation_size,
-                                        dropout=dropout))
-
-        self.network = nn.Sequential(*layers)
-
-        if self.reduce_halve:
-            self.avg_pool = nn.AvgPool1d(kernel_size=2, stride=2)
-
-    def forward(self, x):
-        x = self.network(x)
-        if self.reduce_halve:
-            x = self.avg_pool(x)
+    def forward(self, x, adj=None):
+        for layer in self.layers:
+            x = layer(x, adj)
         return x

@@ -4,8 +4,6 @@ from sklearn.decomposition import FastICA
 from train_model import *
 from scipy.signal import resample
 
-_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
-
 
 class PrepareData:
     def __init__(self, args):

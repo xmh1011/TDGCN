@@ -11,8 +11,6 @@ from network_TDGCN import *
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
-_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
-
 
 def set_gpu(x):
     torch.set_num_threads(1)

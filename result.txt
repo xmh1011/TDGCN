@@ -1,41 +1,198 @@
+# deap TGCN 训练结果
+2024-03-12 23:08:38.977647
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2021
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:L
+12)T:64
+13)graph-type:hem
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+test mAcc=0.6368229166666667 mF1=0.7293367716342263
+val mAcc=0.6977430555555556 F1=0.78526807253654
 
-# 针对deap数据集的原代码测试结果
->>> Test:  loss=0.8736 acc=0.5333 f1=0.5679
-Final: test mean ACC:0.5902083333333333 std:0.06953559989514564
-Final: val mean ACC:0.6861979166666667 std:0.05723656599063629 mean F1:0.7220541447952742
-
-# 针对deap数据集的原代码测试结果
-2023-12-14 15:02:41.015504
+# deap LGGNet 训练结果
+2024-03-12 23:08:07.854055
 Train:Parameter setting for LGGNet on DEAP
 1)number_class:2
 2)random_seed:2021
-3)learning_rate:0.001
-4)pool:16
-5)num_epochs:200
-6)batch_size:64
-7)dropout:0.5
-8)hidden_node:32
-9)input_shape:(1, 32, 512)
-10)class:V
-11)T:64
-12)graph-type:gen
-test mAcc=0.5902083333333333 mF1=0.6391921697562348 val mAcc=0.6861979166666667 val F1=0.7220541447952742
+3)learning_rate:1e-05
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:L
+12)T:64
+13)graph-type:hem
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+test mAcc=0.6311979166666667 mF1=0.7225543209629903
+val mAcc=0.6955150462962962 F1=0.783272644747021
 
 
-
-2023-12-14 14:01:08.514395
-Train:Parameter setting for LGGNet on DEAP
-# 使用原模型参数 1000hz数据 十倍交叉验证
+# deap
+2024-03-13 10:14:05.592708
+Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
-2)random_seed:2023
+2)random_seed:2024
 3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:200
-7)batch_size:25
+7)batch_size:64
 8)dropout:0.5
 9)hidden_node:32
-10)input_shape:(1, 32, 4000)
+10)input_shape:(1, 32, 512)
+11)class:L
+12)T:64
+13)graph-type:hem
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+test mAcc=0.6098958333333333 mF1=0.6821023623528495
+val mAcc=0.6969560185185186 F1=0.7568839539921448
+
+
+
+# 私有数据集
+2024-03-12 23:10:32.975149
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:10
+17)fold:10
+0.8321428571428572,0.8362369337979093
+0.6743243243243243,0.6581560283687944
+0.6310810810810811,0.6250000000000001
+0.9891891891891892,0.989145183175034
+0.9108108108108108,0.9100817438692098
+0.9432432432432433,0.9430122116689281
+0.8493243243243244,0.8448155880306193
+0.9594594594594594,0.9594594594594594
+0.9162162162162162,0.9130434782608695
+0.7263513513513513,0.7246770904146839
+0.7371621621621621,0.7362711864406779
+0.9283783783783783,0.9253521126760564
+0.754054054054054,0.7275449101796407
+0.7574324324324324,0.7430207587687904
+0.8756756756756757,0.8713286713286712
+0.8128378378378378,0.810663021189337
+0.8385135135135136,0.836637047163363
+0.6655405405405406,0.6634942216179469
+0.7216216216216216,0.7073863636363638
+0.8621621621621621,0.8563380281690142
+0.9777027027027027,0.9777177582714381
+0.5912162162162162,0.5778087927424983
+0.8398648648648649,0.8298636037329505
+0.6358108108108108,0.6113914924297044
+0.6472972972972973,0.6239193083573488
+0.6885135135135135,0.6737438075017693
+0.7168918918918918,0.7139931740614334
+0.6189189189189189,0.5828402366863906
+0.3952702702702703,0.3789035392088827
+0.7972972972972973,0.8002663115845539
+0.8952702702702703,0.8940533151059467
+0.8574324324324324,0.8637830858618464
+test mAcc=0.7827189913127414 mF1=0.775310889492504
+val mAcc=0.9077645726083226 F1=0.9053705153063243
+
+# 私有数据集 打散的数据 使用split_balance_class函数
+2024-03-14 10:51:59.651132
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+total test accuracy 0.8142857142857143, f1: 0.825503355704698
+total test accuracy 0.5722972972972973, f1: 0.562543192812716
+total test accuracy 0.55, f1: 0.5493910690121786
+total test accuracy 0.972972972972973, f1: 0.972936400541272
+total test accuracy 0.9175675675675675, f1: 0.9177897574123989
+total test accuracy 0.9331081081081081, f1: 0.9325153374233129
+total test accuracy 0.8202702702702702, f1: 0.8331242158092848
+total test accuracy 0.9398648648648649, f1: 0.9394145677331519
+total test accuracy 0.8898648648648648, f1: 0.8919814446653412
+total test accuracy 0.6972972972972973, f1: 0.7135549872122763
+total test accuracy 0.7513513513513513, f1: 0.7422969187675069
+total test accuracy 0.9182432432432432, f1: 0.9135096497498213
+total test accuracy 0.7675675675675676, f1: 0.758765778401122
+total test accuracy 0.6939189189189189, f1: 0.6821052631578948
+total test accuracy 0.5148648648648648, f1: 0.48567335243553006
+total test accuracy 0.7486486486486487, f1: 0.743448275862069
+total test accuracy 0.847972972972973, f1: 0.8484848484848485
+total test accuracy 0.6628378378378378, f1: 0.6710613052076465
+total test accuracy 0.7222972972972973, f1: 0.7163561076604554
+total test accuracy 0.822972972972973, f1: 0.8236877523553162
+total test accuracy 0.9405405405405406, f1: 0.9388038942976356
+total test accuracy 0.5547297297297298, f1: 0.5282748747315675
+total test accuracy 0.7891891891891892, f1: 0.7830319888734354
+total test accuracy 0.6283783783783784, f1: 0.6077032810271041
+total test accuracy 0.6932432432432433, f1: 0.6761768901569187
+total test accuracy 0.7094594594594594, f1: 0.6950354609929078
+total test accuracy 0.7074324324324325, f1: 0.6935598018400566
+total test accuracy 0.6635135135135135, f1: 0.6442857142857144
+total test accuracy 0.32837837837837835, f1: 0.330188679245283
+total test accuracy 0.5405405405405406, f1: 0.5466666666666666
+total test accuracy 0.8148648648648649, f1: 0.8094575799721835
+total test accuracy 0.7695945945945946, f1: 0.7843137254901961
+test mAcc=0.7405646718146719 mF1=0.736301316812141
+val mAcc=0.869075437044187 F1=0.8646305398978607
+
+
+2024-03-14 15:05:01.605413
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
 11)class:V
 12)T:64
 13)graph-type:gen
@@ -43,15 +200,13 @@ Train:Parameter setting for LGGNet on DEAP
 15)patient-cmb:8
 16)max-epoch-cmb:20
 17)fold:10
-test mAcc=0.7015037593984963 mF1=0.6960927552189908 val mAcc=0.8393042792165599 val F1=0.8272734237200412
 
 
-2023-12-13 18:16:32.684523
-# 使用原模型默认参数 128hz数据
-Train:Parameter setting for LGGNet on DEAP
-
+# 私有数据集 没打散的数据 使用split_balance_class函数
+2024-03-14 15:10:51.938817
+Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
-2)random_seed:2023
+2)random_seed:2024
 3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
@@ -59,214 +214,46 @@ Train:Parameter setting for LGGNet on DEAP
 7)batch_size:64
 8)dropout:0.5
 9)hidden_node:32
-10)input_shape:(1, 32, 512)
-11)class:V
-12)T:64
-13)graph-type:gen
-test mAcc=0.8486615245009075 mF1=0.8348771544665152 val mAcc=0.9318360626110191 val F1=0.9111514685852575
-
-
-2023-12-13 16:13:28.674232
-# 避免过拟合
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:64
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 512)
-11)class:V
-12)T:64
-13)graph-type:gen
-test mAcc=0.7450090744101634 mF1=0.7171445372084936 val mAcc=0.8694793281301522 val F1=0.8355562220110752
-
-2023-12-13 22:02:59.8
-# 修改后增加patient-cmb验证的代码
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:64
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 512)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-test mAcc=0.7486388384754991 mF1=0.7206213038022418 val mAcc=0.8514715564539922 val F1=0.8171856082317548
-
-
-2023-12-14 13:22:43.886934
-# 用1000hz的数据 四倍交叉验证
-# 该组数据效果不错
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:4
-test mAcc=0.6199248120300752 mF1=0.5957851397778507 val mAcc=0.7575085812356979 val F1=0.7419544426321621
-
-2023-12-14 13:59:10.284305
-# 四倍交叉验证 1000hz数据
-# 该组数据效果也不错
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:4
-test mAcc=0.6375939849624059 mF1=0.6232135744645787 val mAcc=0.7509614162217136 val F1=0.7486045742172385
-
-
-2023-12-14 13:57:48.575995
-# 用1000hz的数据 十倍交叉验证 修改后的参数
-# 该组数据效果不错
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:2
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.6387218045112781 mF1=0.6325911717389944 val mAcc=0.7656989696463381 val F1=0.7614451138554029
-
-2023-12-14 21:13:27.831553
-Train:Parameter setting for LGGNet on DEAP
-# 修改后的参数，
-/home/xiaominghao/anaconda3/envs/LGG/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1492: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 due to no true nor predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-05
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:4
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.6392857142857143 mF1=0.6430230544708673
-val mAcc=0.7617144713635942 F1=0.7636661668353386
-
-
-2023-12-14 13:11:45.705503
-# 使用原参数，训练多轮，四倍交叉验证
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:0.001
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
+10)input_shape:(1, 32, 800)
+11)class:A
 12)T:64
 13)graph-type:gen
 14)patient:20
 15)patient-cmb:8
 16)max-epoch-cmb:20
-test mAcc=0.7259398496240601 mF1=0.6903873187700892 val mAcc=0.8043478260869565 val F1=0.7476088352742052
-
-
-2024-02-01 22:35:50.439747
-# 数据增加到32组，降低早停次数和最大迭代次数
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-06
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:6
-15)patient-cmb:2
-16)max-epoch-cmb:10
 17)fold:10
-test mAcc=0.5147465437788019 mF1=0.5172486904996064
-val mAcc=0.640983956306537 F1=0.6685076840858057
+total test accuracy 0.7535714285714286, f1: 0.7509025270758122
+total test accuracy 0.5567567567567567, f1: 0.5300859598853868
+total test accuracy 0.5635135135135135, f1: 0.5738786279683377
+total test accuracy 0.9695945945945946, f1: 0.9692832764505119
+total test accuracy 0.918918918918919, f1: 0.9191374663072777
+total test accuracy 0.9432432432432433, f1: 0.9424657534246577
+total test accuracy 0.8074324324324325, f1: 0.817658349328215
+total test accuracy 0.9358108108108109, f1: 0.9354180829367776
+total test accuracy 0.8486486486486486, f1: 0.8502673796791443
+total test accuracy 0.6959459459459459, f1: 0.7081712062256809
+total test accuracy 0.7486486486486487, f1: 0.7361702127659574
+total test accuracy 0.9094594594594595, f1: 0.9058988764044943
+total test accuracy 0.7189189189189189, f1: 0.7028571428571428
+total test accuracy 0.6554054054054054, f1: 0.6325648414985591
+total test accuracy 0.5054054054054054, f1: 0.45937961595273263
+total test accuracy 0.772972972972973, f1: 0.7630465444287728
+total test accuracy 0.8378378378378378, f1: 0.8393574297188755
+total test accuracy 0.6189189189189189, f1: 0.6284584980237155
+total test accuracy 0.6810810810810811, f1: 0.674931129476584
+total test accuracy 0.802027027027027, f1: 0.8045363575717145
+total test accuracy 0.9182432432432432, f1: 0.9153254023792862
+total test accuracy 0.5554054054054054, f1: 0.5252525252525253
+total test accuracy 0.7682432432432432, f1: 0.7655502392344498
+total test accuracy 0.6013513513513513, f1: 0.5749279538904899
+total test accuracy 0.6554054054054054, f1: 0.6586345381526105
+total test accuracy 0.7256756756756757, f1: 0.7180555555555554
+total test accuracy 0.7378378378378379, f1: 0.725212464589235
+total test accuracy 0.6722972972972973, f1: 0.6629603891591384
+total test accuracy 0.32094594594594594, f1: 0.3149284253578732
+total test accuracy 0.5121621621621621, f1: 0.5147849462365592
+total test accuracy 0.8290540540540541, f1: 0.8224561403508772
+total test accuracy 0.7472972972972973, f1: 0.7614795918367346
+test mAcc=0.7277509652509653 mF1=0.7220011703117402
+val mAcc=0.8604743734933087 F1=0.8549122961976019
 
-
-2024-02-02 17:18:54.735885
-# 减少训练次数，适当提高早停参数
-Train:Parameter setting for LGGNet on DEAP
-1)number_class:2
-2)random_seed:2023
-3)learning_rate:1e-06
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:150
-7)batch_size:25
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 4000)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:8
-15)patient-cmb:5
-16)max-epoch-cmb:10
-17)fold:10
-test mAcc=0.5300691244239631 mF1=0.5323383031566242
-val mAcc=0.6512800819252431 F1=0.6736409012391326
