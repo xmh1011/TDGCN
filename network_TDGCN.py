@@ -24,7 +24,7 @@ class PowerLayer(nn.Module):
         return torch.log(self.pooling(x.pow(2)))
 
 
-class DGCNN(nn.Module):
+class TDGCN(nn.Module):
     """
     提供的代码实现了一个动态图卷积神经网络（DGCNN）的架构，其中包含以下几个关键组件和概念：
 
@@ -60,7 +60,7 @@ class DGCNN(nn.Module):
 
     def __init__(self, num_classes, input_size, sampling_rate, num_T,
                  out_graph, dropout_rate, pool, pool_step_rate, idx_graph):
-        super(DGCNN, self).__init__()
+        super(TDGCN, self).__init__()
 
         self.num_T = num_T
         self.out_graph = out_graph
