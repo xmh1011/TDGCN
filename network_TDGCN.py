@@ -71,6 +71,7 @@ class TDGCN(nn.Module):
         self.idx = idx_graph
         self.channel = input_size[1]
         self.brain_area = len(self.idx)
+        hidden_features = input_size[2]
 
         # by setting the convolutional kernel being (1,lenght) and the strids being 1, we can use conv2d to
         # achieve the 1d convolution operation.
@@ -114,7 +115,8 @@ class TDGCN(nn.Module):
         self.aggregate = Aggregator(self.idx)
 
         # Dynamic Graph Convolution Layers
-        self.dynamic_gcn = DynamicGraphConvolution(size[-1], out_graph)
+        self.dynamic_gcn = StackedDynamicGraphConvolution(size[-1], hidden_features, out_graph, num_layers=3)
+        # self.dynamic_gcn = DynamicGraphConvolution(size[-1], out_graph)
         # 表示全局邻接矩阵。它被定义为浮点型张量，并设置为需要梯度计算（requires_grad=True）
         self.global_adj = nn.Parameter(torch.FloatTensor(self.brain_area, self.brain_area), requires_grad=True)
         # 根据给定的张量的形状和分布进行参数初始化。用来对global_adj进行初始化，采用的是Xavier均匀分布初始化方法。
@@ -367,6 +369,25 @@ class DynamicGraphConvolution(GraphConvolution):
         d_inv_sqrt = torch.pow(rowsum, -0.5).unsqueeze(-1)
         d_mat_inv_sqrt = d_inv_sqrt * torch.eye(adj.size(1)).to(adj.device)
         return torch.bmm(torch.bmm(d_mat_inv_sqrt, adj), d_mat_inv_sqrt)
+
+
+class StackedDynamicGraphConvolution(nn.Module):
+    def __init__(self, in_features, hidden_features, out_features, num_layers=3, bias=True):
+        super(StackedDynamicGraphConvolution, self).__init__()
+        self.layers = nn.ModuleList()
+
+        # First layer
+        self.layers.append(DynamicGraphConvolution(in_features, hidden_features, bias=bias))
+        # Hidden layers
+        for _ in range(num_layers - 2):
+            self.layers.append(DynamicGraphConvolution(hidden_features, hidden_features, bias=bias))
+        # Last layer
+        self.layers.append(DynamicGraphConvolution(hidden_features, out_features, bias=bias))
+
+    def forward(self, x, adj=None):
+        for layer in self.layers:
+            x = layer(x, adj)
+        return x
 
 
 class TemporalBlock(nn.Module):
