@@ -9,7 +9,7 @@ def main():
     pd.run(sub_to_run, split=True, expand=True)
     cv = CrossValidation(args)
     seed_all(args.random_seed)
-    cv.n_fold_CV(subject=sub_to_run, fold=args.fold)
+    cv.n_fold_CV(subject=sub_to_run, fold=args.fold, reproduce=args.reproduce)
 
 
 if __name__ == '__main__':

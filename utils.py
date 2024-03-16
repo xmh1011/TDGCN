@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
-from network_DGCNN import *
+from network_TDGCN import *
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
@@ -93,8 +93,8 @@ def get_model(args):
             dropout_rate=args.dropout,
             pool=args.pool, pool_step_rate=args.pool_step_rate,
             idx_graph=idx_local_graph)
-    elif args.model == 'DGCNN':
-        model = DGCNN(
+    elif args.model == 'TDGCN':
+        model = TDGCN(
             num_classes=args.num_class, input_size=input_size,
             sampling_rate=args.target_rate,
             num_T=args.T, out_graph=args.hidden,

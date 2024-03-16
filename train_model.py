@@ -115,7 +115,6 @@ def train(args, data_train, label_train, data_val, label_val, subject, fold):
         else:
             counter += 1
             if counter >= patient:
-                # deap 数据集在此停止训练
                 print('early stopping')
                 break
 

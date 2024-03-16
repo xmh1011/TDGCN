@@ -39,6 +39,10 @@ class CrossValidation:
                    "\n15)patient-cmb:" + str(args.patient_cmb) +
                    "\n16)max-epoch-cmb:" + str(args.max_epoch_cmb) +
                    "\n17)fold:" + str(args.fold) +
+                   "\n18)model:" + str(args.model) +
+                   "\n19)data-path:" + str(args.data_path) +
+                   "\n20balance):" + str(args.balance) +
+                   "\n21)bandpass:" + str(args.bandpass) +
                    '\n')
         file.close()
 
@@ -153,7 +157,7 @@ class CrossValidation:
 
         return train, train_label, val, val_label
 
-    def n_fold_CV(self, subject=None, fold=4, shuffle=True, reproduce=False):
+    def n_fold_CV(self, subject, fold, reproduce):
         """
         this function achieves n-fold cross-validation
         param subject: how many subjects to load
@@ -170,11 +174,16 @@ class CrossValidation:
             va_val = Averager()
             vf_val = Averager()
             preds, acts = [], []
-            kf = KFold(n_splits=fold, shuffle=shuffle)
+            kf = KFold(n_splits=fold, shuffle=True)
             for idx_fold, (idx_train, idx_test) in enumerate(kf.split(data)):
                 print('Outer loop: {}-fold-CV Fold:{}'.format(fold, idx_fold))
                 data_train, label_train, data_test, label_test = self.prepare_data(
                     idx_train=idx_train, idx_test=idx_test, data=data, label=label)
+                if self.args.balance:
+                    data_train, label_train, data_val, label_val = self.split_balance_class(
+                        data=data_train, label=label_train, train_rate=self.args.training_rate, random=True)
+                print('Train:', label_train)
+                print('Test:', label_test)
 
                 if reproduce:
                     # to reproduce the reported ACC
@@ -207,7 +216,7 @@ class CrossValidation:
             acc, f1, _ = get_metrics(y_pred=preds, y_true=acts)
             tta.append(acc)
             ttf.append(f1)
-            result = '{},{}'.format(tta[-1], f1)
+            result = 'total test accuracy {}, f1: {}'.format(tta[-1], f1)
             self.log2txt(result)
 
         # prepare final report
@@ -233,8 +242,8 @@ class CrossValidation:
     def first_stage(self, data, label, subject, fold):
         """
         this function achieves n-fold-CV to:
-            1. select hyper-parameters on training data
-            2. get the model for evaluation on testing data
+        1. select hyper-parameters on training data
+        2. get the model for evaluation on testing data
         param data: (segments, 1, channel, data)
         param label: (segments,)
         param subject: which subject the data belongs to
