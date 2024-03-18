@@ -21,7 +21,7 @@ def set_config():
     # Training Process
     parser.add_argument('--fold', type=int, default=10)
     parser.add_argument('--random-seed', type=int, default=2024)
-    parser.add_argument('--max-epoch', type=int, default=200)
+    parser.add_argument('--max-epoch', type=int, default=400)
     parser.add_argument('--patient', type=int, default=20)  # 早停 最开始为20
     parser.add_argument('--patient-cmb', type=int, default=8)  # 原始值为8
     parser.add_argument('--max-epoch-cmb', type=int, default=20)  # 最大迭代次数 原始值为20
