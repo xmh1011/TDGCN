@@ -15,6 +15,7 @@ class PrepareData:
         self.model = None
         self.data_path = args.data_path
         self.label_type = args.label_type
+        self.dataset = args.dataset
         self.original_order = ['Fp1', 'Fp2', 'AF3', 'AF4', 'Fz', 'F3', 'F4', 'F7', 'F8', 'FC1', 'FC2', 'FC5', 'FC6',
                                'Cz', 'C3', 'C4', 'T7', 'T8',
                                'CP1', 'CP2', 'CP5', 'CP6', 'Pz', 'P3', 'P4', 'P7', 'P8', 'PO3', 'PO4', 'Oz', 'O1', 'O2']
@@ -72,7 +73,13 @@ class PrepareData:
         data: (40, 32, 7680) label: (40, 4)
         """
         sub += 1
-        sub_code = str('sample_' + str(sub) + '.dat')
+        if self.dataset == 'WQJ':
+            sub_code = str('sample_' + str(sub) + '.dat')
+        elif self.dataset == 'DEAP':
+            if sub < 10:
+                sub_code = str('s0' + str(sub) + '.dat')
+            else:
+                sub_code = str('s' + str(sub) + '.dat')
 
         subject_path = os.path.join(self.data_path, sub_code)
         subject = cPickle.load(open(subject_path, 'rb'), encoding='latin1')
@@ -143,6 +150,9 @@ class PrepareData:
             label = label[:, 2]
         elif self.label_type == 'L':
             label = label[:, 3]
+        if self.dataset == 'DEAP':
+            label = np.where(label <= 5, 0, label)
+            label = np.where(label > 5, 1, label)
         return label
 
     def save(self, data, label, sub):
@@ -198,8 +208,9 @@ class PrepareData:
                 target_rate=self.args.target_rate)
             self.args.sampling_rate = self.args.target_rate
 
-        data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.sampling_rate, order=5)
-        data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
+        if self.args.dataset == 'WQJ':
+            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.sampling_rate, order=5)
+            data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
 
         if split:
             data, label = self.split(

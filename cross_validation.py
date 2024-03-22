@@ -41,8 +41,9 @@ class CrossValidation:
                    "\n17)fold:" + str(args.fold) +
                    "\n18)model:" + str(args.model) +
                    "\n19)data-path:" + str(args.data_path) +
-                   "\n20balance):" + str(args.balance) +
+                   "\n20)balance:" + str(args.balance) +
                    "\n21)bandpass:" + str(args.bandpass) +
+                   "\n22)dataset:" + str(args.dataset) +
                    '\n')
         file.close()
 
@@ -182,8 +183,6 @@ class CrossValidation:
                 if self.args.balance:
                     data_train, label_train, data_val, label_val = self.split_balance_class(
                         data=data_train, label=label_train, train_rate=self.args.training_rate, random=True)
-                print('Train:', label_train)
-                print('Test:', label_test)
 
                 if reproduce:
                     # to reproduce the reported ACC
@@ -216,7 +215,7 @@ class CrossValidation:
             acc, f1, _ = get_metrics(y_pred=preds, y_true=acts)
             tta.append(acc)
             ttf.append(f1)
-            result = 'total test accuracy {}, f1: {}'.format(tta[-1], f1)
+            result = 'sub {}: total test accuracy {}, f1: {}'.format(sub, tta[-1], f1)
             self.log2txt(result)
 
         # prepare final report

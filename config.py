@@ -4,8 +4,8 @@ import argparse
 def set_config():
     parser = argparse.ArgumentParser()
     # Data
-    parser.add_argument('--dataset', type=str, default='DEAP')
-    parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data-shuffled/')
+    parser.add_argument('--dataset', type=str, default='WQJ', choices=['WQJ', 'DEAP'])
+    parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data/')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
@@ -20,11 +20,11 @@ def set_config():
 
     # Training Process
     parser.add_argument('--fold', type=int, default=10)
-    parser.add_argument('--random-seed', type=int, default=2024)
+    parser.add_argument('--random-seed', type=int, default=3407)
     parser.add_argument('--max-epoch', type=int, default=400)
-    parser.add_argument('--patient', type=int, default=20)  # 早停 最开始为20
-    parser.add_argument('--patient-cmb', type=int, default=8)  # 原始值为8
-    parser.add_argument('--max-epoch-cmb', type=int, default=20)  # 最大迭代次数 原始值为20
+    parser.add_argument('--patient', type=int, default=40)  # 早停 最开始为20
+    parser.add_argument('--patient-cmb', type=int, default=20)  # 原始值为8
+    parser.add_argument('--max-epoch-cmb', type=int, default=40)  # 最大迭代次数 原始值为20
     parser.add_argument('--batch-size', type=int, default=64)
     parser.add_argument('--learning-rate', type=float, default=1e-3)  # 学习率 原始值为1e-3
     parser.add_argument('--training-rate', type=float, default=0.8)
@@ -34,7 +34,7 @@ def set_config():
     parser.add_argument('--LS', type=bool, default=True, help="Label smoothing")
     parser.add_argument('--LS-rate', type=float, default=0.1)
     parser.add_argument('--gpu', default='0')
-    parser.add_argument('--balance', type=bool, default=True)
+    parser.add_argument('--balance', type=bool, default=False)
 
     parser.add_argument('--save-path', default='./save/')
     parser.add_argument('--load-path', default='./save/max-acc.pth')
