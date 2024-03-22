@@ -764,3 +764,24 @@ total test accuracy 0.9067567567567567, f1: 0.9033613445378152
 total test accuracy 0.6466216216216216, f1: 0.6449422946367956
 test mAcc=0.8447423986486486 mF1=0.8439724022907961
 val mAcc=0.927953734984985 F1=0.9256315986701833
+
+
+TODO: @Zohix
+
+TDGCN： 改进邻接矩阵计算方法，单层动态图神经网络，跑deap数据集，LGG原有参数。
+
+TDGCN-3： 改进邻接矩阵计算方法，三层动态图神经网络，跑deap数据集，LGG原有参数。
+
+TDGCN-deap-new-A： 新参数，跑老的动态图神经网络。
+
+TDGCN-deap-new-V： 新参数，跑老的动态图神经网络。
+
+TDGCN-deap-A： LGG原有参数，跑老的动态图神经网络。
+
+TDGCN-deap-V： LGG原有参数，跑老的动态图神经网络。
+
+TDGCN-LGG-deap-A:  跑LGG网络，LGG原有参数。
+
+TDGCN-LGG-deap-V:  跑LGG网络，LGG原有参数。
+
+
