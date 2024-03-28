@@ -70,8 +70,14 @@ class TDGCN(nn.Module):
         self.pool_step_rate = pool_step_rate
         self.idx = idx_graph
         self.channel = input_size[1]
-        self.channel_ = 11
         self.brain_area = len(self.idx)
+        ###################
+        # 多头注意力相关参数
+        self.model_dim = round(num_T/2)
+        self.num_heads = 8
+        self.window_size = 100
+        self.stride = 20
+        ###################
         hidden_features = input_size[2]
 
         # by setting the convolutional kernel being (1,lenght) and the strids being 1, we can use conv2d to
@@ -93,25 +99,20 @@ class TDGCN(nn.Module):
             nn.LeakyReLU(),
             nn.AvgPool2d((1, 2))
         )
-
-        self.bn_t2 = nn.BatchNorm1d(32)
-        self.bn_s2 = nn.BatchNorm1d(11)
-        self.channel_attention_compression = ChannelAttentionWithCompression(in_channels=32, out_channels=11)
-
-        # 定义一个1维卷积层来减少通道数量
-        self.channel_reduction = nn.Conv1d(in_channels=32, out_channels=11, kernel_size=1)
-        self.bn_t2 = nn.BatchNorm1d(num_features=32)
-        self.bn_s2 = nn.BatchNorm1d(num_features=11)
-
+        #######################################
+        self.feature_integrator = FeatureIntegrator(in_channels=32, out_channels=self.model_dim)
+        self.sliding_window_processor = SlidingWindowProcessor(model_dim=self.model_dim, num_heads=self.num_heads,
+                                                               window_size=self.window_size, stride=self.stride)
+        #######################################
         # diag(W) to assign a weight to each local areas
         size = self.get_size_temporal(input_size)
         # 表示局部滤波器的权重。它被定义为一个形状为(self.channel, size[-1])的浮点型张量，并设置为需要梯度计算（requires_grad=True）
-        self.local_filter_weight = nn.Parameter(torch.FloatTensor(self.channel_, size[-1]),
+        self.local_filter_weight = nn.Parameter(torch.FloatTensor(self.channel, size[-1]),
                                                 requires_grad=True)
         # 用来对local_filter_weight进行初始化，采用的是Xavier均匀分布初始化方法
         nn.init.xavier_uniform_(self.local_filter_weight)
         # 表示局部滤波器的偏置。它被定义为一个形状为(1, self.channel, 1)的浮点型张量，初始值为全零，并设置为需要梯度计算
-        self.local_filter_bias = nn.Parameter(torch.zeros((1, self.channel_, 1), dtype=torch.float32),
+        self.local_filter_bias = nn.Parameter(torch.zeros((1, self.channel, 1), dtype=torch.float32),
                                               requires_grad=True)
         # aggregate function
         self.aggregate = Aggregator(self.idx)
@@ -142,19 +143,15 @@ class TDGCN(nn.Module):
         out = torch.cat((out, z), dim=-1)
         z = self.Tception3(data)
         out = torch.cat((out, z), dim=-1)
-        out = self.bn_t(out)
-        out = self.OneXOneConv(out)
-        out = self.bn_s(out)
-        out = out.permute(0, 2, 1, 3)
+        # out = self.bn_t(out)
+        # out = self.OneXOneConv(out)
+        # out = self.bn_s(out)
+        # out = out.permute(0, 2, 1, 3)
+        #######################################
+        out = self.feature_integrator(out)  # 特征整合和降维
+        out = self.sliding_window_processor(out)  # 滑动窗口处理
+        #######################################
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
-
-        # out = self.channel_attention_compression(out)
-        # # 新增：在注意力机制之后添加批量归一化层
-        # out = self.bn_s2(out)
-        out = self.channel_reduction(out)
-        # 新增：在注意力机制之后添加批量归一化层
-        out = self.bn_s2(out)
-
         size = out.size()
         return size
 
@@ -166,28 +163,23 @@ class TDGCN(nn.Module):
 
     def forward(self, x):
         # Temporal convolution
-        # (64,1,32,800)
         y = self.Tception1(x)
-        out = y  # (64,64,32,172)
+        out = y
         y = self.Tception2(x)
-        out = torch.cat((out, y), dim=-1)  # (64,1,32,356)
+        out = torch.cat((out, y), dim=-1)
         y = self.Tception3(x)
-        out = torch.cat((out, y), dim=-1)  # (64,64,32,547)
-        out = self.bn_t(out)
-        out = self.OneXOneConv(out)  # (64,64,32,273)
-        out = self.bn_s(out)
-        out = out.permute(0, 2, 1, 3)  # (64,32,64,273)
-        out = torch.reshape(out, (out.size(0), out.size(1), -1))  # (64,32,17472)
-
-        out = self.bn_t2(out)
-        out = self.channel_reduction(out)  # (64,11,17472)
-        out = self.bn_s2(out)
-        # out = self.channel_attention_compression(out)
-        # # 新增：在注意力机制之后添加批量归一化层
-        # out = self.bn_s2(out)
-
+        out = torch.cat((out, y), dim=-1)
+        # out = self.bn_t(out)
+        # out = self.OneXOneConv(out)
+        # out = self.bn_s(out)
+        # out = out.permute(0, 2, 1, 3)
+        ##############################
+        out = self.feature_integrator(out)  # 特征整合和降维
+        out = self.sliding_window_processor(out)  # 滑动窗口处理
+        ##############################
+        out = torch.reshape(out, (out.size(0), out.size(1), -1))
         out = self.local_filter_fun(out, self.local_filter_weight)
-        # out = self.aggregate.forward(out)
+        out = self.aggregate.forward(out)
         out = self.bn(out)
         out = self.dynamic_gcn(out)
         out = self.bn_(out)
@@ -343,35 +335,99 @@ class StackedDynamicGraphConvolution(nn.Module):
         return x
 
 
-class ChannelAttentionWithCompression(nn.Module):
+class TemporalConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
-        super(ChannelAttentionWithCompression, self).__init__()
-        self.in_channels = in_channels
-        self.out_channels = out_channels
-
-        self.global_avg_pool = nn.AdaptiveAvgPool1d(1)
-        self.fc1 = nn.Linear(in_channels, out_channels, bias=False)
-        self.fc2 = nn.Linear(out_channels, out_channels, bias=False)
-        self.relu = nn.ReLU()
-        self.sigmoid = nn.Sigmoid()
-
-        # 新增加的 1x1 卷积层用于在应用通道权重前将输入的通道数从 in_channels 减少到 out_channels
-        self.channel_downsample = nn.Conv1d(in_channels, out_channels, kernel_size=1, bias=False)
+        super(TemporalConvBlock, self).__init__()
+        self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=3, stride=1, padding=1)
+        self.norm = nn.BatchNorm1d(out_channels)
 
     def forward(self, x):
-        # 使用全局平均池化获取每个通道的全局信息
-        out = self.global_avg_pool(x)
+        return F.relu(self.norm(self.conv(x)))
 
-        # 通过两个全连接层计算通道权重
-        out = self.fc1(out.squeeze(-1))
-        out = self.relu(out)
-        out = self.fc2(out)
-        channel_weights = self.sigmoid(out)  # (batch_size, out_channels)
 
-        # 使用 1x1 卷积减少输入 x 的通道数
-        x = self.channel_downsample(x)  # (batch_size, out_channels, length)
+class FeatureIntegrator(nn.Module):
+    def __init__(self, in_channels, out_channels, kernel_size=64, stride=64):
+        super(FeatureIntegrator, self).__init__()
+        self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=kernel_size, stride=stride)
 
-        # 应用通道权重
-        out = x * channel_weights.unsqueeze(-1)  # 使用unsqueeze(-1)来匹配x的形状
+    def forward(self, x):
+        # 假设输入x的形状为 (batch_size, feature_dim, channels, length)
+        batch_size, feature_dim, channels, length = x.size()
 
-        return out
+        # 你想将feature和length维度相结合
+        # 首先，将x变形为 (batch_size, channels, feature_dim * length)
+        x = x.reshape(batch_size, channels, feature_dim * length)
+
+        # 然后，应用1D卷积
+        x = self.conv(x)  # 卷积后的形状为 (batch_size, out_channels, new_length)
+
+        return x
+
+
+class SlidingWindowProcessor(nn.Module):
+    def __init__(self, model_dim, num_heads, window_size, stride):
+        super(SlidingWindowProcessor, self).__init__()
+        self.window_size = window_size
+        self.stride = stride
+        self.layer_norm1 = nn.LayerNorm([window_size, model_dim])
+        self.multi_head_attention = nn.MultiheadAttention(embed_dim=model_dim, num_heads=num_heads, batch_first=True)
+        self.layer_norm2 = nn.LayerNorm(model_dim)
+        self.tcn_block = TemporalConvBlock(in_channels=model_dim, out_channels=32)
+        # 定义融合层，使用1D卷积以保留32通道的结构，卷积核大小和步长可以根据需要调整
+        self.fusion_conv = nn.Conv1d(32, 32, kernel_size=3, stride=1, padding=1)
+
+    def forward(self, x):
+        batch_size, _, length = x.shape
+        # 使用列表收集所有窗口的输出
+        window_outputs = []
+
+        for window_start in range(0, length - self.window_size + 1, self.stride):
+            window_end = window_start + self.window_size
+            window = x[:, :, window_start:window_end]
+            window = window.permute(0, 2, 1)
+
+            window = self.layer_norm1(window)
+            attn_output, _ = self.multi_head_attention(window, window, window)
+            attn_output = self.layer_norm2(attn_output + window)
+            tcn_input = attn_output.permute(0, 2, 1)
+            tcn_output = self.tcn_block(tcn_input)
+
+            window_outputs.append(tcn_output)
+
+        # 将所有窗口的输出沿着时间维度堆叠起来，形成一个新的维度
+        stacked_outputs = torch.stack(window_outputs, dim=2)
+        # 重新排列维度以匹配卷积层的输入要求
+        stacked_outputs = stacked_outputs.permute(0, 3, 1, 2).reshape(batch_size, 32, -1)
+        # 通过融合层整合所有窗口的输出
+        fused_output = self.fusion_conv(stacked_outputs)
+
+        return fused_output
+
+
+# class SlidingWindowProcessor(nn.Module):
+#     def __init__(self, model_dim, num_heads, window_size, stride):
+#         super(SlidingWindowProcessor, self).__init__()
+#         self.window_size = window_size
+#         self.stride = stride
+#         self.layer_norm1 = nn.LayerNorm([window_size, model_dim])
+#         self.multi_head_attention = nn.MultiheadAttention(embed_dim=model_dim, num_heads=num_heads, batch_first=True)
+#         self.layer_norm2 = nn.LayerNorm(model_dim)
+#         self.tcn_block = TemporalConvBlock(in_channels=model_dim, out_channels=model_dim)
+#
+#     def forward(self, x):
+#         outputs = []
+#
+#         for window_start in range(0, x.size(2) - self.window_size + 1, self.stride):
+#             window_end = window_start + self.window_size
+#             window = x[:, :, window_start:window_end]  # 提取窗口
+#             window = window.permute(0, 2, 1)  # 调整形状以匹配多头注意力的输入
+#
+#             window = self.layer_norm1(window)
+#             attn_output, _ = self.multi_head_attention(window, window, window)
+#             attn_output = self.layer_norm2(attn_output + window)  # 残差连接
+#             tcn_input = attn_output.permute(0, 2, 1)
+#             tcn_output = self.tcn_block(tcn_input)
+#             outputs.append(tcn_output.permute(0, 2, 1))
+#
+#         output_tensor = torch.stack(outputs, dim=1)
+#         return output_tensor

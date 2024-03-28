@@ -149,9 +149,10 @@ class TDGCN(nn.Module):
         out = out.permute(0, 2, 1, 3)
         out = torch.reshape(out, (out.size(0), out.size(1), -1))
 
-        out = self.channel_attention_compression(out)
-        # 新增：在注意力机制之后添加批量归一化层
+        out = self.bn_t2(out)
+        out = self.channel_reduction(out)
         out = self.bn_s2(out)
+        out = F.relu(out)
 
         size = out.size()
         return size
