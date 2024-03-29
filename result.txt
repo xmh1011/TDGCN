@@ -1752,7 +1752,123 @@ TDGCN-adj-am3-WQJ-A：改进后代码跑咱们的数据集
 
 TDGCN-adj-am3-WQJ-V：改进后代码跑咱们的数据集
 
-TDGCN-ACT-deap-A: 采用原参数，增加滑动窗口和多头注意力模块 【3-28】
+TDGCN-ACT-deap-A: 采用原参数，增加滑动窗口和多头注意力模块
+2024-03-28 20:33:15.633402
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+sub 0: total test accuracy 0.5366666666666666, f1: 0.6351706036745407
+sub 1: total test accuracy 0.49333333333333335, f1: 0.571830985915493
+sub 2: total test accuracy 0.7166666666666667, f1: 0.07608695652173912
+sub 3: total test accuracy 0.5366666666666666, f1: 0.4591439688715953
+sub 4: total test accuracy 0.44166666666666665, f1: 0.45705024311183146
+sub 5: total test accuracy 0.5383333333333333, f1: 0.3661327231121281
+sub 6: total test accuracy 0.5666666666666667, f1: 0.6614583333333333
+sub 7: total test accuracy 0.5666666666666667, f1: 0.6024464831804281
+sub 8: total test accuracy 0.54, f1: 0.6584158415841584
+sub 9: total test accuracy 0.575, f1: 0.6199701937406855
+sub 10: total test accuracy 0.5016666666666667, f1: 0.2997658079625293
+sub 11: total test accuracy 0.7666666666666667, f1: 0.8646034816247583
+sub 12: total test accuracy 0.815, f1: 0.8971269694161261
+sub 13: total test accuracy 0.6133333333333333, f1: 0.7121588089330024
+sub 14: total test accuracy 0.5433333333333333, f1: 0.5054151624548735
+sub 15: total test accuracy 0.5966666666666667, f1: 0.6333333333333333
+sub 16: total test accuracy 0.6133333333333333, f1: 0.6864864864864865
+sub 17: total test accuracy 0.5483333333333333, f1: 0.6466753585397653
+sub 18: total test accuracy 0.5883333333333334, f1: 0.704191616766467
+sub 19: total test accuracy 0.7016666666666667, f1: 0.8236453201970443
+sub 20: total test accuracy 0.7516666666666667, f1: 0.8551992225461612
+sub 21: total test accuracy 0.64, f1: 0.7024793388429753
+sub 22: total test accuracy 0.715, f1: 0.4203389830508475
+sub 23: total test accuracy 0.6933333333333334, f1: 0.8148893360160966
+sub 24: total test accuracy 0.68, f1: 0.7983193277310924
+sub 25: total test accuracy 0.56, f1: 0.4823529411764706
+sub 26: total test accuracy 0.6566666666666666, f1: 0.7615740740740742
+sub 27: total test accuracy 0.5016666666666667, f1: 0.4194174757281553
+sub 28: total test accuracy 0.5416666666666666, f1: 0.626865671641791
+sub 29: total test accuracy 0.49666666666666665, f1: 0.45289855072463764
+sub 30: total test accuracy 0.5366666666666666, f1: 0.41841004184100417
+sub 31: total test accuracy 0.5816666666666667, f1: 0.7150964812712826
+test mAcc=0.59859375 mF1=0.6046546913564034
+val mAcc=0.6933969907407408 F1=0.6882880243157744
+
 
 TDGCN-ACT-deap-V: 采用原参数，增加滑动窗口和多头注意力模块 【3-28】
-
+2024-03-28 20:33:53.063621
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+sub 0: total test accuracy 0.5433333333333333, f1: 0.5371621621621622
+sub 1: total test accuracy 0.5516666666666666, f1: 0.6162624821683309
+sub 2: total test accuracy 0.5666666666666667, f1: 0.6476964769647697
+sub 3: total test accuracy 0.55, f1: 0.47674418604651164
+sub 4: total test accuracy 0.5216666666666666, f1: 0.6208718626155878
+sub 5: total test accuracy 0.6633333333333333, f1: 0.7917525773195876
+sub 6: total test accuracy 0.6516666666666666, f1: 0.7654320987654321
+sub 7: total test accuracy 0.545, f1: 0.6138613861386139
+sub 8: total test accuracy 0.62, f1: 0.6415094339622641
+sub 9: total test accuracy 0.6566666666666666, f1: 0.6761006289308177
+sub 10: total test accuracy 0.605, f1: 0.6801619433198381
+sub 11: total test accuracy 0.6166666666666667, f1: 0.6229508196721311
+sub 12: total test accuracy 0.7066666666666667, f1: 0.6653992395437262
+sub 13: total test accuracy 0.6316666666666667, f1: 0.6129597197898424
+sub 14: total test accuracy 0.6283333333333333, f1: 0.6477093206951027
+sub 15: total test accuracy 0.605, f1: 0.47216035634743875
+sub 16: total test accuracy 0.5116666666666667, f1: 0.5172981878088962
+sub 17: total test accuracy 0.64, f1: 0.7096774193548386
+sub 18: total test accuracy 0.5383333333333333, f1: 0.6281879194630872
+sub 19: total test accuracy 0.6066666666666667, f1: 0.6609195402298852
+sub 20: total test accuracy 0.485, f1: 0.5296803652968036
+sub 21: total test accuracy 0.585, f1: 0.46680942184154184
+sub 22: total test accuracy 0.6583333333333333, f1: 0.7651775486827033
+sub 23: total test accuracy 0.4866666666666667, f1: 0.3185840707964602
+sub 24: total test accuracy 0.495, f1: 0.4855687606112054
+sub 25: total test accuracy 0.6, f1: 0.7266514806378132
+sub 26: total test accuracy 0.69, f1: 0.8046218487394957
+sub 27: total test accuracy 0.6266666666666667, f1: 0.7241379310344829
+sub 28: total test accuracy 0.555, f1: 0.6337448559670782
+sub 29: total test accuracy 0.5333333333333333, f1: 0.6482412060301508
+sub 30: total test accuracy 0.535, f1: 0.6162310866574965
+sub 31: total test accuracy 0.4633333333333333, f1: 0.47385620915032683
+test mAcc=0.5835416666666666 mF1=0.6186913295857632
+val mAcc=0.6763715277777778 F1=0.6938968701370896
