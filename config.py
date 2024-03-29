@@ -5,7 +5,7 @@ def set_config():
     parser = argparse.ArgumentParser()
     # Data
     parser.add_argument('--dataset', type=str, default='WQJ', choices=['WQJ', 'DEAP'])
-    parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data/')
+    parser.add_argument('--data-path', type=str, default='D:/脑机接口/NetCode/data_net')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
