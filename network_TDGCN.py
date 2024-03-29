@@ -144,41 +144,6 @@ class TDGCN(nn.Module):
         x = F.relu(torch.mul(x, w) - self.local_filter_bias)
         return x
 
-    def self_similarity(self, x):
-        # x: b, node, feature
-        x_ = x.permute(0, 2, 1)
-        s = torch.bmm(x, x_)
-        return s
-
-    def get_adj(self, x, self_loop=True):
-        """
-        x：输入的特征矩阵，大小为(b, node, feature)，其中b为批次大小，node为节点数目，feature为每个节点的特征向量维度。
-        self_loop：一个布尔值，表示是否在邻接矩阵中加入自环（自己到自己的连接）。
-        """
-        # x: b, node, feature
-        # 利用模型中的self_similarity方法计算输入特征矩阵x的自相似度矩阵。结果为一个大小为(b, n, n)的张量，其中n为节点数目
-        adj = self.self_similarity(x)  # b, n, n
-        num_nodes = adj.shape[-1]
-        # 将自相似度矩阵与全局邻接矩阵的和进行逐元素相乘，并经过ReLU激活函数处理。这一步可以用来控制邻接矩阵中的连接关系
-        adj = F.relu(adj * (self.global_adj + self.global_adj.transpose(1, 0)))
-        if self_loop:
-            # 在邻接矩阵中添加自环，即在对角线上设置为1，表示每个节点与自己相连接
-            adj = adj + torch.eye(num_nodes).to(DEVICE)
-        # 计算邻接矩阵每一行的元素之和，得到一个大小为(b, n)的张量
-        rowsum = torch.sum(adj, dim=-1)
-        # 创建一个与rowsum大小相同的全零张量mask，并将rowsum中和为0的位置置为1。这一步是为了处理邻接矩阵中存在度为0的节点，避免除以0的错误
-        mask = torch.zeros_like(rowsum)
-        mask[rowsum == 0] = 1
-        # 将mask添加到rowsum中，实现对邻接矩阵的修正。避免除以0的错误，并保证每个节点的度至少为1
-        rowsum += mask
-        # 计算度矩阵的逆平方根
-        d_inv_sqrt = torch.pow(rowsum, -0.5)
-        # 将逆平方根得到的张量转换为对角矩阵
-        d_mat_inv_sqrt = torch.diag_embed(d_inv_sqrt)
-        # 通过矩阵乘法和广播机制，将度矩阵的逆平方根与邻接矩阵相乘，得到归一化后的邻接矩阵
-        adj = torch.bmm(torch.bmm(d_mat_inv_sqrt, adj), d_mat_inv_sqrt)
-        return adj
-
     def forward(self, x):
         # Temporal convolution
         y = self.Tception1(x)
@@ -290,8 +255,7 @@ class DynamicGraphConvolution(GraphConvolution):
     def forward(self, x, adj=None):
         if adj is None:
             # Compute adjacency matrix dynamically based on feature similarity, for example:
-            similarity = self.compute_similarity(x)
-            adj = self.normalize_adjacency_matrix(similarity)
+            adj = self.normalize_adjacency_matrix(x)
 
         output = torch.matmul(x, self.weight)
         if self.bias is not None:
@@ -300,31 +264,35 @@ class DynamicGraphConvolution(GraphConvolution):
         return output
 
     def compute_similarity(self, x):
-        batch_size, num_channels, width = x.size()
-        # 将高度和宽度维度合并，形成新的特征向量
-        x = x.view(batch_size, num_channels, -1)  # 新形状: (batch_size, num_channels, height*width)
-
-        # 归一化x沿最后一个维度（特征维度）
-        x_normalized = F.normalize(x, p=2, dim=2)
-
-        # 使用批量矩阵乘法计算相似度（相关性）
-        similarity = torch.bmm(x_normalized, x_normalized.transpose(1, 2))
-
-        # 确保对角线是1（自相关）
-        eye = torch.eye(num_channels, device=x.device)
-        similarity = similarity * (1 - eye) + eye
-
-        return similarity
+        # x: b, node, feature
+        x_ = x.permute(0, 2, 1)
+        s = torch.bmm(x, x_)
+        return s
 
 
-    def normalize_adjacency_matrix(self, adj):
+    def normalize_adjacency_matrix(self, x):
         """
-        Normalize the adjacency matrix (symmetric normalization).
+        x：输入的特征矩阵，大小为(b, node, feature)，其中b为批次大小，node为节点数目，feature为每个节点的特征向量维度。
+        self_loop：一个布尔值，表示是否在邻接矩阵中加入自环（自己到自己的连接）。
         """
+        # x: b, node, feature
+        # 利用模型中的self_similarity方法计算输入特征矩阵x的自相似度矩阵。结果为一个大小为(b, n, n)的张量，其中n为节点数目
+        adj = self.compute_similarity(x)  # b, n, n
+        num_nodes = adj.shape[-1]
+        adj = adj + torch.eye(num_nodes).to(DEVICE)
         rowsum = torch.sum(adj, dim=-1)
-        d_inv_sqrt = torch.pow(rowsum, -0.5).unsqueeze(-1)
-        d_mat_inv_sqrt = d_inv_sqrt * torch.eye(adj.size(1)).to(adj.device)
-        return torch.bmm(torch.bmm(d_mat_inv_sqrt, adj), d_mat_inv_sqrt)
+        # 创建一个与rowsum大小相同的全零张量mask，并将rowsum中和为0的位置置为1。这一步是为了处理邻接矩阵中存在度为0的节点，避免除以0的错误
+        mask = torch.zeros_like(rowsum)
+        mask[rowsum == 0] = 1
+        # 将mask添加到rowsum中，实现对邻接矩阵的修正。避免除以0的错误，并保证每个节点的度至少为1
+        rowsum += mask
+        # 计算度矩阵的逆平方根
+        d_inv_sqrt = torch.pow(rowsum, -0.5)
+        # 将逆平方根得到的张量转换为对角矩阵
+        d_mat_inv_sqrt = torch.diag_embed(d_inv_sqrt)
+        # 通过矩阵乘法和广播机制，将度矩阵的逆平方根与邻接矩阵相乘，得到归一化后的邻接矩阵
+        adj = torch.bmm(torch.bmm(d_mat_inv_sqrt, adj), d_mat_inv_sqrt)
+        return adj
 
 
 class StackedDynamicGraphConvolution(nn.Module):
