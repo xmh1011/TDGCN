@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
 from network_TDGCN_ATC import *
+from models import *
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
@@ -80,9 +81,10 @@ def pprint(x):
 
 def get_model(args):
 
-    idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
-    channels = sum(idx_local_graph)
-    input_size = (args.input_shape[0], channels, args.input_shape[2])
+    if args.model == 'LGGNet' or args.model == 'TDGCN':
+        idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
+        channels = sum(idx_local_graph)
+        input_size = (args.input_shape[0], channels, args.input_shape[2])
     if args.model == 'LGGNet':
         model = LGGNet(
             num_classes=args.num_class, input_size=input_size,
@@ -99,6 +101,35 @@ def get_model(args):
             dropout_rate=args.dropout,
             pool=args.pool, pool_step_rate=args.pool_step_rate,
             idx_graph=idx_local_graph)
+    elif args.model == 'EEGNet':
+        model = EEGNet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate,
+            dropout_rate=args.dropout)
+    elif args.model == 'DeepConvNet':
+        model = DeepConvNet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate,
+            dropout_rate=args.dropout)
+    elif args.model == 'ShallowConvNet':
+        model = ShallowConvNet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate,
+            dropout_rate=args.dropout)
+    elif args.model == 'EEGTCNet':
+        model = EEGTCNet(
+            n_classes=args.num_class, channels=channels,
+            sampling_rate=args.target_rate,
+            dropout_rate=args.dropout)
+    elif args.model == 'MBEEG_SENet':
+        model = MBEEG_SENet(
+            n_classes=args.num_class, channels=channels,
+            sampling_rate=args.target_rate)
+    elif args.model == 'EEGNetClassifier':
+        model = EEGNetClassifier(
+            n_classes=args.num_class, channels=channels,
+            sampling_rate=args.target_rate,
+            dropout_rate=args.dropout)
 
     return model
 

@@ -36,7 +36,7 @@ class PrepareData:
                    'Fp2', 'AF4', 'F4', 'F8', 'FC6', 'FC2', 'C4', 'T8', 'CP6', 'CP2', 'P4', 'P8', 'PO4', 'O2']
         self.graph_type = args.graph_type
 
-    def run(self, subject_list, split=False, expand=True):
+    def run(self, subject_list, split, expand):
         """
         Parameters
         ----------
@@ -60,6 +60,8 @@ class PrepareData:
             print('data:' + str(data_.shape) + ' label:' + str(label_.shape))
             print('----------------------')
             self.save(data_, label_, sub)
+
+        self.args.sampling_rate = self.args.target_rate
 
     def load_data_per_subject(self, sub):
         """
@@ -206,7 +208,6 @@ class PrepareData:
             data, label = self.downsample_data(
                 data=data, label=label, sampling_rate=self.args.sampling_rate,
                 target_rate=self.args.target_rate)
-            self.args.sampling_rate = self.args.target_rate
 
         if self.args.dataset == 'WQJ':
             data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.sampling_rate, order=5)
@@ -215,7 +216,7 @@ class PrepareData:
         if split:
             data, label = self.split(
                 data=data, label=label, segment_length=self.args.segment,
-                overlap=self.args.overlap, sampling_rate=self.args.sampling_rate)
+                overlap=self.args.overlap, sampling_rate=self.args.target_rate)
 
         return data, label
 

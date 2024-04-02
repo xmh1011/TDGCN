@@ -140,18 +140,18 @@ class SEBlock(nn.Module):
         return x * y.expand_as(x)
 
 class MBEEG_SENet(nn.Module):
-    def __init__(self, nb_classes, channels, sampling_rate, D=2):
+    def __init__(self, n_classes, channels, sampling_rate, D=2):
         super(MBEEG_SENet, self).__init__()
-        self.EEGNet_sep1 = EEGNet(n_classes=nb_classes, sampling_rate=sampling_rate, F1=4, kernLength=16, D=D, channels=channels, dropout_rate=0)
-        self.EEGNet_sep2 = EEGNet(n_classes=nb_classes, sampling_rate=sampling_rate, F1=8, kernLength=32, D=D, channels=channels, dropout_rate=0.1)
-        self.EEGNet_sep3 = EEGNet(n_classes=nb_classes, sampling_rate=sampling_rate, F1=16, kernLength=64, D=D, channels=channels, dropout_rate=0.2)
+        self.EEGNet_sep1 = EEGNet(n_classes=n_classes, sampling_rate=sampling_rate, F1=4, kernLength=16, D=D, channels=channels, dropout_rate=0)
+        self.EEGNet_sep2 = EEGNet(n_classes=n_classes, sampling_rate=sampling_rate, F1=8, kernLength=32, D=D, channels=channels, dropout_rate=0.1)
+        self.EEGNet_sep3 = EEGNet(n_classes=n_classes, sampling_rate=sampling_rate, F1=16, kernLength=64, D=D, channels=channels, dropout_rate=0.2)
 
         self.SE1 = SEBlock(channel=channels, reduction_ratio=4)  # Assuming channel count matches here
         self.SE2 = SEBlock(channel=channels, reduction_ratio=4)
         self.SE3 = SEBlock(channel=channels, reduction_ratio=2)
 
         self.flatten = nn.Flatten()
-        self.dense1 = nn.Linear(channels * 3, nb_classes)  # Adjust the size according to your SEBlock output
+        self.dense1 = nn.Linear(channels * 3, n_classes)  # Adjust the size according to your SEBlock output
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
@@ -239,7 +239,7 @@ class EEGNetClassifier(nn.Module):
 
 
 class DeepConvNet(nn.Module):
-    def __init__(self, nb_classes, channels, sampling_rate, dropout_rate):
+    def __init__(self, n_classes, channels, sampling_rate, dropout_rate):
         super(DeepConvNet, self).__init__()
         self.block1_conv1 = nn.Conv2d(1, 25, (1, 10), padding='same')
         self.block1_conv2 = nn.Conv2d(25, 25, (channels, 1))
@@ -265,7 +265,7 @@ class DeepConvNet(nn.Module):
         self.flatten = nn.Flatten()
         # Calculate the number of features after flattening
         out_features = self._get_conv_output((1, channels, sampling_rate))
-        self.dense = nn.Linear(out_features, nb_classes)
+        self.dense = nn.Linear(out_features, n_classes)
 
     def _get_conv_output(self, shape):
         with torch.no_grad():
@@ -313,7 +313,7 @@ class LogActivation(nn.Module):
         return torch.log(torch.clamp(x, min=1e-7))  # Clamp values to avoid log(0)
 
 class ShallowConvNet(nn.Module):
-    def __init__(self, nb_classes, channels, sampling_rate, droupout_rate=0.5):
+    def __init__(self, n_classes, channels, sampling_rate, dropout_rate):
         super(ShallowConvNet, self).__init__()
         self.conv1 = nn.Conv2d(1, 40, (1, 25), padding='same', bias=False)
         # Note: Conv2d's weight norm can be applied via torch.nn.utils.weight_norm or manually in forward
@@ -322,10 +322,10 @@ class ShallowConvNet(nn.Module):
         self.square = SquareActivation()
         self.avgpool = nn.AvgPool2d((1, 75), stride=(1, 15))
         self.log = LogActivation()
-        self.dropout = nn.Dropout(droupout_rate)
+        self.dropout = nn.Dropout(dropout_rate)
         self.flatten = nn.Flatten()
         # Determining the number of flattened features for the dense layer
-        self.dense = nn.Linear(self._get_dense_in_features(sampling_rate), nb_classes)
+        self.dense = nn.Linear(self._get_dense_in_features(sampling_rate), n_classes)
 
     def _get_dense_in_features(self, sampling_rate):
         # Calculate the size here based on the network architecture and input dimensions

@@ -5,7 +5,7 @@ def set_config():
     parser = argparse.ArgumentParser()
     # Data
     parser.add_argument('--dataset', type=str, default='WQJ', choices=['WQJ', 'DEAP'])
-    parser.add_argument('--data-path', type=str, default='D:/脑机接口/NetCode/data_net')
+    parser.add_argument('--data-path', type=str, default='/home/xiaominghao/eeg-data')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
@@ -17,14 +17,15 @@ def set_config():
     parser.add_argument('--input-shape', type=tuple, default=(1, 32, 800))  # 输入形状 (1, 32, 512)
     parser.add_argument('--data-format', type=str, default='eeg')
     parser.add_argument('--bandpass', type=tuple, default=(1, 50))
+    parser.add_argument('--channels', type=int, default=32)
 
     # Training Process
     parser.add_argument('--fold', type=int, default=10)
     parser.add_argument('--random-seed', type=int, default=3407)
-    parser.add_argument('--max-epoch', type=int, default=400)
-    parser.add_argument('--patient', type=int, default=40)  # 早停 最开始为20
-    parser.add_argument('--patient-cmb', type=int, default=20)  # 原始值为8
-    parser.add_argument('--max-epoch-cmb', type=int, default=40)  # 最大迭代次数 原始值为20
+    parser.add_argument('--max-epoch', type=int, default=200)
+    parser.add_argument('--patient', type=int, default=20)  # 早停 最开始为20
+    parser.add_argument('--patient-cmb', type=int, default=8)  # 原始值为8
+    parser.add_argument('--max-epoch-cmb', type=int, default=20)  # 最大迭代次数 原始值为20
     parser.add_argument('--batch-size', type=int, default=64)
     parser.add_argument('--learning-rate', type=float, default=1e-3)  # 学习率 原始值为1e-3
     parser.add_argument('--training-rate', type=float, default=0.8)
@@ -41,7 +42,7 @@ def set_config():
     parser.add_argument('--load-path-final', default='./save/final_model.pth')
     parser.add_argument('--save-model', type=bool, default=True)
     # Model Parameters
-    parser.add_argument('--model', type=str, default='TDGCN', choices=['LGGNet', 'TDGCN'])
+    parser.add_argument('--model', type=str, default='TDGCN', choices=['LGGNet', 'TDGCN', 'EEGNet', 'DeepConvNet', 'ShallowConvNet', 'EEGTCNet', 'MBEEG_SENet', 'EEGNetClassifier'])
     parser.add_argument('--pool', type=int, default=16)
     parser.add_argument('--pool-step-rate', type=float, default=0.25)
     parser.add_argument('--T', type=int, default=64)
