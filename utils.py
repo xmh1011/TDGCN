@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
-from network_TDGCN_ATC import *
+from network_TDGCN_am2 import *
 from models import *
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
