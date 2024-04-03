@@ -16,9 +16,6 @@ class PrepareDataOld:
         self.data_path = args.data_path
         self.label_type = args.label_type
         self.dataset = args.dataset
-        self.original_order = ['Fp1', 'Fp2', 'AF3', 'AF4', 'Fz', 'F3', 'F4', 'F7', 'F8', 'FC1', 'FC2', 'FC5', 'FC6',
-                               'Cz', 'C3', 'C4', 'T7', 'T8',
-                               'CP1', 'CP2', 'CP5', 'CP6', 'Pz', 'P3', 'P4', 'P7', 'P8', 'PO3', 'PO4', 'Oz', 'O1', 'O2']
 
     def run(self, subject_list, split, expand):
         """
@@ -145,14 +142,14 @@ class PrepareDataOld:
             # expand one dimension for deep learning(CNNs)
             data = np.expand_dims(data, axis=-3)
 
+        if self.args.dataset == 'WQJ':
+            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.sampling_rate, order=5)
+            data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
+
         if self.args.sampling_rate != self.args.target_rate:
             data, label = self.downsample_data(
                 data=data, label=label, sampling_rate=self.args.sampling_rate,
                 target_rate=self.args.target_rate)
-
-        if self.args.dataset == 'WQJ':
-            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.target_rate, order=5)
-            data = self.notch_filter(data=data, fs=self.args.target_rate, Q=50)
 
         if split:
             data, label = self.split(
