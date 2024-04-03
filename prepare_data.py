@@ -204,14 +204,14 @@ class PrepareData:
             # expand one dimension for deep learning(CNNs)
             data = np.expand_dims(data, axis=-3)
 
+        if self.args.dataset == 'WQJ':
+            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.sampling_rate, order=5)
+            data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
+
         if self.args.sampling_rate != self.args.target_rate:
             data, label = self.downsample_data(
                 data=data, label=label, sampling_rate=self.args.sampling_rate,
                 target_rate=self.args.target_rate)
-
-        if self.args.dataset == 'WQJ':
-            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.target_rate, order=5)
-            data = self.notch_filter(data=data, fs=self.args.target_rate, Q=50)
 
         if split:
             data, label = self.split(
