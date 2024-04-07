@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
-from network_TDGCN_am2 import *
+from network_TDGCN_ATC import *
 from models import *
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
@@ -104,18 +104,15 @@ def get_model(args):
     elif args.model == 'EEGNet':
         model = EEGNet(
             n_classes=args.num_class, channels=args.channels,
-            sampling_rate=args.target_rate,
-            dropout_rate=args.dropout)
+            sampling_rate=args.target_rate)
     elif args.model == 'DeepConvNet':
         model = DeepConvNet(
             n_classes=args.num_class, channels=args.channels,
-            sampling_rate=args.target_rate,
-            dropout_rate=args.dropout)
+            sampling_rate=args.target_rate)
     elif args.model == 'ShallowConvNet':
         model = ShallowConvNet(
             n_classes=args.num_class, channels=args.channels,
-            sampling_rate=args.target_rate,
-            dropout_rate=args.dropout)
+            sampling_rate=args.target_rate)
     elif args.model == 'EEGTCNet':
         model = EEGTCNet(
             n_classes=args.num_class, channels=channels,
@@ -197,3 +194,18 @@ class LabelSmoothing(nn.Module):
         smooth_loss = -logprobs.mean(dim=-1)
         loss = self.confidence * nll_loss + self.smoothing * smooth_loss
         return loss.mean()
+
+#Data augmentation function
+def Meiosis(data, rand_subs_stre, split):
+    new_data1 = []
+    new_data2 = []
+    for i in range(0,16):
+        si = rand_subs_stre[i]
+        sj = rand_subs_stre[i+2]
+        xi = np.concatenate([data[si, :, :split, :], data[sj, :, split:, :]], axis=1)
+        xj = np.concatenate([data[sj, :, :split, :], data[si, :, split:, :]], axis=1)
+        new_data1.append(xi)
+        new_data2.append(xj)
+    new_data = new_data1 + new_data2
+    new_data = np.array(new_data)
+    return new_data

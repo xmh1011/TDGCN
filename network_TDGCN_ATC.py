@@ -65,7 +65,7 @@ class TDGCN(nn.Module):
         self.num_T = num_T
         self.out_graph = out_graph
         self.dropout_rate = dropout_rate
-        self.window = [0.5, 0.25, 0.125]
+        self.window = [0.5, 0.25, 0.125, 0.0625]
         self.pool = pool
         self.pool_step_rate = pool_step_rate
         self.idx = idx_graph
@@ -90,6 +90,9 @@ class TDGCN(nn.Module):
                                                self.pool, pool_step_rate)
         self.Tception3 = self.temporal_learner(input_size[0], num_T,
                                                (1, int(self.window[2] * sampling_rate)),
+                                               self.pool, pool_step_rate)
+        self.Tception4 = self.temporal_learner(input_size[0], num_T,
+                                               (1, int(self.window[3] * sampling_rate)),
                                                self.pool, pool_step_rate)
         # Batch normalization layers
         self.bn_t = nn.BatchNorm2d(num_T)
@@ -143,6 +146,8 @@ class TDGCN(nn.Module):
         out = torch.cat((out, z), dim=-1)
         z = self.Tception3(data)
         out = torch.cat((out, z), dim=-1)
+        # z = self.Tception4(data)
+        # out = torch.cat((out, z), dim=-1)
         # out = self.bn_t(out)
         # out = self.OneXOneConv(out)
         # out = self.bn_s(out)
@@ -168,6 +173,8 @@ class TDGCN(nn.Module):
         y = self.Tception2(x)
         out = torch.cat((out, y), dim=-1)
         y = self.Tception3(x)
+        # out = torch.cat((out, y), dim=-1)
+        # y = self.Tception4(x)
         out = torch.cat((out, y), dim=-1)
         # out = self.bn_t(out)
         # out = self.OneXOneConv(out)

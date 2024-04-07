@@ -1,48 +1,60 @@
+import config
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils import weight_norm
 
+_, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 class EEGNet(nn.Module):
-    def __init__(self, n_classes, channels, sampling_rate, dropout_rate, kernLength=64, F1=8, D=2, F2=None):
+    def __init__(self, channels, sampling_rate, n_classes):
+        """
+        初始化EEGNet模型。
+        参数:
+            channels: EEG信号的通道数。
+            sampling_rate: 单个EEG信号样本中的采样点数。
+            n_classes: 预测的类别数。
+        """
         super(EEGNet, self).__init__()
-        if F2 is None:
-            F2 = F1*D
-        self.firstConv = nn.Conv2d(1, F1, (1, kernLength), padding=(0, kernLength // 2), bias=False)
-        self.batchnorm1 = nn.BatchNorm2d(F1, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        self.classes = n_classes
 
-        self.depthwiseConv = nn.Conv2d(F1, F2, (channels, 1), groups=F1, bias=False)
-        self.batchnorm2 = nn.BatchNorm2d(F2, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        self.activation = nn.ELU()
-        self.avgPool1 = nn.AvgPool2d((1, 4))
-        self.dropout1 = nn.Dropout(p=dropout_rate)
+        # 第一层卷积
+        self.firstConv = nn.Sequential(
+            nn.Conv2d(1, 16, kernel_size=(1, 51), stride=(1, 1), padding=(0, 25), bias=False),
+            nn.BatchNorm2d(16)
+        )
 
-        self.separableConv = nn.Conv2d(F2, F2, (1, 16), padding=(0, 16 // 2), bias=False)
-        self.batchnorm3 = nn.BatchNorm2d(F2, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        self.avgPool2 = nn.AvgPool2d((1, 8))
-        self.dropout2 = nn.Dropout(p=dropout_rate)
+        # 深度卷积层
+        self.depthwiseConv = nn.Sequential(
+            nn.Conv2d(16, 32, kernel_size=(channels, 1), stride=(1, 1), groups=16, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ELU(),
+            nn.AvgPool2d(kernel_size=(1, 4), stride=(1, 4)),
+            nn.Dropout(0.25)
+        )
 
-        self.flatten = nn.Flatten()
-        self.dense = nn.Linear(F2 * (sampling_rate // 32), n_classes)
+        # 可分离卷积层
+        self.separableConv = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=(1, 15), stride=(1, 1), padding=(0, 7), groups=32, bias=False),
+            nn.Conv2d(32, 32, kernel_size=(1, 1), stride=(1, 1), bias=False),
+            nn.BatchNorm2d(32),
+            nn.ELU(),
+            nn.AvgPool2d(kernel_size=(1, 8), stride=(1, 8)),
+            nn.Dropout(0.25)
+        )
+
+    def classifier(self, x):
+        classifier = nn.Linear(x.size(1), self.classes).to(DEVICE) # 注意这里的改动，从x.size(0)变为x.size(1)
+        return classifier(x) # 直接返回执行结果
 
     def forward(self, x):
         x = self.firstConv(x)
-        x = self.batchnorm1(x)
-
         x = self.depthwiseConv(x)
-        x = self.batchnorm2(x)
-        x = self.activation(x)
-        x = self.avgPool1(x)
-        x = self.dropout1(x)
-
         x = self.separableConv(x)
-        x = self.batchnorm3(x)
-        x = self.activation(x)
-        x = self.avgPool2(x)
-        x = self.dropout2(x)
-
-        x = self.flatten(x)
-        x = self.dense(x)
+        x = x.view(x.size(0), -1)  # 扁平化
+        x = self.classifier(x)  # 确保这里返回的是Tensor
         return x
 
 class TCNBlock(nn.Module):
@@ -239,70 +251,90 @@ class EEGNetClassifier(nn.Module):
 
 
 class DeepConvNet(nn.Module):
-    def __init__(self, n_classes, channels, sampling_rate, dropout_rate):
+    def __init__(self, n_classes, channels=32, sampling_rate=128):
         super(DeepConvNet, self).__init__()
-        self.block1_conv1 = nn.Conv2d(1, 25, (1, 10), padding='same')
-        self.block1_conv2 = nn.Conv2d(25, 25, (channels, 1))
-        self.block1_bn = nn.BatchNorm2d(25)
-        self.block1_pool = nn.MaxPool2d((1, 3), stride=(1, 3))
-        self.block1_dropout = nn.Dropout(dropout_rate)
+        self.classes = n_classes
 
-        self.block2_conv = nn.Conv2d(25, 50, (1, 10), padding='same')
-        self.block2_bn = nn.BatchNorm2d(50)
-        self.block2_pool = nn.MaxPool2d((1, 3), stride=(1, 3))
-        self.block2_dropout = nn.Dropout(dropout_rate)
+        self.conv1 = nn.Conv2d(1, 25, (1, 5))
+        self.conv2 = nn.Conv2d(25, 25, (channels, 1))
+        self.batch_norm1 = nn.BatchNorm2d(25)
+        self.pooling1 = nn.MaxPool2d((1, 2))
+        self.dropout1 = nn.Dropout(0.5)
 
-        self.block3_conv = nn.Conv2d(50, 100, (1, 10), padding='same')
-        self.block3_bn = nn.BatchNorm2d(100)
-        self.block3_pool = nn.MaxPool2d((1, 3), stride=(1, 3))
-        self.block3_dropout = nn.Dropout(dropout_rate)
+        self.conv3 = nn.Conv2d(25, 50, (1, 5))
+        self.batch_norm2 = nn.BatchNorm2d(50)
+        self.pooling2 = nn.MaxPool2d((1, 2))
+        self.dropout2 = nn.Dropout(0.5)
 
-        self.block4_conv = nn.Conv2d(100, 200, (1, 10), padding='same')
-        self.block4_bn = nn.BatchNorm2d(200)
-        self.block4_pool = nn.MaxPool2d((1, 3), stride=(1, 3))
-        self.block4_dropout = nn.Dropout(dropout_rate)
+        self.conv4 = nn.Conv2d(50, 100, (1, 5))
+        self.batch_norm3 = nn.BatchNorm2d(100)
+        self.pooling3 = nn.MaxPool2d((1, 2))
+        self.dropout3 = nn.Dropout(0.5)
 
-        self.flatten = nn.Flatten()
-        # Calculate the number of features after flattening
-        out_features = self._get_conv_output((1, channels, sampling_rate))
-        self.dense = nn.Linear(out_features, n_classes)
+        self.conv5 = nn.Conv2d(100, 200, (1, 5))
+        self.batch_norm4 = nn.BatchNorm2d(200)
+        self.pooling4 = nn.MaxPool2d((1, 2))
+        self.dropout4 = nn.Dropout(0.5)
 
-    def _get_conv_output(self, shape):
-        with torch.no_grad():
-            input = torch.rand(1, *shape)
-            output = self._forward_features(input)
-            return int(torch.numel(output) / output.shape[0])
-
-    def _forward_features(self, x):
-        x = self.block1_conv1(x)
-        x = self.block1_conv2(x)
-        x = F.elu(self.block1_bn(x))
-        x = self.block1_pool(x)
-        x = self.block1_dropout(x)
-
-        x = self.block2_conv(x)
-        x = F.elu(self.block2_bn(x))
-        x = self.block2_pool(x)
-        x = self.block2_dropout(x)
-
-        x = self.block3_conv(x)
-        x = F.elu(self.block3_bn(x))
-        x = self.block3_pool(x)
-        x = self.block3_dropout(x)
-
-        x = self.block4_conv(x)
-        x = F.elu(self.block4_bn(x))
-        x = self.block4_pool(x)
-        x = self.block4_dropout(x)
-
-        return x
+        self.flat_features = self._get_flat_features(channels, sampling_rate)
+        self.fc1 = nn.Linear(self.flat_features, n_classes)
 
     def forward(self, x):
-        x = self._forward_features(x)
-        x = self.flatten(x)
-        x = self.dense(x)
-        return F.log_softmax(x, dim=1)
+        x = F.elu(self.conv2(F.elu(self.conv1(x))))
+        x = self.batch_norm1(x)
+        x = self.pooling1(x)
+        x = self.dropout1(x)
 
+        x = F.elu(self.conv3(x))
+        x = self.batch_norm2(x)
+        x = self.pooling2(x)
+        x = self.dropout2(x)
+
+        x = F.elu(self.conv4(x))
+        x = self.batch_norm3(x)
+        x = self.pooling3(x)
+        x = self.dropout3(x)
+
+        x = F.elu(self.conv5(x))
+        x = self.batch_norm4(x)
+        x = self.pooling4(x)
+        x = self.dropout4(x)
+
+        x = x.view(x.size(0), -1)  # 注意，确保扁平化时保留了批次大小
+        x = self.classifier(x)
+        return x
+
+    def classifier(self, x):
+        classifier = nn.Linear(x.size(1), self.classes).to(DEVICE) # 注意这里的改动，从x.size(0)变为x.size(1)
+        return classifier(x) # 直接返回执行结果
+
+    def _get_flat_features(self, channels, sampling_rate):
+        x = torch.rand(1, 1, channels, sampling_rate)
+        x = self.forward_features(x)
+        return x.numel()
+
+    def forward_features(self, x):
+        x = F.elu(self.conv2(F.elu(self.conv1(x))))
+        x = self.batch_norm1(x)
+        x = self.pooling1(x)
+        x = self.dropout1(x)
+
+        x = F.elu(self.conv3(x))
+        x = self.batch_norm2(x)
+        x = self.pooling2(x)
+        x = self.dropout2(x)
+
+        x = F.elu(self.conv4(x))
+        x = self.batch_norm3(x)
+        x = self.pooling3(x)
+        x = self.dropout3(x)
+
+        x = F.elu(self.conv5(x))
+        x = self.batch_norm4(x)
+        x = self.pooling4(x)
+        x = self.dropout4(x)
+
+        return x
 
 class SquareActivation(nn.Module):
     def forward(self, x):
@@ -313,34 +345,40 @@ class LogActivation(nn.Module):
         return torch.log(torch.clamp(x, min=1e-7))  # Clamp values to avoid log(0)
 
 class ShallowConvNet(nn.Module):
-    def __init__(self, n_classes, channels, sampling_rate, dropout_rate):
+    def __init__(self, n_classes, channels=32, sampling_rate=128):
+        """
+        初始化ShallowConvNet模型。
+        参数:
+            n_classes: 预测的类别数。
+            channels: EEG信号的通道数，默认为32。
+            sampling_rate: 单个EEG信号样本中的时间步数或采样点数，默认为128。
+        """
         super(ShallowConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(1, 40, (1, 25), padding='same', bias=False)
-        # Note: Conv2d's weight norm can be applied via torch.nn.utils.weight_norm or manually in forward
-        self.conv2 = nn.Conv2d(40, 40, (channels, 1), bias=False)
-        self.batchnorm = nn.BatchNorm2d(40)
-        self.square = SquareActivation()
-        self.avgpool = nn.AvgPool2d((1, 75), stride=(1, 15))
-        self.log = LogActivation()
-        self.dropout = nn.Dropout(dropout_rate)
-        self.flatten = nn.Flatten()
-        # Determining the number of flattened features for the dense layer
-        self.dense = nn.Linear(self._get_dense_in_features(sampling_rate), n_classes)
+        self.classes = n_classes
 
-    def _get_dense_in_features(self, sampling_rate):
-        # Calculate the size here based on the network architecture and input dimensions
-        # Placeholder calculation; replace with actual size
-        return 40 * ((sampling_rate - 75) // 15 + 1)
+        # 卷积层参数
+        self.conv_filters = 40
+        self.conv_kernel_size = (channels, 1)  # 仅在时间维度上卷积
+        self.pool_kernel_size = (1, 75)  # 池化窗口大小
+        self.pool_stride = (1, 15)  # 池化步长
+
+        # 定义网络层
+        self.conv = nn.Conv2d(1, self.conv_filters, self.conv_kernel_size, bias=False)
+        self.conv_bn = nn.BatchNorm2d(self.conv_filters)
+        self.pool = nn.AvgPool2d(self.pool_kernel_size, stride=self.pool_stride)
+
+    def classifier(self, x):
+        classifier = nn.Linear(x.size(1), self.classes).to(DEVICE) # 注意这里的改动，从x.size(0)变为x.size(1)
+        return classifier(x) # 直接返回执行结果
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.conv2(x)
-        x = self.batchnorm(x)
-        x = self.square(x)
-        x = self.avgpool(x)
-        x = self.log(x)
-        x = self.dropout(x)
-        x = self.flatten(x)
-        x = self.dense(x)
-        x = F.softmax(x, dim=1)
+        # 卷积层
+        x = self.conv(x)
+        x = self.conv_bn(x)
+        x = F.elu(x)
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)  # 扁平化
+
+        # 全连接层
+        x = self.classifier(x)
         return x
