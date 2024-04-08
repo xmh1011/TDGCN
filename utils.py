@@ -81,10 +81,9 @@ def pprint(x):
 
 def get_model(args):
 
-    if args.model == 'LGGNet' or args.model == 'TDGCN':
-        idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
-        channels = sum(idx_local_graph)
-        input_size = (args.input_shape[0], channels, args.input_shape[2])
+    idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
+    channels = sum(idx_local_graph)
+    input_size = (args.input_shape[0], channels, args.input_shape[2])
     if args.model == 'LGGNet':
         model = LGGNet(
             num_classes=args.num_class, input_size=input_size,
@@ -115,18 +114,22 @@ def get_model(args):
             sampling_rate=args.target_rate)
     elif args.model == 'EEGTCNet':
         model = EEGTCNet(
-            n_classes=args.num_class, channels=channels,
-            sampling_rate=args.target_rate,
-            dropout_rate=args.dropout)
+            n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate)
     elif args.model == 'MBEEG_SENet':
         model = MBEEG_SENet(
-            n_classes=args.num_class, channels=channels,
+            n_classes=args.num_class, channels=args.channels,
             sampling_rate=args.target_rate)
     elif args.model == 'EEGNetClassifier':
         model = EEGNetClassifier(
-            n_classes=args.num_class, channels=channels,
+            n_classes=args.num_class, channels=args.channels,
             sampling_rate=args.target_rate,
             dropout_rate=args.dropout)
+    elif args.model == 'AMCNN_DGCN':
+        model = AMCNN_DGCN(
+            num_nodes=args.channels, n_classes=args.num_class,
+            temporal_in_channels=args.channels, temporal_out_channels=args.T,
+            dgcn_in_channels=args.T, dgcn_out_channels=args.T*2,
+        )
 
     return model
 

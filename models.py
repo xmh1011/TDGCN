@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils import weight_norm
+from torch_geometric.nn import GCNConv, global_mean_pool
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -57,6 +58,13 @@ class EEGNet(nn.Module):
         x = self.classifier(x)  # 确保这里返回的是Tensor
         return x
 
+ACTIVATIONS = {
+    'relu': 'ReLU',
+    'elu': 'ELU',
+    'leaky_relu': 'LeakyReLU',
+    # 添加其他激活函数名称映射
+}
+
 class TCNBlock(nn.Module):
     def __init__(self, input_dimension, depth, kernel_size, filters, dropout, activation='relu'):
         super(TCNBlock, self).__init__()
@@ -67,18 +75,23 @@ class TCNBlock(nn.Module):
 
         self.initial_conv = nn.Conv1d(input_dimension, filters, kernel_size=1, padding='same')
 
-        # Initial block
+        # 检查提供的激活函数是否在映射中，并获取正确的激活函数名称
+        if activation.lower() in ACTIVATIONS:
+            activation_name = ACTIVATIONS[activation.lower()]
+        else:
+            raise ValueError(f"Unsupported activation function: {activation}")
+
         self.conv1 = nn.Conv1d(filters, filters, kernel_size, padding=(kernel_size-1), dilation=1)
         self.bn1 = nn.BatchNorm1d(filters)
         self.conv2 = nn.Conv1d(filters, filters, kernel_size, padding=(kernel_size-1), dilation=1)
         self.bn2 = nn.BatchNorm1d(filters)
 
-        # Subsequent blocks with increasing dilation
+        # 使用正确的激活函数名称
         self.blocks = nn.ModuleList([
             nn.Sequential(
                 nn.Conv1d(filters, filters, kernel_size, padding=(kernel_size-1) * 2 ** (i + 1), dilation=2 ** (i + 1)),
                 nn.BatchNorm1d(filters),
-                getattr(nn, activation.capitalize())(),
+                getattr(nn, activation_name)(),
                 nn.Dropout(dropout),
                 nn.Conv1d(filters, filters, kernel_size, padding=(kernel_size-1) * 2 ** (i + 1), dilation=2 ** (i + 1)),
                 nn.BatchNorm1d(filters),
@@ -86,7 +99,7 @@ class TCNBlock(nn.Module):
             for i in range(depth-1)
         ])
 
-        self.activation = getattr(nn, activation.capitalize())()
+        self.activation = getattr(nn, activation_name)()
 
     def forward(self, x):
         # Match dimensions if necessary
@@ -95,6 +108,7 @@ class TCNBlock(nn.Module):
 
         # Initial block
         out = self.conv1(x)
+
         out = self.bn1(out)
         out = self.activation(out)
         out = F.dropout(out, self.dropout, training=self.training)
@@ -114,21 +128,18 @@ class TCNBlock(nn.Module):
         return self.activation(res)
 
 class EEGTCNet(nn.Module):
-    def __init__(self, n_classes, channels, sampling_rate, layers=2, kernel_s=4, filt=12, dropout=0.3, activation='elu', F1=8, D=2, kernLength=32, dropout_rate=0.2):
+    def __init__(self, n_classes, channels, sampling_rate, layers=2, kernel_s=4, filt=5, dropout=0.3, activation='elu', F1=32, D=2):
         super(EEGTCNet, self).__init__()
-        # Assuming EEGNet and TCN_block are defined elsewhere with PyTorch
-        self.permute = nn.Permute(2, 1, 0)  # Adjust dimension order
-        self.EEGNet_sep = EEGNet(n_classes=n_classes, F1=F1, sampling_rate=sampling_rate, channels=channels, kernLength=kernLength, D=D, dropout_rate=dropout_rate)
+        self.EEGNet_sep = EEGNet(n_classes=n_classes, sampling_rate=sampling_rate, channels=channels)
         self.TCN_block = TCNBlock(input_dimension=F1*D, depth=layers, kernel_size=kernel_s, filters=filt, dropout=dropout, activation=activation)
         self.dense = nn.Linear(filt, n_classes)  # Assuming the output of TCN_block has 'filt' features
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
-        x = self.permute(x)
         x = self.EEGNet_sep(x)
-        x = x[:, :, -1, :]  # Selecting the last feature map as done in Lambda(lambda x: x[:,:,-1,:])(EEGNet_sep)
+        # x = x[:, :, -1, :]  # Selecting the last feature map as done in Lambda(lambda x: x[:,:,-1,:])(EEGNet_sep)
         x = self.TCN_block(x)
-        x = x[:, -1, :]  # Selecting the last timestep as done in Lambda(lambda x: x[:,-1,:])(outs)
+        # x = x[:, -1, :]  # Selecting the last timestep as done in Lambda(lambda x: x[:,-1,:])(outs)
         x = self.dense(x)
         x = self.softmax(x)
         return x
@@ -382,3 +393,58 @@ class ShallowConvNet(nn.Module):
         # 全连接层
         x = self.classifier(x)
         return x
+
+class AMCNN_DGCN(nn.Module):
+    def __init__(self, num_nodes, temporal_in_channels, temporal_out_channels, dgcn_in_channels, dgcn_out_channels, n_classes):
+        super(AMCNN_DGCN, self).__init__()
+        self.temporal = TemporalConvBlock(temporal_in_channels, temporal_out_channels)
+        self.dgcn = DGCN(num_nodes, dgcn_in_channels, dgcn_out_channels)
+        self.classifier = nn.Linear(dgcn_out_channels, n_classes)
+
+    def forward(self, x):
+        x = self.temporal(x)
+        x = self.dgcn(x)
+        x = self.classifier(x)
+        return F.log_softmax(x, dim=-1)
+
+class DGCN(nn.Module):
+    def __init__(self, num_nodes, in_channels, out_channels):
+        super(DGCN, self).__init__()
+        self.gcn = GCNConv(in_channels, out_channels)
+        # Learnable adjacency matrix
+        self.adj_matrix = nn.Parameter(torch.rand(num_nodes, num_nodes))
+
+    def forward(self, x, batch):
+        edge_index = self.adj_matrix.nonzero().t().contiguous()
+        x = F.relu(self.gcn(x, edge_index))
+        x = global_mean_pool(x, batch)  # Pooling for graph-level classification
+        return x
+
+class TemporalConvBlock(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super(TemporalConvBlock, self).__init__()
+        # Assuming 3 scales: small, medium, and large
+        self.conv_small = nn.Conv1d(in_channels, out_channels, kernel_size=3, padding=1)
+        self.conv_medium = nn.Conv1d(in_channels, out_channels, kernel_size=5, padding=2)
+        self.conv_large = nn.Conv1d(in_channels, out_channels, kernel_size=7, padding=3)
+        self.attention = AttentionLayer(out_channels)
+
+    def forward(self, x):
+        # x: [batch_size, channels, time_steps]
+        small_features = F.relu(self.conv_small(x))
+        medium_features = F.relu(self.conv_medium(x))
+        large_features = F.relu(self.conv_large(x))
+
+        combined_features = small_features + medium_features + large_features
+        combined_features = combined_features.mean(dim=1)  # Mean across scales
+
+        return self.attention(combined_features)
+
+class AttentionLayer(nn.Module):
+    def __init__(self, in_features):
+        super(AttentionLayer, self).__init__()
+        self.linear = nn.Linear(in_features, in_features)
+
+    def forward(self, x):
+        attention_scores = F.softmax(self.linear(x), dim=-1)
+        return x * attention_scores.unsqueeze(-1)
