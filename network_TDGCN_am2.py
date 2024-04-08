@@ -179,7 +179,7 @@ class TDGCN(nn.Module):
         adj = self.self_similarity(x)  # b, n, n
         num_nodes = adj.shape[-1]
         # 将自相似度矩阵与全局邻接矩阵的和进行逐元素相乘，并经过ReLU激活函数处理。这一步可以用来控制邻接矩阵中的连接关系
-        adj = F.relu(adj * (self.global_adj + self.global_adj.transpose(1, 0)))
+        # adj = F.relu(adj * (self.global_adj + self.global_adj.transpose(1, 0)))
         if self_loop:
             # 在邻接矩阵中添加自环，即在对角线上设置为1，表示每个节点与自己相连接
             adj = adj + torch.eye(num_nodes).to(DEVICE)

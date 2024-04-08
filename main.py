@@ -1,11 +1,15 @@
 from cross_validation import *
 from prepare_data import *
+from prepare_data_old import *
 
 
 def main():
     args, _ = config.set_config()
     sub_to_run = np.arange(args.subjects)
-    pd = PrepareData(args)
+    if args.model == 'TDGCN' or args.model == 'LGGNet':
+        pd = PrepareData(args)
+    else:
+        pd = PrepareDataOld(args)
     pd.run(sub_to_run, split=True, expand=True)
     cv = CrossValidation(args)
     seed_all(args.random_seed)

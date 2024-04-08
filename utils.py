@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 from eeg_dataset import *
 from networks import *
 from network_TDGCN_ATC import *
+from models import *
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 
@@ -99,6 +100,36 @@ def get_model(args):
             dropout_rate=args.dropout,
             pool=args.pool, pool_step_rate=args.pool_step_rate,
             idx_graph=idx_local_graph)
+    elif args.model == 'EEGNet':
+        model = EEGNet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate)
+    elif args.model == 'DeepConvNet':
+        model = DeepConvNet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate)
+    elif args.model == 'ShallowConvNet':
+        model = ShallowConvNet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate)
+    elif args.model == 'EEGTCNet':
+        model = EEGTCNet(
+            n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate)
+    elif args.model == 'MBEEG_SENet':
+        model = MBEEG_SENet(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate)
+    elif args.model == 'EEGNetClassifier':
+        model = EEGNetClassifier(
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate,
+            dropout_rate=args.dropout)
+    elif args.model == 'AMCNN_DGCN':
+        model = AMCNN_DGCN(
+            num_nodes=args.channels, n_classes=args.num_class,
+            temporal_in_channels=args.channels, temporal_out_channels=args.T,
+            dgcn_in_channels=args.T, dgcn_out_channels=args.T*2,
+        )
 
     return model
 
@@ -166,3 +197,18 @@ class LabelSmoothing(nn.Module):
         smooth_loss = -logprobs.mean(dim=-1)
         loss = self.confidence * nll_loss + self.smoothing * smooth_loss
         return loss.mean()
+
+#Data augmentation function
+def Meiosis(data, rand_subs_stre, split):
+    new_data1 = []
+    new_data2 = []
+    for i in range(0,16):
+        si = rand_subs_stre[i]
+        sj = rand_subs_stre[i+2]
+        xi = np.concatenate([data[si, :, :split, :], data[sj, :, split:, :]], axis=1)
+        xj = np.concatenate([data[sj, :, :split, :], data[si, :, split:, :]], axis=1)
+        new_data1.append(xi)
+        new_data2.append(xj)
+    new_data = new_data1 + new_data2
+    new_data = np.array(new_data)
+    return new_data
