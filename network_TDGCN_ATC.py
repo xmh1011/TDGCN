@@ -73,7 +73,7 @@ class TDGCN(nn.Module):
         self.brain_area = len(self.idx)
         ###################
         # 多头注意力相关参数
-        self.model_dim = round(num_T/2)
+        self.model_dim = round(num_T / 2)
         self.num_heads = 8
         self.window_size = 100
         self.stride = 20
@@ -100,6 +100,7 @@ class TDGCN(nn.Module):
             nn.AvgPool2d((1, 2))
         )
         #######################################
+        # 特征整合、滑动窗口相关配置
         self.feature_integrator = FeatureIntegrator(in_channels=32, out_channels=self.model_dim)
         self.sliding_window_processor = SlidingWindowProcessor(model_dim=self.model_dim, num_heads=self.num_heads,
                                                                window_size=self.window_size, stride=self.stride)
@@ -402,7 +403,6 @@ class SlidingWindowProcessor(nn.Module):
         fused_output = self.fusion_conv(stacked_outputs)
 
         return fused_output
-
 
 # class SlidingWindowProcessor(nn.Module):
 #     def __init__(self, model_dim, num_heads, window_size, stride):
