@@ -124,12 +124,6 @@ def get_model(args):
             n_classes=args.num_class, channels=args.channels,
             sampling_rate=args.target_rate,
             dropout_rate=args.dropout)
-    elif args.model == 'AMCNN_DGCN':
-        model = AMCNN_DGCN(
-            num_nodes=args.channels, n_classes=args.num_class,
-            temporal_in_channels=args.channels, temporal_out_channels=args.T,
-            dgcn_in_channels=args.T, dgcn_out_channels=args.T*2,
-        )
 
     return model
 

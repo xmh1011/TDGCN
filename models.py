@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils import weight_norm
-from torch_geometric.nn import GCNConv, global_mean_pool
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -393,58 +392,3 @@ class ShallowConvNet(nn.Module):
         # 全连接层
         x = self.classifier(x)
         return x
-
-class AMCNN_DGCN(nn.Module):
-    def __init__(self, num_nodes, temporal_in_channels, temporal_out_channels, dgcn_in_channels, dgcn_out_channels, n_classes):
-        super(AMCNN_DGCN, self).__init__()
-        self.temporal = TemporalConvBlock(temporal_in_channels, temporal_out_channels)
-        self.dgcn = DGCN(num_nodes, dgcn_in_channels, dgcn_out_channels)
-        self.classifier = nn.Linear(dgcn_out_channels, n_classes)
-
-    def forward(self, x):
-        x = self.temporal(x)
-        x = self.dgcn(x)
-        x = self.classifier(x)
-        return F.log_softmax(x, dim=-1)
-
-class DGCN(nn.Module):
-    def __init__(self, num_nodes, in_channels, out_channels):
-        super(DGCN, self).__init__()
-        self.gcn = GCNConv(in_channels, out_channels)
-        # Learnable adjacency matrix
-        self.adj_matrix = nn.Parameter(torch.rand(num_nodes, num_nodes))
-
-    def forward(self, x, batch):
-        edge_index = self.adj_matrix.nonzero().t().contiguous()
-        x = F.relu(self.gcn(x, edge_index))
-        x = global_mean_pool(x, batch)  # Pooling for graph-level classification
-        return x
-
-class TemporalConvBlock(nn.Module):
-    def __init__(self, in_channels, out_channels):
-        super(TemporalConvBlock, self).__init__()
-        # Assuming 3 scales: small, medium, and large
-        self.conv_small = nn.Conv1d(in_channels, out_channels, kernel_size=3, padding=1)
-        self.conv_medium = nn.Conv1d(in_channels, out_channels, kernel_size=5, padding=2)
-        self.conv_large = nn.Conv1d(in_channels, out_channels, kernel_size=7, padding=3)
-        self.attention = AttentionLayer(out_channels)
-
-    def forward(self, x):
-        # x: [batch_size, channels, time_steps]
-        small_features = F.relu(self.conv_small(x))
-        medium_features = F.relu(self.conv_medium(x))
-        large_features = F.relu(self.conv_large(x))
-
-        combined_features = small_features + medium_features + large_features
-        combined_features = combined_features.mean(dim=1)  # Mean across scales
-
-        return self.attention(combined_features)
-
-class AttentionLayer(nn.Module):
-    def __init__(self, in_features):
-        super(AttentionLayer, self).__init__()
-        self.linear = nn.Linear(in_features, in_features)
-
-    def forward(self, x):
-        attention_scores = F.softmax(self.linear(x), dim=-1)
-        return x * attention_scores.unsqueeze(-1)
