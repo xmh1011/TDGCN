@@ -44,7 +44,416 @@ Train:Parameter setting for LGGNet on DEAP
 test mAcc=0.6311979166666667 mF1=0.7225543209629903
 val mAcc=0.6955150462962962 F1=0.783272644747021
 
+
+2024-03-21 09:51:05.704962
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data/
+20balance):False
+21)bandpass:(1, 50)
+total test accuracy 0.7571428571428571, f1: 0.7588652482269502
+total test accuracy 0.7763513513513514, f1: 0.7829508196721311
+total test accuracy 0.9905405405405405, f1: 0.9905913978494624
+total test accuracy 0.9621621621621622, f1: 0.9613793103448276
+total test accuracy 0.9128378378378378, f1: 0.9125423728813559
+total test accuracy 0.9351351351351351, f1: 0.9345156889495224
+total test accuracy 0.8189189189189189, f1: 0.8225165562913906
+total test accuracy 0.956081081081081, f1: 0.9564050972501678
+total test accuracy 0.9310810810810811, f1: 0.9295580110497237
+total test accuracy 0.702027027027027, f1: 0.7081403044341497
+total test accuracy 0.7608108108108108, f1: 0.7517531556802244
+total test accuracy 0.9297297297297298, f1: 0.9270687237026647
+total test accuracy 0.7554054054054054, f1: 0.7380607814761214
+total test accuracy 0.7047297297297297, f1: 0.6853851691864651
+total test accuracy 0.9209459459459459, f1: 0.9192546583850932
+total test accuracy 0.7925675675675675, f1: 0.7827317763623496
+total test accuracy 0.8513513513513513, f1: 0.847009735744089
+total test accuracy 0.6277027027027027, f1: 0.6078291814946619
+total test accuracy 0.7027027027027027, f1: 0.6990424076607387
+total test accuracy 0.8317567567567568, f1: 0.830496936691627
+total test accuracy 0.9304054054054054, f1: 0.9293067947838024
+total test accuracy 0.8635135135135135, f1: 0.8579465541490859
+total test accuracy 0.8141891891891891, f1: 0.8062015503875969
+total test accuracy 0.8614864864864865, f1: 0.8540925266903914
+total test accuracy 0.6472972972972973, f1: 0.6255380200860832
+total test accuracy 0.697972972972973, f1: 0.6885017421602787
+total test accuracy 0.7202702702702702, f1: 0.703862660944206
+total test accuracy 0.6364864864864865, f1: 0.6002971768202079
+total test accuracy 0.8783783783783784, f1: 0.8798397863818425
+total test accuracy 0.8817567567567568, f1: 0.8763250883392226
+total test accuracy 0.8317567567567568, f1: 0.8307273963290278
+total test accuracy 0.7945945945945946, f1: 0.8033635187580853
+test mAcc=0.8180652750965252 mF1=0.8125656296613608
+val mAcc=0.9220898353710854 F1=0.9204145731303254
+
+2024-03-21 09:55:50.706669
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data/
+20balance):False
+21)bandpass:(1, 50)
+total test accuracy 0.7464285714285714, f1: 0.7473309608540925
+total test accuracy 0.7736486486486487, f1: 0.7794601711652404
+total test accuracy 0.975, f1: 0.9746748802190282
+total test accuracy 0.9682432432432433, f1: 0.9675638371290546
+total test accuracy 0.9195945945945946, f1: 0.919212491513917
+total test accuracy 0.9148648648648648, f1: 0.9162234042553192
+total test accuracy 0.8371621621621622, f1: 0.8370520622041919
+total test accuracy 0.9648648648648649, f1: 0.9651006711409396
+total test accuracy 0.9371621621621622, f1: 0.9350104821802936
+total test accuracy 0.6871621621621622, f1: 0.682659355723098
+total test accuracy 0.7378378378378379, f1: 0.729050279329609
+total test accuracy 0.9317567567567567, f1: 0.9287226534932957
+total test accuracy 0.7574324324324324, f1: 0.7448471926083866
+total test accuracy 0.722972972972973, f1: 0.7096317280453257
+total test accuracy 0.9398648648648649, f1: 0.9381514940931203
+total test accuracy 0.7763513513513514, f1: 0.7670654468684025
+total test accuracy 0.8506756756756757, f1: 0.848318462594372
+total test accuracy 0.6797297297297298, f1: 0.6694560669456067
+total test accuracy 0.7182432432432433, f1: 0.7085953878406709
+total test accuracy 0.8364864864864865, f1: 0.8364864864864865
+total test accuracy 0.9067567567567567, f1: 0.903631284916201
+total test accuracy 0.8905405405405405, f1: 0.8862359550561798
+total test accuracy 0.8175675675675675, f1: 0.8090523338048091
+total test accuracy 0.8445945945945946, f1: 0.8454301075268816
+total test accuracy 0.6668918918918919, f1: 0.6711140760507004
+total test accuracy 0.6858108108108109, f1: 0.6777546777546777
+total test accuracy 0.7202702702702702, f1: 0.7072135785007073
+total test accuracy 0.6317567567567568, f1: 0.5892991710625471
+total test accuracy 0.8736486486486487, f1: 0.8778576094056172
+total test accuracy 0.8925675675675676, f1: 0.8876325088339223
+total test accuracy 0.8695945945945946, f1: 0.866988283942109
+total test accuracy 0.7648648648648648, f1: 0.7772087067861716
+test mAcc=0.8200108590733591 mF1=0.815750994010343
+val mAcc=0.9221263674388674 F1=0.9211014843332359
+
+
+2024-03-21 09:57:23.741373
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data/
+20balance):False
+21)bandpass:(1, 50)
+total test accuracy 1.0, f1: 1.0
+total test accuracy 1.0, f1: 1.0
+total test accuracy 0.8263513513513514, f1: 0.8238519533927346
+total test accuracy 0.9966216216216216, f1: 0.9966329966329966
+total test accuracy 0.9574324324324325, f1: 0.9567010309278351
+total test accuracy 0.8689189189189189, f1: 0.8637640449438202
+total test accuracy 0.8533783783783784, f1: 0.8577049180327869
+total test accuracy 0.9567567567567568, f1: 0.9581151832460733
+total test accuracy 0.8601351351351352, f1: 0.8557491289198607
+total test accuracy 0.7567567567567568, f1: 0.7631578947368421
+total test accuracy 0.8743243243243243, f1: 0.8741542625169146
+total test accuracy 0.8925675675675676, f1: 0.8930733019502354
+total test accuracy 0.8783783783783784, f1: 0.8735955056179776
+total test accuracy 0.922972972972973, f1: 0.9198312236286919
+total test accuracy 0.7533783783783784, f1: 0.7194465795541891
+total test accuracy 0.8864864864864865, f1: 0.8887417218543047
+total test accuracy 0.8587837837837838, f1: 0.8573378839590442
+total test accuracy 0.8344594594594594, f1: 0.8304498269896194
+total test accuracy 0.8851351351351351, f1: 0.8885976408912188
+total test accuracy 0.9547297297297297, f1: 0.9557171183079973
+total test accuracy 0.8141891891891891, f1: 0.8206131767775603
+total test accuracy 0.9459459459459459, f1: 0.945872801082544
+total test accuracy 0.43986486486486487, f1: 0.41413427561837457
+total test accuracy 0.9141891891891892, f1: 0.9155023286759814
+total test accuracy 0.5608108108108109, f1: 0.5596205962059619
+total test accuracy 0.8635135135135135, f1: 0.8618331053351573
+total test accuracy 0.777027027027027, f1: 0.7800000000000001
+total test accuracy 0.7479729729729729, f1: 0.7397069085833915
+total test accuracy 0.8635135135135135, f1: 0.8595271210013908
+total test accuracy 0.8195945945945946, f1: 0.832601880877743
+total test accuracy 0.893918918918919, f1: 0.8916494133885438
+total test accuracy 0.6304054054054054, f1: 0.6266211604095564
+test mAcc=0.8465160472972972 mF1=0.8445095307518546
+val mAcc=0.9289367492492493 F1=0.9265130693991479
+
+2024-03-21 10:04:27.462960
+Train:Parameter setting for LGGNet on DEAP
+1)number_class:2
+2)random_seed:2024
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data/
+20balance):False
+21)bandpass:(1, 50)
+total test accuracy 1.0, f1: 1.0
+total test accuracy 1.0, f1: 1.0
+total test accuracy 0.7837837837837838, f1: 0.7746478873239436
+total test accuracy 0.9966216216216216, f1: 0.9966329966329966
+total test accuracy 0.952027027027027, f1: 0.9511355815554026
+total test accuracy 0.8736486486486487, f1: 0.8672817601135557
+total test accuracy 0.8472972972972973, f1: 0.8477088948787063
+total test accuracy 0.9581081081081081, f1: 0.9593709043250327
+total test accuracy 0.8547297297297297, f1: 0.8499651081646895
+total test accuracy 0.7155405405405405, f1: 0.7157326130992574
+total test accuracy 0.8587837837837838, f1: 0.8584969532836831
+total test accuracy 0.8736486486486487, f1: 0.8750835003340013
+total test accuracy 0.8641891891891892, f1: 0.8627986348122867
+total test accuracy 0.9554054054054054, f1: 0.9544198895027625
+total test accuracy 0.7466216216216216, f1: 0.7232472324723247
+total test accuracy 0.8986486486486487, f1: 0.9014454664914585
+total test accuracy 0.8594594594594595, f1: 0.8577291381668947
+total test accuracy 0.8297297297297297, f1: 0.8235294117647058
+total test accuracy 0.8743243243243243, f1: 0.8741542625169146
+total test accuracy 0.9527027027027027, f1: 0.9534574468085106
+total test accuracy 0.8047297297297298, f1: 0.814624759461193
+total test accuracy 0.9371621621621622, f1: 0.9374579690652319
+total test accuracy 0.47094594594594597, f1: 0.46479835953520166
+total test accuracy 0.9121621621621622, f1: 0.9137931034482758
+total test accuracy 0.5547297297297298, f1: 0.5772931366260424
+total test accuracy 0.8702702702702703, f1: 0.8651685393258428
+total test accuracy 0.8168918918918919, f1: 0.8187290969899665
+total test accuracy 0.7452702702702703, f1: 0.7412491420727522
+total test accuracy 0.8594594594594595, f1: 0.8555555555555556
+total test accuracy 0.8114864864864865, f1: 0.8233058898036733
+total test accuracy 0.9067567567567567, f1: 0.9033613445378152
+total test accuracy 0.6466216216216216, f1: 0.6449422946367956
+test mAcc=0.8447423986486486 mF1=0.8439724022907961
+val mAcc=0.927953734984985 F1=0.9256315986701833
+
+
 TODO: @Zohix
+
+TDGCN： 改进邻接矩阵计算方法，单层动态图神经网络，跑deap数据集，LGG原有参数。
+2024-03-22 18:00:36.449405
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.5989583333333333 mF1=0.5938943139316315
+val mAcc=0.6894560185185186 F1=0.6722720501761954
+
+
+TDGCN-3： 改进邻接矩阵计算方法，三层动态图神经网络，跑deap数据集，LGG原有参数。
+2024-03-22 18:07:52.151027
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.5951562499999999 mF1=0.5975042635378383
+val mAcc=0.6904976851851852 F1=0.677881007621308
+
+
+TDGCN-deap-new-A： 新参数，跑老的动态图神经网络。
+2024-03-22 14:50:45.288166
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:400
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:40
+15)patient-cmb:20
+16)max-epoch-cmb:40
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.5963541666666667 mF1=0.5884328566661706
+val mAcc=0.6923611111111111 F1=0.6728562022283281
+
+
+TDGCN-deap-new-V： 新参数，跑老的动态图神经网络。
+2024-03-22 14:52:14.376975
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:400
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:40
+15)patient-cmb:20
+16)max-epoch-cmb:40
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.59203125 mF1=0.6210480613206941
+val mAcc=0.6839872685185185 F1=0.6972918431904874
+
+
+TDGCN-deap-A： LGG原有参数，跑老的动态图神经网络。
+2024-03-22 11:10:18.457630
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.59734375 mF1=0.5900005550059298
+val mAcc=0.6900115740740741 F1=0.6696025781219362
+
+
+TDGCN-deap-V： LGG原有参数，跑老的动态图神经网络。
+2024-03-22 11:11:51.233220
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.5900520833333334 mF1=0.6201312324449926
+val mAcc=0.6811689814814814 F1=0.6933837504658298
+
 
 TDGCN-LGG-deap-A:  跑LGG网络，LGG原有参数。
 2024-03-22 14:55:16.352608
@@ -71,7 +480,7 @@ Train:Parameter setting for LGGNet on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.6043229166666666 mF1=0.6124924897819309 
+test mAcc=0.6043229166666666 mF1=0.6124924897819309
 val mAcc=0.6931886574074075 F1=0.6995748979543032
 
 
@@ -100,8 +509,67 @@ Train:Parameter setting for LGGNet on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.5890625 mF1=0.6271771204654069 
+test mAcc=0.5890625 mF1=0.6271771204654069
 val mAcc=0.6797858796296297 F1=0.7078485079365002
+
+
+TDGCN-adj-deap-A: 改进邻接矩阵计算方式，新参数
+2024-03-23 17:11:14.123891
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:400
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:40
+15)patient-cmb:20
+16)max-epoch-cmb:40
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.5960416666666666 mF1=0.6016276869605588
+val mAcc=0.6890972222222222 F1=0.6642387654983872
+
+
+TDGCN-adj-deap-V: 改进邻接矩阵计算方式，新参数
+2024-03-23 18:20:08.072995
+Train:Parameter setting for TDGCN on DEAP
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:400
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 512)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:40
+15)patient-cmb:20
+16)max-epoch-cmb:40
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/deap/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:DEAP
+test mAcc=0.5881770833333333 mF1=0.62035273469251
+val mAcc=0.6715219907407407 F1=0.6791635039564465
+
 
 TDGCN-adj-am-deap-A: 结合矩阵权重更新和注意力机制
 2024-03-24 19:44:57.489986
@@ -132,13 +600,12 @@ test mAcc=0.59953125 mF1=0.571902466688797
 val mAcc=0.6691898148148148 F1=0.6198288985093816
 
 
-
 TDGCN-am-deap-A： 注意力机制缩减通道数 【3.28重跑】
-2024-03-24 21:08:18.949609
+2024-03-28 21:19:55.072060
 Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
 2)random_seed:3407
-3)learning_rate:1e-05
+3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:400
@@ -158,16 +625,16 @@ Train:Parameter setting for TDGCN on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.59921875 mF1=0.5969603429815735
-val mAcc=0.6721180555555555 F1=0.6444737025794882
+test mAcc=0.5905208333333334 mF1=0.5871736973420711
+val mAcc=0.6961574074074074 F1=0.6827828113485837
 
 
 TDGCN-am2-deap-A： 二维卷积缩减通道数（含Relu） 【3.28重跑】
-2024-03-24 19:32:30.913506
+2024-03-28 21:20:15.823166
 Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
 2)random_seed:3407
-3)learning_rate:1e-05
+3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:400
@@ -187,16 +654,17 @@ Train:Parameter setting for TDGCN on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.59765625 mF1=0.5869903202210722
-val mAcc=0.6756770833333333 F1=0.6301143811259109
+test mAcc=0.6038541666666666 mF1=0.6058559822354073
+val mAcc=0.6849016203703704 F1=0.6448164252584601
+
 
 TDGCN-am3-deap-A： 二维卷积缩减通道数（不含Relu）【3.28重跑】
 # 这一组值得关注 TODO mark
-2024-03-24 19:34:44.132240
+2024-03-28 21:20:39.577043
 Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
 2)random_seed:3407
-3)learning_rate:1e-05
+3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:400
@@ -216,23 +684,139 @@ Train:Parameter setting for TDGCN on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.6044791666666667 mF1=0.5966712610215605
-val mAcc=0.676857638888889 F1=0.6378464508170882
+test mAcc=0.6014062499999999 mF1=0.606564731298352
+val mAcc=0.6998958333333333 F1=0.6887832238087075
 
 
-TDGCN-LGG-WQJ-A: LGG跑咱们的数据集 【3-28】
+TDGCN-LGG-WQJ-A: LGG跑咱们的数据集
+2024-03-28 20:35:28.994439
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.6535714285714286, f1: 0.6900958466453675
+sub 1: total test accuracy 0.7506756756756757, f1: 0.7633098139833225
+sub 2: total test accuracy 0.9912162162162163, f1: 0.9912339851652057
+sub 3: total test accuracy 0.9635135135135136, f1: 0.963265306122449
+sub 4: total test accuracy 0.9108108108108108, f1: 0.9141742522756826
+sub 5: total test accuracy 0.9412162162162162, f1: 0.9410169491525423
+sub 6: total test accuracy 0.8439189189189189, f1: 0.8542586750788643
+sub 7: total test accuracy 0.9817567567567568, f1: 0.9819397993311036
+sub 8: total test accuracy 0.9398648648648649, f1: 0.9389993145990404
+sub 9: total test accuracy 0.6594594594594595, f1: 0.676923076923077
+sub 10: total test accuracy 0.7560810810810811, f1: 0.7542545949625595
+sub 11: total test accuracy 0.9297297297297298, f1: 0.9279778393351801
+sub 12: total test accuracy 0.7695945945945946, f1: 0.7709872397582269
+sub 13: total test accuracy 0.9351351351351351, f1: 0.9340659340659342
+sub 14: total test accuracy 0.9594594594594594, f1: 0.959016393442623
+sub 15: total test accuracy 0.731081081081081, f1: 0.7258953168044077
+sub 16: total test accuracy 0.8304054054054054, f1: 0.8289025221540559
+sub 17: total test accuracy 0.9581081081081081, f1: 0.958611481975968
+sub 18: total test accuracy 0.7263513513513513, f1: 0.726904922454484
+sub 19: total test accuracy 0.7932432432432432, f1: 0.7883817427385892
+sub 20: total test accuracy 0.8966216216216216, f1: 0.8914123491838183
+sub 21: total test accuracy 0.9047297297297298, f1: 0.9040163376446563
+sub 22: total test accuracy 0.802027027027027, f1: 0.8053156146179401
+sub 23: total test accuracy 0.85, f1: 0.8445378151260505
+sub 24: total test accuracy 0.8094594594594594, f1: 0.8142292490118577
+sub 25: total test accuracy 0.6918918918918919, f1: 0.6868131868131868
+sub 26: total test accuracy 0.6871621621621622, f1: 0.6843899113837764
+sub 27: total test accuracy 0.6547297297297298, f1: 0.655892255892256
+sub 28: total test accuracy 0.8621621621621621, f1: 0.8726591760299625
+sub 29: total test accuracy 0.8905405405405405, f1: 0.8929986789960371
+sub 30: total test accuracy 0.8006756756756757, f1: 0.7952810548230396
+sub 31: total test accuracy 0.731081081081081, f1: 0.7558282208588956
+test mAcc=0.8314460666023166 mF1=0.8341746517921925
+val mAcc=0.9279678115615616 F1=0.9281910028498311
 
 
-TDGCN-LGG-WQJ-V： LGG跑咱们的数据集 【3-28】
+TDGCN-LGG-WQJ-V： LGG跑咱们的数据集
+2024-03-28 20:36:12.549079
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 1.0, f1: 1.0
+sub 2: total test accuracy 0.7527027027027027, f1: 0.7288888888888888
+sub 3: total test accuracy 0.9966216216216216, f1: 0.9966329966329966
+sub 4: total test accuracy 0.9486486486486486, f1: 0.948509485094851
+sub 5: total test accuracy 0.8567567567567568, f1: 0.8494318181818181
+sub 6: total test accuracy 0.8614864864864865, f1: 0.8594928032899246
+sub 7: total test accuracy 0.9804054054054054, f1: 0.9806795469686875
+sub 8: total test accuracy 0.8648648648648649, f1: 0.8652291105121294
+sub 9: total test accuracy 0.6932432432432433, f1: 0.6924119241192411
+sub 10: total test accuracy 0.8418918918918918, f1: 0.8423180592991915
+sub 11: total test accuracy 0.8844594594594595, f1: 0.8851578240429818
+sub 12: total test accuracy 0.8905405405405405, f1: 0.8871866295264623
+sub 13: total test accuracy 0.8094594594594594, f1: 0.8014084507042253
+sub 14: total test accuracy 0.7168918918918918, f1: 0.68801191362621
+sub 15: total test accuracy 0.8608108108108108, f1: 0.8624833110814419
+sub 16: total test accuracy 0.8540540540540541, f1: 0.8524590163934427
+sub 17: total test accuracy 0.9013513513513514, f1: 0.9070063694267516
+sub 18: total test accuracy 0.8702702702702703, f1: 0.8726790450928381
+sub 19: total test accuracy 0.9527027027027027, f1: 0.9532710280373832
+sub 20: total test accuracy 0.8013513513513514, f1: 0.8065789473684211
+sub 21: total test accuracy 0.9358108108108109, f1: 0.9367930805056555
+sub 22: total test accuracy 0.847972972972973, f1: 0.8468345813478557
+sub 23: total test accuracy 0.9101351351351351, f1: 0.91324200913242
+sub 24: total test accuracy 0.8777027027027027, f1: 0.8767869298842749
+sub 25: total test accuracy 0.8337837837837838, f1: 0.8277310924369747
+sub 26: total test accuracy 0.8074324324324325, f1: 0.8111332007952287
+sub 27: total test accuracy 0.7520270270270271, f1: 0.7238525206922499
+sub 28: total test accuracy 0.9060810810810811, f1: 0.9036729036729036
+sub 29: total test accuracy 0.8878378378378379, f1: 0.891644908616188
+sub 30: total test accuracy 0.9, f1: 0.8975069252077563
+sub 31: total test accuracy 0.6013513513513513, f1: 0.5797720797720798
+test mAcc=0.8624577702702703 mF1=0.8590252312609835
+val mAcc=0.9375868055555555 F1=0.9356924625388383
 
 
-# 这一组也值得关注 TODO mark
+# 这一组也值得关注
 TDGCN-adj-am3-deap-A:改进后代码跑deap数据集 【3-28重跑】
-2024-03-27 20:57:04.089136
+2024-03-28 20:40:08.127122
 Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
 2)random_seed:3407
-3)learning_rate:1e-05
+3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:400
@@ -252,16 +836,16 @@ Train:Parameter setting for TDGCN on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.6035937499999999 mF1=0.5864960683324429
-val mAcc=0.6760416666666667 F1=0.6313040866934598
+test mAcc=0.5958854166666667 mF1=0.589978552271277
+val mAcc=0.6888483796296296 F1=0.6372335759032626
 
 
 TDGCN-adj-am3-deap-V:改进后代码跑deap数据集 【3-28重跑】
-2024-03-27 20:57:15.579699
+2024-03-28 20:40:52.432962
 Train:Parameter setting for TDGCN on DEAP
 1)number_class:2
 2)random_seed:3407
-3)learning_rate:1e-05
+3)learning_rate:0.001
 4)training_rate:0.8
 5)pool:16
 6)num_epochs:400
@@ -281,8 +865,8 @@ Train:Parameter setting for TDGCN on DEAP
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:DEAP
-test mAcc=0.5647395833333333 mF1=0.5871839823260309
-val mAcc=0.6486111111111111 F1=0.6415521444080825
+test mAcc=0.5896354166666666 mF1=0.6151868392824722
+val mAcc=0.6652604166666667 F1=0.6401422366725351
 
 
 TDGCN-adj-am3-WQJ-A：改进后代码跑咱们的数据集
@@ -346,11 +930,1304 @@ Train:Parameter setting for TDGCN on DEAP
 test mAcc=0.5835416666666666 mF1=0.6186913295857632
 val mAcc=0.6763715277777778 F1=0.6938968701370896
 
-############################################################################################################
-# 修复降采样bug之后的数据集 #
-############################################################################################################
 
-## TDGCN 三层时间学习器 A标签
+TDGCN-ATC-A:增加滑动窗口和多头注意力模块 ，跑咱们数据集
+2024-03-30 14:15:42.190487
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.7035714285714286, f1: 0.7348242811501597
+sub 1: total test accuracy 0.7810810810810811, f1: 0.8021978021978022
+sub 2: total test accuracy 0.9966216216216216, f1: 0.9966284558327714
+sub 3: total test accuracy 0.9513513513513514, f1: 0.9497206703910615
+sub 4: total test accuracy 0.8831081081081081, f1: 0.8941896024464832
+sub 5: total test accuracy 0.9209459459459459, f1: 0.923076923076923
+sub 6: total test accuracy 0.9047297297297298, f1: 0.9079033311561071
+sub 7: total test accuracy 0.9608108108108108, f1: 0.9605978260869565
+sub 8: total test accuracy 0.9689189189189189, f1: 0.9688346883468836
+sub 9: total test accuracy 0.8547297297297297, f1: 0.8501742160278745
+sub 10: total test accuracy 0.8391891891891892, f1: 0.8398384925975774
+sub 11: total test accuracy 0.9277027027027027, f1: 0.9251224632610217
+sub 12: total test accuracy 0.8587837837837838, f1: 0.8598256203890007
+sub 13: total test accuracy 0.9648648648648649, f1: 0.9652406417112299
+sub 14: total test accuracy 0.9459459459459459, f1: 0.9438202247191011
+sub 15: total test accuracy 0.7925675675675675, f1: 0.7827317763623496
+sub 16: total test accuracy 0.8439189189189189, f1: 0.8427501701837986
+sub 17: total test accuracy 0.9581081081081081, f1: 0.9579945799457994
+sub 18: total test accuracy 0.7878378378378378, f1: 0.8002544529262086
+sub 19: total test accuracy 0.7777027027027027, f1: 0.7610748002904866
+sub 20: total test accuracy 0.9175675675675675, f1: 0.9140845070422536
+sub 21: total test accuracy 0.9168918918918919, f1: 0.9146426092990979
+sub 22: total test accuracy 0.8027027027027027, f1: 0.8018995929443689
+sub 23: total test accuracy 0.7486486486486487, f1: 0.7300435413642962
+sub 24: total test accuracy 0.7993243243243243, f1: 0.8087572440437861
+sub 25: total test accuracy 0.702027027027027, f1: 0.7054108216432866
+sub 26: total test accuracy 0.7033783783783784, f1: 0.7039784221173297
+sub 27: total test accuracy 0.6547297297297298, f1: 0.7098239636570131
+sub 28: total test accuracy 0.8587837837837838, f1: 0.8648998060762766
+sub 29: total test accuracy 0.8716216216216216, f1: 0.8819875776397516
+sub 30: total test accuracy 0.7824324324324324, f1: 0.773876404494382
+sub 31: total test accuracy 0.8074324324324325, f1: 0.797153024911032
+test mAcc=0.8496259652509652 mF1=0.8522924541978898
+val mAcc=0.9421375616688117 F1=0.9406241648361939
+
+
+TDGCN-ATC-V:增加滑动窗口和多头注意力模块 ，跑咱们数据集，采样率1000HZ
+2024-03-31 00:19:26.172502
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.9986486486486487, f1: 0.9986468200270636
+sub 2: total test accuracy 0.7682432432432432, f1: 0.7655502392344498
+sub 3: total test accuracy 0.9966216216216216, f1: 0.9966329966329966
+sub 4: total test accuracy 0.9614864864864865, f1: 0.9626719056974459
+sub 5: total test accuracy 0.8668918918918919, f1: 0.8558888076079005
+sub 6: total test accuracy 0.9141891891891892, f1: 0.9107519325368939
+sub 7: total test accuracy 0.9817567567567568, f1: 0.9820836098208361
+sub 8: total test accuracy 0.7398648648648649, f1: 0.6867371847030106     //13
+sub 9: total test accuracy 0.8351351351351352, f1: 0.8342391304347826
+sub 10: total test accuracy 0.8898648648648648, f1: 0.8939492517891996
+sub 11: total test accuracy 0.927027027027027, f1: 0.928759894459103
+sub 12: total test accuracy 0.879054054054054, f1: 0.8866371120962635
+sub 13: total test accuracy 0.8966216216216216, f1: 0.89382373351839
+sub 14: total test accuracy 0.6621621621621622, f1: 0.6301775147928994    //5
+sub 15: total test accuracy 0.847972972972973, f1: 0.8384781048097631
+sub 16: total test accuracy 0.8432432432432433, f1: 0.8508997429305913
+sub 17: total test accuracy 0.9601351351351352, f1: 0.9599456890699254
+sub 18: total test accuracy 0.8, f1: 0.8310502283105022
+sub 19: total test accuracy 0.8324324324324325, f1: 0.8187134502923976    //12
+sub 20: total test accuracy 0.7898648648648648, f1: 0.756078431372549
+sub 21: total test accuracy 0.9148648648648648, f1: 0.9102564102564101
+sub 22: total test accuracy 0.8621621621621621, f1: 0.853868194842407
+sub 23: total test accuracy 0.9094594594594595, f1: 0.9099462365591396
+sub 24: total test accuracy 0.8777027027027027, f1: 0.8759424263193969
+sub 25: total test accuracy 0.8364864864864865, f1: 0.8367071524966262
+sub 26: total test accuracy 0.7702702702702703, f1: 0.806157354618016
+sub 27: total test accuracy 0.7993243243243243, f1: 0.8128544423440454
+sub 28: total test accuracy 0.6790540540540541, f1: 0.756784434203789     //23
+sub 29: total test accuracy 0.8418918918918918, f1: 0.8559113300492611    //4
+sub 30: total test accuracy 0.8614864864864865, f1: 0.8685054522129569
+sub 31: total test accuracy 0.6236486486486487, f1: 0.6074700493305145
+test mAcc=0.8552364864864865 mF1=0.8555037269802976
+val mAcc=0.9243079016516517 F1=0.9176602411788166
+
+
+TDGCN-ATC-am2-A:滑动窗口和多头注意力模块+一维卷积降维（含Relu），跑咱们数据集 TODO
+
+TDGCN-ATC-am2-V:滑动窗口和多头注意力模块+一维卷积降维（含Relu），跑咱们数据集 TODO
+
+-------------------------------修正采样率为200HZ-------------------------------------------------------
+
+TDGCN-ATC-old-A:增加滑动窗口和多头注意力模块 ，跑咱们数据集，采样率200HZ,窗口大小100，步长20
+2024-04-03 17:53:06.398012
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.7392857142857143, f1: 0.7558528428093646
+sub 1: total test accuracy 0.6785714285714286, f1: 0.6917808219178083
+sub 2: total test accuracy 0.7607142857142857, f1: 0.7649122807017544
+sub 3: total test accuracy 0.9392857142857143, f1: 0.9368029739776953
+sub 4: total test accuracy 0.7071428571428572, f1: 0.730263157894737
+sub 5: total test accuracy 0.6642857142857143, f1: 0.7473118279569894
+sub 6: total test accuracy 0.7821428571428571, f1: 0.7932203389830508
+sub 7: total test accuracy 0.7642857142857142, f1: 0.8047337278106508
+sub 8: total test accuracy 0.7892857142857143, f1: 0.8065573770491803
+sub 9: total test accuracy 0.475, f1: 0.5273311897106109
+sub 10: total test accuracy 0.725, f1: 0.7259786476868327
+sub 11: total test accuracy 0.8785714285714286, f1: 0.8851351351351352
+sub 12: total test accuracy 0.7535714285714286, f1: 0.7836990595611285
+sub 13: total test accuracy 0.9035714285714286, f1: 0.9052631578947368
+sub 14: total test accuracy 0.7178571428571429, f1: 0.7357859531772575
+sub 15: total test accuracy 0.725, f1: 0.7539936102236422
+sub 16: total test accuracy 0.8392857142857143, f1: 0.8339483394833948
+sub 17: total test accuracy 0.9178571428571428, f1: 0.9187279151943463
+sub 18: total test accuracy 0.6678571428571428, f1: 0.7155963302752294
+sub 19: total test accuracy 0.5392857142857143, f1: 0.5536332179930796
+sub 20: total test accuracy 0.8, f1: 0.8014184397163121
+sub 21: total test accuracy 0.75, f1: 0.7878787878787878
+sub 22: total test accuracy 0.7821428571428571, f1: 0.7859649122807018
+sub 23: total test accuracy 0.7464285714285714, f1: 0.7731629392971247
+sub 24: total test accuracy 0.6892857142857143, f1: 0.7238095238095239
+sub 25: total test accuracy 0.5821428571428572, f1: 0.5865724381625441
+sub 26: total test accuracy 0.5892857142857143, f1: 0.6483180428134556
+sub 27: total test accuracy 0.5821428571428572, f1: 0.6138613861386139
+sub 28: total test accuracy 0.7107142857142857, f1: 0.7522935779816513
+sub 29: total test accuracy 0.7107142857142857, f1: 0.7272727272727273
+sub 30: total test accuracy 0.6035714285714285, f1: 0.6262626262626263
+sub 31: total test accuracy 0.675, f1: 0.6784452296819787
+test mAcc=0.7246651785714285 mF1=0.746118391772896
+val mAcc=0.8147321428571429 F1=0.8216385371279082
+
+
+TDGCN-ATC-old-V:增加滑动窗口和多头注意力模块 ，跑咱们数据集，采样率200HZ,窗口大小100，步长20
+2024-04-03 17:53:06.406384
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data/
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.95, f1: 0.9523809523809523
+sub 2: total test accuracy 0.6821428571428572, f1: 0.6763636363636363
+sub 3: total test accuracy 0.9964285714285714, f1: 0.9964412811387899
+sub 4: total test accuracy 0.5785714285714286, f1: 0.3789473684210526
+sub 5: total test accuracy 0.6535714285714286, f1: 0.522167487684729
+sub 6: total test accuracy 0.7392857142857143, f1: 0.7542087542087541
+sub 7: total test accuracy 0.925, f1: 0.9189189189189189
+sub 8: total test accuracy 0.65, f1: 0.6620689655172415
+sub 9: total test accuracy 0.6, f1: 0.5757575757575757
+sub 10: total test accuracy 0.8892857142857142, f1: 0.888086642599278
+sub 11: total test accuracy 0.8535714285714285, f1: 0.8404669260700388
+sub 12: total test accuracy 0.7142857142857143, f1: 0.7435897435897435
+sub 13: total test accuracy 0.7928571428571428, f1: 0.7851851851851851
+sub 14: total test accuracy 0.6964285714285714, f1: 0.6473029045643154
+sub 15: total test accuracy 0.6964285714285714, f1: 0.5853658536585366
+sub 16: total test accuracy 0.8357142857142857, f1: 0.8391608391608392
+sub 17: total test accuracy 0.9, f1: 0.9060402684563759
+sub 18: total test accuracy 0.6892857142857143, f1: 0.7355623100303951
+sub 19: total test accuracy 0.475, f1: 0.5116279069767442
+sub 20: total test accuracy 0.7107142857142857, f1: 0.7096774193548387
+sub 21: total test accuracy 0.8714285714285714, f1: 0.8838709677419355
+sub 22: total test accuracy 0.8964285714285715, f1: 0.8982456140350877
+sub 23: total test accuracy 0.875, f1: 0.8689138576779027
+sub 24: total test accuracy 0.8678571428571429, f1: 0.8644688644688644
+sub 25: total test accuracy 0.6964285714285714, f1: 0.6863468634686346
+sub 26: total test accuracy 0.725, f1: 0.750809061488673
+sub 27: total test accuracy 0.8321428571428572, f1: 0.8438538205980066
+sub 28: total test accuracy 0.6107142857142858, f1: 0.6765578635014836
+sub 29: total test accuracy 0.725, f1: 0.7094339622641508
+sub 30: total test accuracy 0.5678571428571428, f1: 0.6967418546365914
+sub 31: total test accuracy 0.6892857142857143, f1: 0.6836363636363636
+test mAcc=0.7620535714285714 mF1=0.7560062510486136
+val mAcc=0.8407986111111112 F1=0.838586998233735
+
+
+TDGCN-ATC-new1-A:增加滑动窗口和多头注意力模块 ，跑咱们数据集，采样率200HZ,窗口大小50，步长10，效果一般
+2024-04-03 21:38:47.191313
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.7104910714285715 mF1=0.7310084282854983
+val mAcc=0.7959945436507937 F1=0.7902073380860019
+
+
+TDGCN-LGG-A：LGG跑咱们数据集，采样率200HZ
+2024-04-03 17:53:06.268419
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.6642857142857143, f1: 0.6928104575163397
+sub 1: total test accuracy 0.7535714285714286, f1: 0.7809523809523808
+sub 2: total test accuracy 0.7607142857142857, f1: 0.7509293680297398
+sub 3: total test accuracy 0.9142857142857143, f1: 0.9104477611940298
+sub 4: total test accuracy 0.8214285714285714, f1: 0.8201438848920863
+sub 5: total test accuracy 0.85, f1: 0.8521126760563381
+sub 6: total test accuracy 0.75, f1: 0.7756410256410257
+sub 7: total test accuracy 0.7607142857142857, f1: 0.7632508833922261
+sub 8: total test accuracy 0.8071428571428572, f1: 0.8098591549295775
+sub 9: total test accuracy 0.3892857142857143, f1: 0.4536741214057508
+sub 10: total test accuracy 0.7071428571428572, f1: 0.6940298507462687
+sub 11: total test accuracy 0.9178571428571428, f1: 0.915129151291513
+sub 12: total test accuracy 0.75, f1: 0.7569444444444445
+sub 13: total test accuracy 0.9071428571428571, f1: 0.9071428571428571
+sub 14: total test accuracy 0.7607142857142857, f1: 0.7581227436823106
+sub 15: total test accuracy 0.7464285714285714, f1: 0.7526132404181185
+sub 16: total test accuracy 0.8571428571428571, f1: 0.8581560283687943
+sub 17: total test accuracy 0.8535714285714285, f1: 0.8619528619528619
+sub 18: total test accuracy 0.6714285714285714, f1: 0.6783216783216783
+sub 19: total test accuracy 0.5428571428571428, f1: 0.5460992907801419
+sub 20: total test accuracy 0.7464285714285714, f1: 0.7436823104693141
+sub 21: total test accuracy 0.7821428571428571, f1: 0.7889273356401384
+sub 22: total test accuracy 0.7535714285714286, f1: 0.7676767676767676
+sub 23: total test accuracy 0.6107142857142858, f1: 0.6378737541528239
+sub 24: total test accuracy 0.7857142857142857, f1: 0.7857142857142857
+sub 25: total test accuracy 0.575, f1: 0.5765124555160143
+sub 26: total test accuracy 0.5928571428571429, f1: 0.6013986013986014
+sub 27: total test accuracy 0.5642857142857143, f1: 0.5793103448275861
+sub 28: total test accuracy 0.6821428571428572, f1: 0.7294832826747719
+sub 29: total test accuracy 0.8678571428571429, f1: 0.8719723183391003
+sub 30: total test accuracy 0.6107142857142858, f1: 0.6354515050167224
+sub 31: total test accuracy 0.6857142857142857, f1: 0.6944444444444444
+test mAcc=0.7325892857142857 mF1=0.742211914594658
+val mAcc=0.8140873015873015 F1=0.8111367617049601
+
+
+TDGCN-LGG-V：LGG跑咱们数据集，采样率200HZ
+2024-04-03 17:53:05.118545
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.95, f1: 0.9523809523809523
+sub 2: total test accuracy 0.6428571428571429, f1: 0.6212121212121212
+sub 3: total test accuracy 1.0, f1: 1.0
+sub 4: total test accuracy 0.7964285714285714, f1: 0.8106312292358805
+sub 5: total test accuracy 0.6107142857142858, f1: 0.6036363636363636
+sub 6: total test accuracy 0.7321428571428571, f1: 0.736842105263158
+sub 7: total test accuracy 0.8607142857142858, f1: 0.8621908127208481
+sub 8: total test accuracy 0.6321428571428571, f1: 0.6113207547169811
+sub 9: total test accuracy 0.6071428571428571, f1: 0.6308724832214765
+sub 10: total test accuracy 0.7821428571428571, f1: 0.7889273356401384
+sub 11: total test accuracy 0.7964285714285714, f1: 0.8027681660899654
+sub 12: total test accuracy 0.7571428571428571, f1: 0.7553956834532374
+sub 13: total test accuracy 0.7571428571428571, f1: 0.75
+sub 14: total test accuracy 0.7, f1: 0.6865671641791045
+sub 15: total test accuracy 0.8071428571428572, f1: 0.8
+sub 16: total test accuracy 0.8607142857142858, f1: 0.8571428571428571
+sub 17: total test accuracy 0.8535714285714285, f1: 0.862876254180602
+sub 18: total test accuracy 0.8321428571428572, f1: 0.8278388278388279
+sub 19: total test accuracy 0.45357142857142857, f1: 0.45936395759717313
+sub 20: total test accuracy 0.6535714285714286, f1: 0.6881028938906752
+sub 21: total test accuracy 0.85, f1: 0.8541666666666666
+sub 22: total test accuracy 0.7857142857142857, f1: 0.7727272727272727
+sub 23: total test accuracy 0.8142857142857143, f1: 0.8156028368794327
+sub 24: total test accuracy 0.8214285714285714, f1: 0.8299319727891157
+sub 25: total test accuracy 0.5678571428571428, f1: 0.5724381625441697
+sub 26: total test accuracy 0.7642857142857142, f1: 0.778523489932886
+sub 27: total test accuracy 0.8035714285714286, f1: 0.7924528301886793
+sub 28: total test accuracy 0.6821428571428572, f1: 0.6590038314176246
+sub 29: total test accuracy 0.725, f1: 0.6956521739130435
+sub 30: total test accuracy 0.9, f1: 0.8970588235294117
+sub 31: total test accuracy 0.7071428571428572, f1: 0.7172413793103448
+test mAcc=0.7658482142857144 mF1=0.765402168821844
+val mAcc=0.8363095238095237 F1=0.8209791779150767
+
+
+TDGCN-ATC-44-A:采样率200Hz，数据增加到44组，窗口大小为100，步长为20
+2024-04-04 17:51:11.729147
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.7392857142857143, f1: 0.760655737704918
+sub 1: total test accuracy 0.6535714285714286, f1: 0.6689419795221843     //低10%
+sub 2: total test accuracy 0.6964285714285714, f1: 0.6909090909090909     //低8%
+sub 3: total test accuracy 0.9535714285714286, f1: 0.9523809523809524
+sub 4: total test accuracy 0.7535714285714286, f1: 0.7737704918032787     //低6%
+sub 5: total test accuracy 0.7607142857142857, f1: 0.8011869436201781       //低9%
+sub 6: total test accuracy 0.8214285714285714, f1: 0.8322147651006712
+sub 7: total test accuracy 0.7678571428571429, f1: 0.8036253776435045
+sub 8: total test accuracy 0.7107142857142857, f1: 0.7361563517915308        //低5%
+sub 9: total test accuracy 0.32857142857142857, f1: 0.3691275167785235     //低10%
+sub 10: total test accuracy 0.7321428571428571, f1: 0.7349823321554771
+sub 11: total test accuracy 0.8607142857142858, f1: 0.8668941979522184      //低5%
+sub 12: total test accuracy 0.7142857142857143, f1: 0.7484276729559749     //低5%
+sub 13: total test accuracy 0.9071428571428571, f1: 0.9090909090909091
+sub 14: total test accuracy 0.6535714285714286, f1: 0.686084142394822     //低13%
+sub 15: total test accuracy 0.7571428571428571, f1: 0.7888198757763975
+sub 16: total test accuracy 0.8178571428571428, f1: 0.8131868131868132
+sub 17: total test accuracy 0.9214285714285714, f1: 0.9225352112676057
+sub 18: total test accuracy 0.675, f1: 0.7147335423197492
+sub 19: total test accuracy 0.5428571428571428, f1: 0.5586206896551724
+sub 20: total test accuracy 0.775, f1: 0.7835051546391752
+sub 21: total test accuracy 0.7857142857142857, f1: 0.803921568627451
+sub 22: total test accuracy 0.8, f1: 0.8082191780821917
+sub 23: total test accuracy 0.75, f1: 0.7756410256410257
+sub 24: total test accuracy 0.7, f1: 0.7423312883435583                                          //低9%
+sub 25: total test accuracy 0.5535714285714286, f1: 0.5519713261648745
+sub 26: total test accuracy 0.6821428571428572, f1: 0.7023411371237457
+sub 27: total test accuracy 0.5857142857142857, f1: 0.6158940397350993
+sub 28: total test accuracy 0.6571428571428571, f1: 0.6666666666666667
+sub 29: total test accuracy 0.8178571428571428, f1: 0.7935222672064776     //低6%
+sub 30: total test accuracy 0.5678571428571428, f1: 0.6134185303514377
+sub 31: total test accuracy 0.5892857142857143, f1: 0.6153846153846154     //低12%
+sub 32: total test accuracy 0.4785714285714286, f1: 0.47482014388489213
+sub 33: total test accuracy 0.5214285714285715, f1: 0.4765625
+sub 34: total test accuracy 0.6035714285714285, f1: 0.662613981762918
+sub 35: total test accuracy 0.36428571428571427, f1: 0.4066666666666667
+sub 36: total test accuracy 0.5821428571428572, f1: 0.5411764705882353         //高6%
+sub 37: total test accuracy 0.7571428571428571, f1: 0.7536231884057971        //高2%
+sub 38: total test accuracy 0.4642857142857143, f1: 0.5398773006134969
+sub 39: total test accuracy 0.625, f1: 0.668769716088328                                       //高12%
+sub 40: total test accuracy 0.6178571428571429, f1: 0.629757785467128          //高10%
+sub 41: total test accuracy 0.475, f1: 0.5116279069767442
+sub 42: total test accuracy 0.34285714285714286, f1: 0.39869281045751637   //高3%
+sub 43: total test accuracy 0.4357142857142857, f1: 0.5031446540880503
+test mAcc=0.665909090909091 mF1=0.685738511749456
+val mAcc=0.7771825396825396 F1=0.7778973216168343
+
+
+TDGCN-ATC-44-V:采样率200Hz，数据增加到44组，窗口大小为100，步长为20
+2024-04-04 18:30:50.757813
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.95, f1: 0.9523809523809523
+sub 2: total test accuracy 0.6821428571428572, f1: 0.6763636363636363
+sub 3: total test accuracy 0.9964285714285714, f1: 0.9964412811387899
+sub 4: total test accuracy 0.5785714285714286, f1: 0.3789473684210526
+sub 5: total test accuracy 0.6535714285714286, f1: 0.522167487684729
+sub 6: total test accuracy 0.7392857142857143, f1: 0.7542087542087541
+sub 7: total test accuracy 0.925, f1: 0.9189189189189189
+sub 8: total test accuracy 0.65, f1: 0.6620689655172415
+sub 9: total test accuracy 0.6, f1: 0.5757575757575757
+sub 10: total test accuracy 0.8892857142857142, f1: 0.888086642599278
+sub 11: total test accuracy 0.8535714285714285, f1: 0.8404669260700388
+sub 12: total test accuracy 0.7142857142857143, f1: 0.7435897435897435
+sub 13: total test accuracy 0.7928571428571428, f1: 0.7851851851851851
+sub 14: total test accuracy 0.6964285714285714, f1: 0.6473029045643154
+sub 15: total test accuracy 0.6964285714285714, f1: 0.5853658536585366
+sub 16: total test accuracy 0.8357142857142857, f1: 0.8391608391608392
+sub 17: total test accuracy 0.9, f1: 0.9060402684563759
+sub 18: total test accuracy 0.6892857142857143, f1: 0.7355623100303951
+sub 19: total test accuracy 0.475, f1: 0.5116279069767442
+sub 20: total test accuracy 0.7107142857142857, f1: 0.7096774193548387
+sub 21: total test accuracy 0.8714285714285714, f1: 0.8838709677419355
+sub 22: total test accuracy 0.8964285714285715, f1: 0.8982456140350877
+sub 23: total test accuracy 0.875, f1: 0.8689138576779027
+sub 24: total test accuracy 0.8678571428571429, f1: 0.8644688644688644
+sub 25: total test accuracy 0.6964285714285714, f1: 0.6863468634686346
+sub 26: total test accuracy 0.725, f1: 0.750809061488673
+sub 27: total test accuracy 0.8321428571428572, f1: 0.8438538205980066
+sub 28: total test accuracy 0.6107142857142858, f1: 0.6765578635014836
+sub 29: total test accuracy 0.725, f1: 0.7094339622641508
+sub 30: total test accuracy 0.5678571428571428, f1: 0.6967418546365914
+sub 31: total test accuracy 0.6892857142857143, f1: 0.6836363636363636
+sub 32: total test accuracy 1.0, f1: 1.0
+sub 33: total test accuracy 0.625, f1: 0.6181818181818182
+sub 34: total test accuracy 0.8642857142857143, f1: 0.8689655172413793
+sub 35: total test accuracy 0.7535714285714286, f1: 0.7661016949152543
+sub 36: total test accuracy 0.7464285714285714, f1: 0.754325259515571
+sub 37: total test accuracy 0.9, f1: 0.8978102189781023
+sub 38: total test accuracy 0.7928571428571428, f1: 0.7898550724637681
+sub 39: total test accuracy 0.6285714285714286, f1: 0.5772357723577236
+sub 40: total test accuracy 0.5321428571428571, f1: 0.3791469194312796
+sub 41: total test accuracy 0.5964285714285714, f1: 0.6035087719298247
+sub 42: total test accuracy 0.7785714285714286, f1: 0.7633587786259541
+sub 43: total test accuracy 0.7714285714285715, f1: 0.7611940298507462
+test mAcc=0.7585227272727274 mF1=0.7493609974328878
+val mAcc=0.826415945165945 F1=0.8210436097547866
+
+
+TDGCN-LGG-44-A:采样率200Hz，数据增加到44组
+2024-04-04 17:56:19.009370
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.675, f1: 0.6996699669966997
+sub 1: total test accuracy 0.7678571428571429, f1: 0.7949526813880126
+sub 2: total test accuracy 0.775, f1: 0.7657992565055762
+sub 3: total test accuracy 0.9357142857142857, f1: 0.9343065693430657
+sub 4: total test accuracy 0.8142857142857143, f1: 0.8102189781021897
+sub 5: total test accuracy 0.85, f1: 0.851063829787234
+sub 6: total test accuracy 0.7464285714285714, f1: 0.7880597014925372
+sub 7: total test accuracy 0.7392857142857143, f1: 0.7383512544802867
+sub 8: total test accuracy 0.7678571428571429, f1: 0.7565543071161049
+sub 9: total test accuracy 0.4107142857142857, f1: 0.44067796610169496
+sub 10: total test accuracy 0.675, f1: 0.6666666666666667
+sub 11: total test accuracy 0.9142857142857143, f1: 0.911111111111111
+sub 12: total test accuracy 0.7607142857142857, f1: 0.7744107744107744
+sub 13: total test accuracy 0.8964285714285715, f1: 0.8960573476702509
+sub 14: total test accuracy 0.7857142857142857, f1: 0.7777777777777779
+sub 15: total test accuracy 0.7214285714285714, f1: 0.7272727272727273
+sub 16: total test accuracy 0.8214285714285714, f1: 0.8239436619718309
+sub 17: total test accuracy 0.85, f1: 0.8571428571428572
+sub 18: total test accuracy 0.6821428571428572, f1: 0.6983050847457628
+sub 19: total test accuracy 0.525, f1: 0.5777777777777778
+sub 20: total test accuracy 0.7607142857142857, f1: 0.7681660899653978
+sub 21: total test accuracy 0.7607142857142857, f1: 0.7649122807017544
+sub 22: total test accuracy 0.7178571428571429, f1: 0.7303754266211603
+sub 23: total test accuracy 0.6321428571428571, f1: 0.6555183946488293
+sub 24: total test accuracy 0.7964285714285714, f1: 0.7881040892193307
+sub 25: total test accuracy 0.5785714285714286, f1: 0.5815602836879433
+sub 26: total test accuracy 0.6357142857142857, f1: 0.6357142857142857
+sub 27: total test accuracy 0.5857142857142857, f1: 0.5886524822695035
+sub 28: total test accuracy 0.6821428571428572, f1: 0.7327327327327328
+sub 29: total test accuracy 0.8714285714285714, f1: 0.8741258741258742
+sub 30: total test accuracy 0.5821428571428572, f1: 0.6060606060606061
+sub 31: total test accuracy 0.7, f1: 0.7083333333333334
+sub 32: total test accuracy 0.37142857142857144, f1: 0.41721854304635764
+sub 33: total test accuracy 0.5535714285714286, f1: 0.5644599303135889
+sub 34: total test accuracy 0.7035714285714286, f1: 0.7147766323024054
+sub 35: total test accuracy 0.425, f1: 0.49211356466876977
+sub 36: total test accuracy 0.525, f1: 0.5551839464882944
+sub 37: total test accuracy 0.7357142857142858, f1: 0.7597402597402598
+sub 38: total test accuracy 0.475, f1: 0.5180327868852459
+sub 39: total test accuracy 0.49642857142857144, f1: 0.5346534653465347
+sub 40: total test accuracy 0.5035714285714286, f1: 0.5255972696245734
+sub 41: total test accuracy 0.5464285714285714, f1: 0.5605536332179931
+sub 42: total test accuracy 0.31785714285714284, f1: 0.40125391849529785
+sub 43: total test accuracy 0.45357142857142857, f1: 0.4983606557377049
+test mAcc=0.6710227272727273 mF1=0.6878709268820162
+val mAcc=0.7750541125541126 F1=0.7642855907024138
+
+
+TDGCN-LGG-44-V:采样率200Hz，数据增加到44组
+2024-04-04 18:32:46.423792
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.95, f1: 0.9523809523809523
+sub 2: total test accuracy 0.6428571428571429, f1: 0.6212121212121212
+sub 3: total test accuracy 1.0, f1: 1.0
+sub 4: total test accuracy 0.7964285714285714, f1: 0.8106312292358805
+sub 5: total test accuracy 0.6107142857142858, f1: 0.6036363636363636
+sub 6: total test accuracy 0.7321428571428571, f1: 0.736842105263158
+sub 7: total test accuracy 0.8607142857142858, f1: 0.8621908127208481
+sub 8: total test accuracy 0.6321428571428571, f1: 0.6113207547169811
+sub 9: total test accuracy 0.6071428571428571, f1: 0.6308724832214765
+sub 10: total test accuracy 0.7821428571428571, f1: 0.7889273356401384
+sub 11: total test accuracy 0.7964285714285714, f1: 0.8027681660899654
+sub 12: total test accuracy 0.7571428571428571, f1: 0.7553956834532374
+sub 13: total test accuracy 0.7571428571428571, f1: 0.75
+sub 14: total test accuracy 0.7, f1: 0.6865671641791045
+sub 15: total test accuracy 0.8071428571428572, f1: 0.8
+sub 16: total test accuracy 0.8607142857142858, f1: 0.8571428571428571
+sub 17: total test accuracy 0.8535714285714285, f1: 0.862876254180602
+sub 18: total test accuracy 0.8321428571428572, f1: 0.8278388278388279
+sub 19: total test accuracy 0.45357142857142857, f1: 0.45936395759717313
+sub 20: total test accuracy 0.6535714285714286, f1: 0.6881028938906752
+sub 21: total test accuracy 0.85, f1: 0.8541666666666666
+sub 22: total test accuracy 0.7857142857142857, f1: 0.7727272727272727
+sub 23: total test accuracy 0.8142857142857143, f1: 0.8156028368794327
+sub 24: total test accuracy 0.8214285714285714, f1: 0.8299319727891157
+sub 25: total test accuracy 0.5678571428571428, f1: 0.5724381625441697
+sub 26: total test accuracy 0.7642857142857142, f1: 0.778523489932886
+sub 27: total test accuracy 0.8035714285714286, f1: 0.7924528301886793
+sub 28: total test accuracy 0.6821428571428572, f1: 0.6590038314176246
+sub 29: total test accuracy 0.725, f1: 0.6956521739130435
+sub 30: total test accuracy 0.9, f1: 0.8970588235294117
+sub 31: total test accuracy 0.7071428571428572, f1: 0.7172413793103448
+sub 32: total test accuracy 1.0, f1: 1.0
+sub 33: total test accuracy 0.6464285714285715, f1: 0.6346863468634687
+sub 34: total test accuracy 0.8964285714285715, f1: 0.8960573476702509
+sub 35: total test accuracy 0.5785714285714286, f1: 0.5874125874125874
+sub 36: total test accuracy 0.7678571428571429, f1: 0.7735191637630662
+sub 37: total test accuracy 0.875, f1: 0.8837209302325583
+sub 38: total test accuracy 0.6571428571428571, f1: 0.6521739130434783
+sub 39: total test accuracy 0.55, f1: 0.5563380281690141
+sub 40: total test accuracy 0.6678571428571428, f1: 0.6847457627118645
+sub 41: total test accuracy 0.5607142857142857, f1: 0.5653710247349824
+sub 42: total test accuracy 0.775, f1: 0.7567567567567567
+sub 43: total test accuracy 0.675, f1: 0.6761565836298933
+test mAcc=0.7535714285714286 mF1=0.7536319965292482
+val mAcc=0.8221049783549783 F1=0.8045815144114278
+
+
+TDGCN-ATC-400-A:采样率400Hz，数据增加到44组，效果一般
+2024-04-04 18:07:08.546532
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 1600)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.6541396103896104 mF1=0.6495970075479514
+val mAcc=0.7284181096681096 F1=0.6414276964299018
+
+
+TDGCN-ATC-400-V:采样率400Hz，数据增加到44组，效果一般
+2024-04-04 18:32:46.423792
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.7535714285714286 mF1=0.7536319965292482
+val mAcc=0.8221049783549783 F1=0.8045815144114278
+
+
+TDGCN-ATC-WQJ-new1-A:将表现较好的32组挑出来，后四组表现不佳
+2024-04-05 22:56:07.839101
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.7392857142857143, f1: 0.7558528428093646
+sub 1: total test accuracy 0.7607142857142857, f1: 0.7649122807017544
+sub 2: total test accuracy 0.9392857142857143, f1: 0.9368029739776953
+sub 3: total test accuracy 0.7821428571428571, f1: 0.7932203389830508
+sub 4: total test accuracy 0.7642857142857142, f1: 0.8047337278106508
+sub 5: total test accuracy 0.7892857142857143, f1: 0.8065573770491803
+sub 6: total test accuracy 0.725, f1: 0.7259786476868327
+sub 7: total test accuracy 0.8785714285714286, f1: 0.8851351351351352
+sub 8: total test accuracy 0.7535714285714286, f1: 0.7836990595611285
+sub 9: total test accuracy 0.9035714285714286, f1: 0.9052631578947368
+sub 10: total test accuracy 0.725, f1: 0.7539936102236422
+sub 11: total test accuracy 0.8392857142857143, f1: 0.8339483394833948
+sub 12: total test accuracy 0.9178571428571428, f1: 0.9187279151943463
+sub 13: total test accuracy 0.6678571428571428, f1: 0.7155963302752294
+sub 14: total test accuracy 0.8, f1: 0.8014184397163121
+sub 15: total test accuracy 0.75, f1: 0.7878787878787878
+sub 16: total test accuracy 0.7821428571428571, f1: 0.7859649122807018
+sub 17: total test accuracy 0.7464285714285714, f1: 0.7731629392971247
+sub 18: total test accuracy 0.5821428571428572, f1: 0.5865724381625441
+sub 19: total test accuracy 0.5892857142857143, f1: 0.6483180428134556
+sub 20: total test accuracy 0.5821428571428572, f1: 0.6138613861386139
+sub 21: total test accuracy 0.7107142857142857, f1: 0.7522935779816513
+sub 22: total test accuracy 0.6035714285714285, f1: 0.6262626262626263
+sub 23: total test accuracy 0.675, f1: 0.6784452296819787
+sub 24: total test accuracy 0.4928571428571429, f1: 0.47794117647058826
+sub 25: total test accuracy 0.725, f1: 0.6980392156862745
+sub 26: total test accuracy 0.6464285714285715, f1: 0.6837060702875398
+sub 27: total test accuracy 0.5464285714285714, f1: 0.5347985347985348
+sub 28: total test accuracy 0.31785714285714284, f1: 0.37785016286644957
+sub 29: total test accuracy 0.525, f1: 0.546075085324232
+sub 30: total test accuracy 0.5357142857142857, f1: 0.6060606060606061
+sub 31: total test accuracy 0.40714285714285714, f1: 0.4876543209876543
+test mAcc=0.6938616071428572 mF1=0.7140851652963067
+val mAcc=0.7835689484126984 F1=0.788084570910518
+
+
+TDGCN-WQJ-new1-V:将表现较好的32组挑出来，后四组表现不佳
+2024-04-05 22:56:27.688701
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.6821428571428572, f1: 0.6763636363636363
+sub 2: total test accuracy 0.9964285714285714, f1: 0.9964412811387899
+sub 3: total test accuracy 0.7392857142857143, f1: 0.7542087542087541
+sub 4: total test accuracy 0.925, f1: 0.9189189189189189
+sub 5: total test accuracy 0.65, f1: 0.6620689655172415
+sub 6: total test accuracy 0.8892857142857142, f1: 0.888086642599278
+sub 7: total test accuracy 0.8535714285714285, f1: 0.8404669260700388
+sub 8: total test accuracy 0.7142857142857143, f1: 0.7435897435897435
+sub 9: total test accuracy 0.7928571428571428, f1: 0.7851851851851851
+sub 10: total test accuracy 0.6964285714285714, f1: 0.5853658536585366
+sub 11: total test accuracy 0.8357142857142857, f1: 0.8391608391608392
+sub 12: total test accuracy 0.9, f1: 0.9060402684563759
+sub 13: total test accuracy 0.6892857142857143, f1: 0.7355623100303951
+sub 14: total test accuracy 0.7107142857142857, f1: 0.7096774193548387
+sub 15: total test accuracy 0.8714285714285714, f1: 0.8838709677419355
+sub 16: total test accuracy 0.8964285714285715, f1: 0.8982456140350877
+sub 17: total test accuracy 0.875, f1: 0.8689138576779027
+sub 18: total test accuracy 0.6964285714285714, f1: 0.6863468634686346
+sub 19: total test accuracy 0.725, f1: 0.750809061488673
+sub 20: total test accuracy 0.8321428571428572, f1: 0.8438538205980066
+sub 21: total test accuracy 0.6107142857142858, f1: 0.6765578635014836
+sub 22: total test accuracy 0.5678571428571428, f1: 0.6967418546365914
+sub 23: total test accuracy 0.6892857142857143, f1: 0.6836363636363636
+sub 24: total test accuracy 0.7464285714285714, f1: 0.754325259515571
+sub 25: total test accuracy 0.9, f1: 0.8978102189781023
+sub 26: total test accuracy 0.6285714285714286, f1: 0.5772357723577236
+sub 27: total test accuracy 0.5321428571428571, f1: 0.3791469194312796
+sub 28: total test accuracy 0.525, f1: 0.6099706744868035
+sub 29: total test accuracy 0.6642857142857143, f1: 0.6384615384615385
+sub 30: total test accuracy 0.5392857142857143, f1: 0.5057471264367815
+sub 31: total test accuracy 0.42857142857142855, f1: 0.4444444444444445
+test mAcc=0.7438616071428572 mF1=0.7449142176609218
+val mAcc=0.8203497023809524 F1=0.8136986395102457
+
+
+TDGCN-LGG-WQJnew1-A:将表现较好的32组挑出来，后四组表现不佳
+2024-04-05 22:57:04.689209
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.6642857142857143, f1: 0.6928104575163397
+sub 1: total test accuracy 0.7607142857142857, f1: 0.7509293680297398
+sub 2: total test accuracy 0.9142857142857143, f1: 0.9104477611940298
+sub 3: total test accuracy 0.75, f1: 0.7756410256410257
+sub 4: total test accuracy 0.7607142857142857, f1: 0.7632508833922261
+sub 5: total test accuracy 0.8071428571428572, f1: 0.8098591549295775
+sub 6: total test accuracy 0.7071428571428572, f1: 0.6940298507462687
+sub 7: total test accuracy 0.9178571428571428, f1: 0.915129151291513
+sub 8: total test accuracy 0.75, f1: 0.7569444444444445
+sub 9: total test accuracy 0.9071428571428571, f1: 0.9071428571428571
+sub 10: total test accuracy 0.7464285714285714, f1: 0.7526132404181185
+sub 11: total test accuracy 0.8571428571428571, f1: 0.8581560283687943
+sub 12: total test accuracy 0.8535714285714285, f1: 0.8619528619528619
+sub 13: total test accuracy 0.6714285714285714, f1: 0.6783216783216783
+sub 14: total test accuracy 0.7464285714285714, f1: 0.7436823104693141
+sub 15: total test accuracy 0.7821428571428571, f1: 0.7889273356401384
+sub 16: total test accuracy 0.7535714285714286, f1: 0.7676767676767676
+sub 17: total test accuracy 0.6107142857142858, f1: 0.6378737541528239
+sub 18: total test accuracy 0.575, f1: 0.5765124555160143//
+sub 19: total test accuracy 0.5928571428571429, f1: 0.6013986013986014
+sub 20: total test accuracy 0.5642857142857143, f1: 0.5793103448275861//
+sub 21: total test accuracy 0.6821428571428572, f1: 0.7294832826747719
+sub 22: total test accuracy 0.6107142857142858, f1: 0.6354515050167224
+sub 23: total test accuracy 0.6857142857142857, f1: 0.6944444444444444
+sub 24: total test accuracy 0.5214285714285715, f1: 0.541095890410959//
+sub 25: total test accuracy 0.7, f1: 0.7218543046357616
+sub 26: total test accuracy 0.5321428571428571, f1: 0.5589225589225589//
+sub 27: total test accuracy 0.5107142857142857, f1: 0.5418060200668896//
+sub 28: total test accuracy 0.38571428571428573, f1: 0.4415584415584416//
+sub 29: total test accuracy 0.45714285714285713, f1: 0.5159235668789809//
+sub 30: total test accuracy 0.48214285714285715, f1: 0.5214521452145214//
+sub 31: total test accuracy 0.4, f1: 0.4324324324324324//
+test mAcc=0.6768973214285714 mF1=0.6924073414164751
+val mAcc=0.7779389880952381 F1=0.7678854880465158
+
+
+TDGCN-LGG-WQJnew1-V:将表现较好的32组挑出来，后四组表现不佳
+2024-04-05 22:57:15.883446
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.6428571428571429, f1: 0.6212121212121212
+sub 2: total test accuracy 1.0, f1: 1.0
+sub 3: total test accuracy 0.7321428571428571, f1: 0.736842105263158
+sub 4: total test accuracy 0.8607142857142858, f1: 0.8621908127208481
+sub 5: total test accuracy 0.6321428571428571, f1: 0.6113207547169811
+sub 6: total test accuracy 0.7821428571428571, f1: 0.7889273356401384
+sub 7: total test accuracy 0.7964285714285714, f1: 0.8027681660899654
+sub 8: total test accuracy 0.7571428571428571, f1: 0.7553956834532374
+sub 9: total test accuracy 0.7571428571428571, f1: 0.75
+sub 10: total test accuracy 0.8071428571428572, f1: 0.8
+sub 11: total test accuracy 0.8607142857142858, f1: 0.8571428571428571
+sub 12: total test accuracy 0.8535714285714285, f1: 0.862876254180602
+sub 13: total test accuracy 0.8321428571428572, f1: 0.8278388278388279
+sub 14: total test accuracy 0.6535714285714286, f1: 0.6881028938906752
+sub 15: total test accuracy 0.85, f1: 0.8541666666666666
+sub 16: total test accuracy 0.7857142857142857, f1: 0.7727272727272727
+sub 17: total test accuracy 0.8142857142857143, f1: 0.8156028368794327
+sub 18: total test accuracy 0.5678571428571428, f1: 0.5724381625441697
+sub 19: total test accuracy 0.7642857142857142, f1: 0.778523489932886
+sub 20: total test accuracy 0.8035714285714286, f1: 0.7924528301886793
+sub 21: total test accuracy 0.6821428571428572, f1: 0.6590038314176246
+sub 22: total test accuracy 0.9, f1: 0.8970588235294117
+sub 23: total test accuracy 0.7071428571428572, f1: 0.7172413793103448
+sub 24: total test accuracy 0.7678571428571429, f1: 0.7735191637630662
+sub 25: total test accuracy 0.875, f1: 0.8837209302325583
+sub 26: total test accuracy 0.55, f1: 0.5563380281690141
+sub 27: total test accuracy 0.6678571428571428, f1: 0.6847457627118645
+sub 28: total test accuracy 0.625, f1: 0.6391752577319587
+sub 29: total test accuracy 0.6035714285714285, f1: 0.6185567010309279
+sub 30: total test accuracy 0.5857142857142857, f1: 0.5972222222222221
+sub 31: total test accuracy 0.45714285714285713, f1: 0.4609929078014185
+test mAcc=0.74921875 mF1=0.7511907524690291
+val mAcc=0.8168650793650793 F1=0.801810438844129
+
+
+TDGCN-ATC-WQJnew2-A:替换后四组数据重新组成32组，标记出不足的的组
+2024-04-06 20:32:17.462493
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.7392857142857143, f1: 0.760655737704918
+sub 1: total test accuracy 0.6964285714285714, f1: 0.6909090909090909
+sub 2: total test accuracy 0.9535714285714286, f1: 0.9523809523809524
+sub 3: total test accuracy 0.8214285714285714, f1: 0.8322147651006712
+sub 4: total test accuracy 0.7678571428571429, f1: 0.8036253776435045
+sub 5: total test accuracy 0.7107142857142857, f1: 0.7361563517915308
+sub 6: total test accuracy 0.7321428571428571, f1: 0.7349823321554771
+sub 7: total test accuracy 0.8607142857142858, f1: 0.8668941979522184
+sub 8: total test accuracy 0.7142857142857143, f1: 0.7484276729559749
+sub 9: total test accuracy 0.9071428571428571, f1: 0.9090909090909091
+sub 10: total test accuracy 0.7571428571428571, f1: 0.7888198757763975
+sub 11: total test accuracy 0.8178571428571428, f1: 0.8131868131868132
+sub 12: total test accuracy 0.9214285714285714, f1: 0.9225352112676057
+sub 13: total test accuracy 0.675, f1: 0.7147335423197492
+sub 14: total test accuracy 0.775, f1: 0.7835051546391752
+sub 15: total test accuracy 0.7857142857142857, f1: 0.803921568627451
+sub 16: total test accuracy 0.8, f1: 0.8082191780821917
+sub 17: total test accuracy 0.75, f1: 0.7756410256410257
+sub 18: total test accuracy 0.5535714285714286, f1: 0.5519713261648745  //
+sub 19: total test accuracy 0.6821428571428572, f1: 0.7023411371237457
+sub 20: total test accuracy 0.5857142857142857, f1: 0.6158940397350993//
+sub 21: total test accuracy 0.6571428571428571, f1: 0.6666666666666667
+sub 22: total test accuracy 0.5678571428571428, f1: 0.6134185303514377//
+sub 23: total test accuracy 0.5892857142857143, f1: 0.6153846153846154//
+sub 24: total test accuracy 0.5821428571428572, f1: 0.5411764705882353//
+sub 25: total test accuracy 0.7571428571428571, f1: 0.7536231884057971
+sub 26: total test accuracy 0.625, f1: 0.668769716088328
+sub 27: total test accuracy 0.6178571428571429, f1: 0.629757785467128//
+sub 28: total test accuracy 0.8642857142857143, f1: 0.848
+sub 29: total test accuracy 0.9178571428571428, f1: 0.9192982456140351
+sub 30: total test accuracy 0.8428571428571429, f1: 0.8281250000000001
+sub 31: total test accuracy 0.6857142857142857, f1: 0.7006802721088435
+test mAcc=0.7410714285714286 mF1=0.7531564609663894
+val mAcc=0.8147817460317461 F1=0.8191691586324392
+
+
+TDGCN-ATC-WQJnew2-V:替换后四组数据重新组成32组，标记出不足的的组
+2024-04-06 20:17:36.092528
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.6892857142857143, f1: 0.6968641114982578
+sub 2: total test accuracy 0.9964285714285714, f1: 0.9964412811387899
+sub 3: total test accuracy 0.8035714285714286, f1: 0.8160535117056856
+sub 4: total test accuracy 0.9107142857142857, f1: 0.9027237354085603
+sub 5: total test accuracy 0.6892857142857143, f1: 0.707070707070707
+sub 6: total test accuracy 0.8714285714285714, f1: 0.8741258741258742
+sub 7: total test accuracy 0.8214285714285714, f1: 0.8091603053435115
+sub 8: total test accuracy 0.7785714285714286, f1: 0.80625
+sub 9: total test accuracy 0.8035714285714286, f1: 0.7940074906367042
+sub 10: total test accuracy 0.8035714285714286, f1: 0.7736625514403292
+sub 11: total test accuracy 0.8321428571428572, f1: 0.838487972508591
+sub 12: total test accuracy 0.9142857142857143, f1: 0.9178082191780822
+sub 13: total test accuracy 0.7892857142857143, f1: 0.8013468013468013
+sub 14: total test accuracy 0.7, f1: 0.710344827586207
+sub 15: total test accuracy 0.8428571428571429, f1: 0.855263157894737
+sub 16: total test accuracy 0.9142857142857143, f1: 0.9154929577464788
+sub 17: total test accuracy 0.8678571428571429, f1: 0.8644688644688644
+sub 18: total test accuracy 0.7, f1: 0.6842105263157895
+sub 19: total test accuracy 0.725, f1: 0.7475409836065574
+sub 20: total test accuracy 0.775, f1: 0.7987220447284346
+sub 21: total test accuracy 0.6142857142857143, f1: 0.689655172413793
+sub 22: total test accuracy 0.8, f1: 0.8271604938271606
+sub 23: total test accuracy 0.6535714285714286, f1: 0.657243816254417
+sub 24: total test accuracy 0.7964285714285714, f1: 0.8155339805825242
+sub 25: total test accuracy 0.8678571428571429, f1: 0.8634686346863468
+sub 26: total test accuracy 0.6321428571428571, f1: 0.5960784313725489
+sub 27: total test accuracy 0.48928571428571427, f1: 0.43921568627450985
+sub 28: total test accuracy 0.8714285714285714, f1: 0.8767123287671234
+sub 29: total test accuracy 0.875, f1: 0.8859934853420196
+sub 30: total test accuracy 0.8678571428571429, f1: 0.8794788273615637
+sub 31: total test accuracy 0.8785714285714286, f1: 0.8866666666666666
+test mAcc=0.79921875 mF1=0.8039766702280511
+val mAcc=0.8603174603174604 F1=0.8554527467275634
+
+
+TDGCN-LGG-WQJnew2-A:替换后四组数据重新组成32组
+2024-04-06 20:40:15.667798
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 0.675, f1: 0.6996699669966997
+sub 1: total test accuracy 0.775, f1: 0.7657992565055762
+sub 2: total test accuracy 0.9357142857142857, f1: 0.9343065693430657
+sub 3: total test accuracy 0.7464285714285714, f1: 0.7880597014925372
+sub 4: total test accuracy 0.7392857142857143, f1: 0.7383512544802867
+sub 5: total test accuracy 0.7678571428571429, f1: 0.7565543071161049
+sub 6: total test accuracy 0.675, f1: 0.6666666666666667
+sub 7: total test accuracy 0.9142857142857143, f1: 0.911111111111111
+sub 8: total test accuracy 0.7607142857142857, f1: 0.7744107744107744
+sub 9: total test accuracy 0.8964285714285715, f1: 0.8960573476702509
+sub 10: total test accuracy 0.7214285714285714, f1: 0.7272727272727273
+sub 11: total test accuracy 0.8214285714285714, f1: 0.8239436619718309
+sub 12: total test accuracy 0.85, f1: 0.8571428571428572
+sub 13: total test accuracy 0.6821428571428572, f1: 0.6983050847457628
+sub 14: total test accuracy 0.7607142857142857, f1: 0.7681660899653978
+sub 15: total test accuracy 0.7607142857142857, f1: 0.7649122807017544
+sub 16: total test accuracy 0.7178571428571429, f1: 0.7303754266211603
+sub 17: total test accuracy 0.6321428571428571, f1: 0.6555183946488293
+sub 18: total test accuracy 0.5785714285714286, f1: 0.5815602836879433
+sub 19: total test accuracy 0.6357142857142857, f1: 0.6357142857142857
+sub 20: total test accuracy 0.5857142857142857, f1: 0.5886524822695035
+sub 21: total test accuracy 0.6821428571428572, f1: 0.7327327327327328
+sub 22: total test accuracy 0.5821428571428572, f1: 0.6060606060606061
+sub 23: total test accuracy 0.7, f1: 0.7083333333333334
+sub 24: total test accuracy 0.525, f1: 0.5551839464882944
+sub 25: total test accuracy 0.7357142857142858, f1: 0.7597402597402598
+sub 26: total test accuracy 0.49642857142857144, f1: 0.5346534653465347
+sub 27: total test accuracy 0.5035714285714286, f1: 0.5255972696245734
+sub 28: total test accuracy 0.9392857142857143, f1: 0.9386281588447654
+sub 29: total test accuracy 0.8964285714285715, f1: 0.9016949152542372
+sub 30: total test accuracy 0.825, f1: 0.8063241106719367
+sub 31: total test accuracy 0.6571428571428571, f1: 0.6643356643356644
+test mAcc=0.72421875 mF1=0.734244843530252
+val mAcc=0.8159722222222222 F1=0.8119318970166839
+
+
+TDGCN-LGG-WQJnew2-V:替换后四组数据重新组成32组
+2024-04-06 20:20:30.001375
+Train:Parameter setting for LGGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:LGGNet
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.6214285714285714, f1: 0.6102941176470588
+sub 2: total test accuracy 1.0, f1: 1.0
+sub 3: total test accuracy 0.7892857142857143, f1: 0.8115015974440895
+sub 4: total test accuracy 0.8392857142857143, f1: 0.8409893992932862
+sub 5: total test accuracy 0.5857142857142857, f1: 0.5639097744360902
+sub 6: total test accuracy 0.7642857142857142, f1: 0.7739726027397261
+sub 7: total test accuracy 0.8107142857142857, f1: 0.8140350877192983
+sub 8: total test accuracy 0.7535714285714286, f1: 0.7415730337078652
+sub 9: total test accuracy 0.8285714285714286, f1: 0.8356164383561644
+sub 10: total test accuracy 0.825, f1: 0.8150943396226416
+sub 11: total test accuracy 0.875, f1: 0.8708487084870847
+sub 12: total test accuracy 0.8678571428571429, f1: 0.8770764119601329
+sub 13: total test accuracy 0.8178571428571428, f1: 0.8118081180811808
+sub 14: total test accuracy 0.6571428571428571, f1: 0.6883116883116883
+sub 15: total test accuracy 0.8642857142857143, f1: 0.8661971830985916
+sub 16: total test accuracy 0.7857142857142857, f1: 0.7777777777777779
+sub 17: total test accuracy 0.8321428571428572, f1: 0.8362369337979093
+sub 18: total test accuracy 0.5821428571428572, f1: 0.5714285714285714
+sub 19: total test accuracy 0.7678571428571429, f1: 0.7781569965870307
+sub 20: total test accuracy 0.825, f1: 0.8191881918819187
+sub 21: total test accuracy 0.6428571428571429, f1: 0.6240601503759398
+sub 22: total test accuracy 0.8785714285714286, f1: 0.8759124087591241
+sub 23: total test accuracy 0.6857142857142857, f1: 0.6986301369863013
+sub 24: total test accuracy 0.7857142857142857, f1: 0.7945205479452055
+sub 25: total test accuracy 0.8714285714285714, f1: 0.880794701986755
+sub 26: total test accuracy 0.5535714285714286, f1: 0.5644599303135889
+sub 27: total test accuracy 0.6928571428571428, f1: 0.7074829931972789
+sub 28: total test accuracy 0.8892857142857142, f1: 0.8912280701754385
+sub 29: total test accuracy 0.85, f1: 0.851063829787234
+sub 30: total test accuracy 0.9107142857142857, f1: 0.9140893470790377
+sub 31: total test accuracy 0.8964285714285715, f1: 0.8953068592057762
+test mAcc=0.7921874999999999 mF1=0.7937989358809308
+val mAcc=0.8514384920634921 F1=0.8388708252285653
+
+TDGCN-ATC-newwindow-WQJnew2-A:将窗口调整为[0.4,0.16,0,064],效果不大好
+2024-04-06 23:41:02.782716
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.7123883928571428 mF1=0.7338487142438107
+val mAcc=0.8032614087301586 F1=0.8202188254143998
+
+
+TDGCN-ATC-newwindow-WQJnew2-V:将窗口调整为[0.4,0.16,0,064]，效果不大好
+2024-04-06 23:41:20.624681
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.7952008928571428 mF1=0.8000240516964547
+val mAcc=0.8566592261904762 F1=0.8650720155521683
+
+
+TDGCN-ATC-WQJnew3-A:替换效果不好的6组
 2024-04-07 18:32:43.768219
 Train:Parameter setting for TDGCN on WQJ
 1)number_class:2
@@ -375,42 +2252,103 @@ Train:Parameter setting for TDGCN on WQJ
 20)balance:False
 21)bandpass:(1, 50)
 22)dataset:WQJ
-sub 0: total test accuracy 0.825, f1: 0.8338983050847458 // 高 16
-sub 1: total test accuracy 0.6785714285714286, f1: 0.6762589928057554 // 低 9
-sub 2: total test accuracy 0.9392857142857143, f1: 0.9390681003584229 // 高 2
-sub 3: total test accuracy 0.6321428571428571, f1: 0.4309392265193371 // 低 12
-sub 4: total test accuracy 0.7285714285714285, f1: 0.7751479289940829 // 低 3
-sub 5: total test accuracy 0.7714285714285715, f1: 0.7629629629629631 // 低 3
-sub 6: total test accuracy 0.75, f1: 0.7154471544715448 // 高 5
-sub 7: total test accuracy 0.9178571428571428, f1: 0.9144981412639406 // 相同
-sub 8: total test accuracy 0.7571428571428571, f1: 0.7671232876712328 // 相同
-sub 9: total test accuracy 0.95, f1: 0.9503546099290779 // 高 5
-sub 10: total test accuracy 0.7071428571428572, f1: 0.7248322147651006 // 低 4
-sub 11: total test accuracy 0.8214285714285714, f1: 0.8161764705882353 // 低 3
-sub 12: total test accuracy 0.9, f1: 0.9034482758620689 // 高 5
-sub 13: total test accuracy 0.6785714285714286, f1: 0.7077922077922079 // 高 1
-sub 14: total test accuracy 0.825, f1: 0.8150943396226416 // 高 8
-sub 15: total test accuracy 0.7928571428571428, f1: 0.8116883116883118 // 高 1
-sub 16: total test accuracy 0.8035714285714286, f1: 0.8122866894197952 // 高 5
-sub 17: total test accuracy 0.7321428571428571, f1: 0.736842105263158 // 高 12
-sub 18: total test accuracy 0.5928571428571429, f1: 0.6013986013986014 // 相同
-sub 19: total test accuracy 0.6357142857142857, f1: 0.5641025641025642 // 低 5
-sub 20: total test accuracy 1.0, f1: 1.0 // 相同
-sub 21: total test accuracy 0.6642857142857143, f1: 0.6887417218543046 // 高 13
-sub 22: total test accuracy 0.9214285714285714, f1: 0.917910447761194 // 低 5
-sub 23: total test accuracy 0.8892857142857142, f1: 0.8919860627177699 // 高 2
-sub 24: total test accuracy 0.8321428571428572, f1: 0.8127490039840637 // 高 2
-sub 25: total test accuracy 0.7107142857142857, f1: 0.7308970099667773 // 高 6
-sub 26: total test accuracy 0.7928571428571428, f1: 0.7803030303030304 // 高 4
-sub 27: total test accuracy 0.7464285714285714, f1: 0.702928870292887 // 低 6
-sub 28: total test accuracy 0.8142857142857143, f1: 0.8219178082191781 // 低 6
-sub 29: total test accuracy 0.7785714285714286, f1: 0.75 // 低 5
-sub 30: total test accuracy 0.8928571428571429, f1: 0.8863636363636365 // 高 3
-sub 31: total test accuracy 0.8142857142857143, f1: 0.7903225806451613 // 高 4
+sub 0: total test accuracy 0.825, f1: 0.8338983050847458
+sub 1: total test accuracy 0.6785714285714286, f1: 0.6762589928057554
+sub 2: total test accuracy 0.9392857142857143, f1: 0.9390681003584229
+sub 3: total test accuracy 0.6321428571428571, f1: 0.4309392265193371
+sub 4: total test accuracy 0.7285714285714285, f1: 0.7751479289940829
+sub 5: total test accuracy 0.7714285714285715, f1: 0.7629629629629631
+sub 6: total test accuracy 0.75, f1: 0.7154471544715448
+sub 7: total test accuracy 0.9178571428571428, f1: 0.9144981412639406
+sub 8: total test accuracy 0.7571428571428571, f1: 0.7671232876712328
+sub 9: total test accuracy 0.95, f1: 0.9503546099290779
+sub 10: total test accuracy 0.7071428571428572, f1: 0.7248322147651006
+sub 11: total test accuracy 0.8214285714285714, f1: 0.8161764705882353
+sub 12: total test accuracy 0.9, f1: 0.9034482758620689
+sub 13: total test accuracy 0.6785714285714286, f1: 0.7077922077922079
+sub 14: total test accuracy 0.825, f1: 0.8150943396226416
+sub 15: total test accuracy 0.7928571428571428, f1: 0.8116883116883118
+sub 16: total test accuracy 0.8035714285714286, f1: 0.8122866894197952
+sub 17: total test accuracy 0.7321428571428571, f1: 0.736842105263158
+sub 18: total test accuracy 0.5928571428571429, f1: 0.6013986013986014
+sub 19: total test accuracy 0.6357142857142857, f1: 0.5641025641025642
+sub 20: total test accuracy 1.0, f1: 1.0
+sub 21: total test accuracy 0.6642857142857143, f1: 0.6887417218543046
+sub 22: total test accuracy 0.9214285714285714, f1: 0.917910447761194
+sub 23: total test accuracy 0.8892857142857142, f1: 0.8919860627177699
+sub 24: total test accuracy 0.8321428571428572, f1: 0.8127490039840637
+sub 25: total test accuracy 0.7107142857142857, f1: 0.7308970099667773
+sub 26: total test accuracy 0.7928571428571428, f1: 0.7803030303030304
+sub 27: total test accuracy 0.7464285714285714, f1: 0.702928870292887
+sub 28: total test accuracy 0.8142857142857143, f1: 0.8219178082191781
+sub 29: total test accuracy 0.7785714285714286, f1: 0.75
+sub 30: total test accuracy 0.8928571428571429, f1: 0.8863636363636365
+sub 31: total test accuracy 0.8142857142857143, f1: 0.7903225806451613
 test mAcc=0.7905133928571428 mF1=0.7822962707084935
 val mAcc=0.8681919642857143 F1=0.8443209695691192
 
-// LGG A
+TDGCN-ATC-WQJnew3-V:替换效果不好的6组
+2024-04-07 18:30:02.899205
+Train:Parameter setting for TDGCN on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:TDGCN
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+sub 0: total test accuracy 1.0, f1: 1.0
+sub 1: total test accuracy 0.6142857142857143, f1: 0.6326530612244898
+sub 2: total test accuracy 1.0, f1: 1.0
+sub 3: total test accuracy 0.65, f1: 0.5950413223140495
+sub 4: total test accuracy 0.9, f1: 0.8923076923076922
+sub 5: total test accuracy 0.6357142857142857, f1: 0.7052023121387283
+sub 6: total test accuracy 0.8535714285714285, f1: 0.8540925266903915
+sub 7: total test accuracy 0.85, f1: 0.8478260869565217
+sub 8: total test accuracy 0.75, f1: 0.7852760736196318
+sub 9: total test accuracy 0.7714285714285715, f1: 0.7629629629629631
+sub 10: total test accuracy 0.7285714285714285, f1: 0.7054263565891473
+sub 11: total test accuracy 0.8571428571428571, f1: 0.855072463768116
+sub 12: total test accuracy 0.9214285714285714, f1: 0.9251700680272108
+sub 13: total test accuracy 0.7642857142857142, f1: 0.7770270270270271
+sub 14: total test accuracy 0.7428571428571429, f1: 0.7692307692307693
+sub 15: total test accuracy 0.85, f1: 0.8609271523178809
+sub 16: total test accuracy 0.875, f1: 0.8788927335640139
+sub 17: total test accuracy 0.8035714285714286, f1: 0.7736625514403292
+sub 18: total test accuracy 0.7428571428571429, f1: 0.7735849056603774
+sub 19: total test accuracy 0.6464285714285715, f1: 0.700906344410876
+sub 20: total test accuracy 0.7428571428571429, f1: 0.7721518987341771
+sub 21: total test accuracy 0.6107142857142858, f1: 0.6279863481228669
+sub 22: total test accuracy 0.875, f1: 0.8771929824561403
+sub 23: total test accuracy 0.8928571428571429, f1: 0.8958333333333333
+sub 24: total test accuracy 0.8571428571428571, f1: 0.869281045751634
+sub 25: total test accuracy 0.9142857142857143, f1: 0.9130434782608695
+sub 26: total test accuracy 0.9821428571428571, f1: 0.9823321554770317
+sub 27: total test accuracy 0.7642857142857142, f1: 0.7870967741935484
+sub 28: total test accuracy 0.825, f1: 0.8304498269896193
+sub 29: total test accuracy 0.6892857142857143, f1: 0.7184466019417476
+sub 30: total test accuracy 0.8535714285714285, f1: 0.8519855595667869
+sub 31: total test accuracy 0.7857142857142857, f1: 0.7916666666666666
+test mAcc=0.8046875 mF1=0.8128977838045199
+val mAcc=0.8619667658730159 F1=0.8243545282477447
+
+
+TDGCN-LGG-WQJnew3-A:替换效果不好的6组
 2024-04-08 09:19:49.814291
 Train:Parameter setting for LGGNet on WQJ
 1)number_class:2
@@ -470,67 +2408,8 @@ sub 31: total test accuracy 0.7714285714285715, f1: 0.7777777777777778
 test mAcc=0.7799107142857142 mF1=0.786782508021199
 val mAcc=0.8541170634920635 F1=0.851155568002661
 
-# 三层时间学习器 V标签
-2024-04-07 18:30:02.899205
-Train:Parameter setting for TDGCN on WQJ
-1)number_class:2
-2)random_seed:3407
-3)learning_rate:0.001
-4)training_rate:0.8
-5)pool:16
-6)num_epochs:200
-7)batch_size:64
-8)dropout:0.5
-9)hidden_node:32
-10)input_shape:(1, 32, 800)
-11)class:V
-12)T:64
-13)graph-type:gen
-14)patient:20
-15)patient-cmb:8
-16)max-epoch-cmb:20
-17)fold:10
-18)model:TDGCN
-19)data-path:/data/xiaominghao/eeg-data
-20)balance:False
-21)bandpass:(1, 50)
-22)dataset:WQJ
-sub 0: total test accuracy 1.0, f1: 1.0
-sub 1: total test accuracy 0.6142857142857143, f1: 0.6326530612244898 // 低 3
-sub 2: total test accuracy 1.0, f1: 1.0
-sub 3: total test accuracy 0.65, f1: 0.5950413223140495 // 低 8
-sub 4: total test accuracy 0.9, f1: 0.8923076923076922 // 低 3
-sub 5: total test accuracy 0.6357142857142857, f1: 0.7052023121387283 // 高 1
-sub 6: total test accuracy 0.8535714285714285, f1: 0.8540925266903915 // 高 7
-sub 7: total test accuracy 0.85, f1: 0.8478260869565217 // 高 6
-sub 8: total test accuracy 0.75, f1: 0.7852760736196318 // 相同
-sub 9: total test accuracy 0.7714285714285715, f1: 0.7629629629629631 // 高 2
-sub 10: total test accuracy 0.7285714285714285, f1: 0.7054263565891473 // 低 8
-sub 11: total test accuracy 0.8571428571428571, f1: 0.855072463768116 // 低 1
-sub 12: total test accuracy 0.9214285714285714, f1: 0.9251700680272108 // 高 7
-sub 13: total test accuracy 0.7642857142857142, f1: 0.7770270270270271 // 低 7
-sub 14: total test accuracy 0.7428571428571429, f1: 0.7692307692307693 // 高 9
-sub 15: total test accuracy 0.85, f1: 0.8609271523178809 // 相同
-sub 16: total test accuracy 0.875, f1: 0.8788927335640139 // 高 9
-sub 17: total test accuracy 0.8035714285714286, f1: 0.7736625514403292 // 低 1
-sub 18: total test accuracy 0.7428571428571429, f1: 0.7735849056603774 // 低 2
-sub 19: total test accuracy 0.6464285714285715, f1: 0.700906344410876 // 低 4
-sub 20: total test accuracy 0.7428571428571429, f1: 0.7721518987341771 // 低 4
-sub 21: total test accuracy 0.6107142857142858, f1: 0.6279863481228669 // 高 6
-sub 22: total test accuracy 0.875, f1: 0.8771929824561403 // 低 1
-sub 23: total test accuracy 0.8928571428571429, f1: 0.8958333333333333 // 高 2
-sub 24: total test accuracy 0.8571428571428571, f1: 0.869281045751634 // 低 5
-sub 25: total test accuracy 0.9142857142857143, f1: 0.9130434782608695 // 高 2
-sub 26: total test accuracy 0.9821428571428571, f1: 0.9823321554770317 // 高 3
-sub 27: total test accuracy 0.7642857142857142, f1: 0.7870967741935484 // 高 2
-sub 28: total test accuracy 0.825, f1: 0.8304498269896193 // 高 6
-sub 29: total test accuracy 0.6892857142857143, f1: 0.7184466019417476 // 低 17
-sub 30: total test accuracy 0.8535714285714285, f1: 0.8519855595667869 // 高 1
-sub 31: total test accuracy 0.7857142857142857, f1: 0.7916666666666666 // 高 3
-test mAcc=0.8046875 mF1=0.8128977838045199
-val mAcc=0.8619667658730159 F1=0.8243545282477447
 
-LGG
+TDGCN-LGG-WQJnew3-V:替换效果不好的6组
 2024-04-07 18:37:36.458734
 Train:Parameter setting for LGGNet on WQJ
 1)number_class:2
@@ -589,3 +2468,198 @@ sub 30: total test accuracy 0.8428571428571429, f1: 0.8405797101449276
 sub 31: total test accuracy 0.7535714285714286, f1: 0.7561837455830388
 test mAcc=0.8022321428571428 mF1=0.8013362349322012
 val mAcc=0.8629464285714286 F1=0.853099084808217
+
+
+EEGNet-A:跑咱们数据集，还未修改数据
+2024-04-07 20:46:04.054301
+Train:Parameter setting for EEGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:EEGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+2024-04-08 20:58:28.609077
+Train:Parameter setting for EEGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:EEGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.6927455357142858 mF1=0.6949523458315832
+val mAcc=0.7645461309523809 F1=0.76254008960736
+
+
+EEGNet-V:跑咱们数据集，还未修改
+2024-04-07 20:55:06.604231
+Train:Parameter setting for EEGNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:EEGNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.5013392857142858 mF1=0.5087775645740931
+val mAcc=0.626376488095238 F1=0.618280883772165
+
+DeepConv-A:跑咱们数据集，还未修改
+2024-04-07 21:25:34.907074
+Train:Parameter setting for DeepConvNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:DeepConvNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.5123883928571429 mF1=0.45507965165584263
+val mAcc=0.6296378968253968 F1=0.6210858515740314
+
+DeepConv-V:跑咱们数据集，还未修改
+2024-04-07 21:22:09.251125
+Train:Parameter setting for DeepConvNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:DeepConvNet
+19)data-path:/data/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.5123883928571429 mF1=0.4631649787657682
+val mAcc=0.6286582341269842 F1=0.6091788972998096
+
+ShallowConv-A:跑咱们数据集，还未修改
+2024-04-07 21:49:10.821651
+Train:Parameter setting for ShallowConvNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:A
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:ShallowConvNet
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.5149553571428571 mF1=0.4781775693011155
+val mAcc=0.6245039682539684 F1=0.601816834891752
+
+ShallowConv-V:跑咱们数据集，还未修改
+2024-04-07 21:48:05.818490
+Train:Parameter setting for ShallowConvNet on WQJ
+1)number_class:2
+2)random_seed:3407
+3)learning_rate:0.001
+4)training_rate:0.8
+5)pool:16
+6)num_epochs:200
+7)batch_size:64
+8)dropout:0.5
+9)hidden_node:32
+10)input_shape:(1, 32, 800)
+11)class:V
+12)T:64
+13)graph-type:gen
+14)patient:20
+15)patient-cmb:8
+16)max-epoch-cmb:20
+17)fold:10
+18)model:ShallowConvNet
+19)data-path:/home/xiaominghao/eeg-data
+20)balance:False
+21)bandpass:(1, 50)
+22)dataset:WQJ
+test mAcc=0.5111607142857143 mF1=0.47413943727908114
+val mAcc=0.6237103174603175 F1=0.608644884717004
+
