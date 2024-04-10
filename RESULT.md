@@ -6,10 +6,10 @@
 
 2080ti_2上已有能正常运行的代码：
 
-EEGNet-deap-A  EEGTCNet-deap-A  EEGTCN-WQJ-A  LGG-fro-deap-A  LGG-gen-deap-A
-EEGNet-deap-D  EEGTCNet-deap-D  EEGTCN-WQJ-V  LGG-fro-deap-D  LGG-gen-deap-D
-EEGNet-deap-L  EEGTCNet-deap-L  EEG-WQJ-A     LGG-fro-deap-L  LGG-gen-deap-L
-EEGNet-deap-V  EEGTCNet-deap-V  EEG-WQJ-V     LGG-fro-deap-V  LGG-gen-deap-V
+EEGNet-deap-A  EEGTCNet-deap-A  LGG-fro-deap-A  LGG-gen-deap-A
+EEGNet-deap-D  EEGTCNet-deap-D  LGG-fro-deap-D  LGG-gen-deap-D
+EEGNet-deap-L  EEGTCNet-deap-L  LGG-fro-deap-L  LGG-gen-deap-L
+EEGNet-deap-V  EEGTCNet-deap-V  LGG-fro-deap-V  LGG-gen-deap-V
 
 2080ti_1上已有正常运行代码：
 
