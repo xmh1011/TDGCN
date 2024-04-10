@@ -44,6 +44,7 @@ class CrossValidation:
                    "\n20)balance:" + str(args.balance) +
                    "\n21)bandpass:" + str(args.bandpass) +
                    "\n22)dataset:" + str(args.dataset) +
+                    "\n23)overlap:" + str(args.overlap) +
                    '\n')
         file.close()
 

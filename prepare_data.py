@@ -3,6 +3,27 @@ from scipy import signal
 from sklearn.decomposition import FastICA
 from train_model import *
 from scipy.signal import resample
+from torch.utils.data import Dataset
+import os
+import numpy as np
+import h5py
+
+
+class eegDataset(Dataset):
+    # x_tensor: (sample, channel, datapoint(feature)) type = torch.tensor
+    # y_tensor: (sample,) type = torch.tensor
+
+    def __init__(self, x_tensor, y_tensor):
+        self.x = x_tensor
+        self.y = y_tensor
+
+        assert self.x.size(0) == self.y.size(0)
+
+    def __getitem__(self, index):
+        return self.x[index], self.y[index]
+
+    def __len__(self):
+        return len(self.y)
 
 
 class PrepareData:
@@ -23,7 +44,8 @@ class PrepareData:
                                    'PO3', 'PO4', 'Oz', 'O1', 'O2']
         else:
             self.original_order = ['Fp1', 'AF3', 'F3', 'F7', 'FC5', 'FC1', 'C3', 'T7', 'CP5', 'CP1', 'P3', 'P7', 'PO3',
-                                   'O1', 'Oz', 'Pz', 'Fp2', 'AF4', 'Fz', 'F4', 'F8', 'FC6', 'FC2', 'Cz', 'C4', 'T8', 'CP6',
+                                   'O1', 'Oz', 'Pz', 'Fp2', 'AF4', 'Fz', 'F4', 'F8', 'FC6', 'FC2', 'Cz', 'C4', 'T8',
+                                   'CP6',
                                    'CP2', 'P4', 'P8', 'PO4', 'O2']
         self.graph_fro_DEAP = [['Fp1', 'AF3'], ['Fp2', 'AF4'], ['F3', 'F7'], ['F4', 'F8'],
                                ['Fz'],
@@ -62,7 +84,7 @@ class PrepareData:
             data_, label_ = self.preprocess_data(data=data_, label=label_, split=split, expand=expand)
 
             print('Data and label prepared!')
-            print('sample_'+str(sub + 1)+'.dat')
+            print('sample_' + str(sub + 1) + '.dat')
             print('data:' + str(data_.shape) + ' label:' + str(label_.shape))
             print('----------------------')
             self.save(data_, label_, sub)
@@ -211,7 +233,8 @@ class PrepareData:
             data = np.expand_dims(data, axis=-3)
 
         if self.args.dataset == 'WQJ':
-            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1], fs=self.args.sampling_rate, order=5)
+            data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1],
+                                        fs=self.args.sampling_rate, order=5)
             data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
 
         if self.args.sampling_rate != self.args.target_rate:

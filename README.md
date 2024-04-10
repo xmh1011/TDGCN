@@ -1,11 +1,21 @@
+# ATDGCN
+
+跑TSception模型的时候，参数为：
+```python
+    parser.add_argument('--input-shape', type=tuple, default=(1, 28, 512))
+    parser.add_argument('--model', type=str, default='TSception', choices=['LGGNet', 'ATDCGN', 'EEGNet', 'DeepConvNet', 'ShallowConvNet', 'EEGTCNet', 'MBEEG_SENet', 'EEGNetClassifier', 'TSception'])
+    parser.add_argument('--T', type=int, default=15)
+    parser.add_argument('--graph-type', type=str, default='TS', choices=['fro', 'gen', 'hem', 'BL', 'TS'])
+```
+
 ```shell
-conda create --name GCN python=3.8
+conda create --name ATGCN python=3.8
 ```
 
 Activate the virtual environment by:
 
 ```shell
-conda activate GCN
+conda activate ATGCN
 ```
 
 Install the requirements by:
