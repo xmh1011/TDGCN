@@ -4,6 +4,20 @@
 
 第一轮实验：
 
+2080ti_2上已有能正常运行的代码：
+
+EEGNet-deap-A  EEGTCNet-deap-A  EEGTCN-WQJ-A  LGG-fro-deap-A  LGG-gen-deap-A
+EEGNet-deap-D  EEGTCNet-deap-D  EEGTCN-WQJ-V  LGG-fro-deap-D  LGG-gen-deap-D
+EEGNet-deap-L  EEGTCNet-deap-L  EEG-WQJ-A     LGG-fro-deap-L  LGG-gen-deap-L
+EEGNet-deap-V  EEGTCNet-deap-V  EEG-WQJ-V     LGG-fro-deap-V  LGG-gen-deap-V
+
+2080ti_1上已有正常运行代码：
+
+LGG-hem-deap-D  TDGCN-fro-deap-A  TDGCN-gen-deap-L  TDGCN-hem-deap-D
+LGG-hem-deap-L  TDGCN-fro-deap-D  TDGCN-gen-deap-A  TDGCN-hem-deap-L
+LGG-hem-deap-V  TDGCN-fro-deap-L  TDGCN-gen-deap-D  TDGCN-hem-deap-V
+LGG-hem-deap-A  TDGCN-fro-deap-V  TDGCN-gen-deap-V  TDGCN-hem-deap-A
+
 | 模型/分区          | 标签 | 平均Acc | Acc标准差 | 平均F1 | F1标准差 |
 |----------------|----|-------|--------|------|-------|
 | EEGNet         | A  |       |        |      |       |
@@ -22,10 +36,6 @@
 | EEGTCNet       | V  |       |        |      |       |
 | EEGTCNet       | D  |       |        |      |       |
 | EEGTCNet       | L  |       |        |      |       |
-| TSception      | A  |       |        |      |       |
-| TSception      | V  |       |        |      |       |
-| TSception      | D  |       |        |      |       |
-| TSception      | L  |       |        |      |       |
 | RGNN           | A  |       |        |      |       |
 | RGNN           | V  |       |        |      |       |
 | RGNN           | D  |       |        |      |       |
@@ -77,8 +87,6 @@
 | ShallowConvNet | V  |       |        |      |       |
 | EEGTCNet       | A  |       |        |      |       |
 | EEGTCNet       | V  |       |        |      |       |
-| TSception      | A  |       |        |      |       |
-| TSception      | V  |       |        |      |       |
 | RGNN           | A  |       |        |      |       |
 | RGNN           | V  |       |        |      |       |
 | R2G-STNN       | A  |       |        |      |       |
@@ -110,8 +118,6 @@
 | ShallowConvNet | V  |       |        |      |       |
 | EEGTCNet       | A  |       |        |      |       |
 | EEGTCNet       | V  |       |        |      |       |
-| TSception      | A  |       |        |      |       |
-| TSception      | V  |       |        |      |       |
 | RGNN           | A  |       |        |      |       |
 | RGNN           | V  |       |        |      |       |
 | R2G-STNN       | A  |       |        |      |       |
@@ -144,8 +150,6 @@
 | ShallowConvNet | V  |       |        |      |       |
 | EEGTCNet       | A  |       |        |      |       |
 | EEGTCNet       | V  |       |        |      |       |
-| TSception      | A  |       |        |      |       |
-| TSception      | V  |       |        |      |       |
 | RGNN           | A  |       |        |      |       |
 | RGNN           | V  |       |        |      |       |
 | R2G-STNN       | A  |       |        |      |       |
@@ -177,8 +181,6 @@
 | ShallowConvNet | V  |       |        |      |       |
 | EEGTCNet       | A  |       |        |      |       |
 | EEGTCNet       | V  |       |        |      |       |
-| TSception      | A  |       |        |      |       |
-| TSception      | V  |       |        |      |       |
 | RGNN           | A  |       |        |      |       |
 | RGNN           | V  |       |        |      |       |
 | R2G-STNN       | A  |       |        |      |       |
@@ -211,8 +213,6 @@
 | ShallowConvNet | V  |       |        |      |       |
 | EEGTCNet       | A  |       |        |      |       |
 | EEGTCNet       | V  |       |        |      |       |
-| TSception      | A  |       |        |      |       |
-| TSception      | V  |       |        |      |       |
 | RGNN           | A  |       |        |      |       |
 | RGNN           | V  |       |        |      |       |
 | R2G-STNN       | A  |       |        |      |       |

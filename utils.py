@@ -112,11 +112,6 @@ def get_model(args):
         model = ShallowConvNet(
             n_classes=args.num_class, channels=args.channels,
             nTime=args.target_rate, dropout_rate=args.dropout)
-    elif args.model == 'TSception':
-        model = TSception(
-            num_classes=args.num_class, input_size=args.input_shape,
-            sampling_rate=args.sampling_rate, num_T=args.T, num_S=args.T,
-            hidden=args.hidden, dropout_rate=args.dropout)
     elif args.model == 'EEGTCNet':
         model = EEGTCNet(
             n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate, input_size=args.input_shape)
