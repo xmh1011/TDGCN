@@ -227,6 +227,7 @@ class CrossValidation:
         mACC = np.mean(tta)
         mF1 = np.mean(ttf)
         std = np.std(tta)
+        stdF1 = np.std(ttf)
         mACC_val = np.mean(tva)
         std_val = np.std(tva)
         mF1_val = np.mean(tvf)
@@ -235,8 +236,8 @@ class CrossValidation:
         print('Final: test mean F1:{}'.format(mF1))
         print('Final: val mean ACC:{} std:{}'.format(mACC_val, std_val))
         print('Final: val mean F1:{}'.format(mF1_val))
-        results = ('test mAcc={} mF1={} \n'
-                   'val mAcc={} F1={}').format(mACC, mF1, mACC_val, mF1_val)
+        results = ('test mAcc={} std:{} mF1={} std:{} \n'
+                   'val mAcc={} F1={}').format(mACC, std, mF1, stdF1, mACC_val, mF1_val)
         self.log2txt(results)
 
     def first_stage(self, data, label, subject, fold):
