@@ -80,15 +80,12 @@ def pprint(x):
 
 def get_model(args):
 
-    input_size = []
     idx_local_graph = 0
     if args.model == 'LGGNet' or args.model == 'ATDCGN':
         idx_local_graph = list(np.array(h5py.File('num_chan_local_graph_{}.hdf'.format(args.graph_type), 'r')['data']))
-        channels = sum(idx_local_graph)
-        input_size = (args.input_shape[0], channels, args.input_shape[2])
     if args.model == 'LGGNet':
         model = LGGNet(
-            num_classes=args.num_class, input_size=input_size,
+            num_classes=args.num_class, input_size=args.input_shape,
             sampling_rate=args.target_rate,
             num_T=args.T, out_graph=args.hidden,
             dropout_rate=args.dropout,
@@ -96,7 +93,7 @@ def get_model(args):
             idx_graph=idx_local_graph)
     elif args.model == 'ATDCGN':
         model = ATDCGN(
-            num_classes=args.num_class, input_size=input_size,
+            num_classes=args.num_class, input_size=args.input_shape,
             sampling_rate=args.target_rate,
             num_T=args.T, out_graph=args.hidden,
             dropout_rate=args.dropout,
@@ -104,8 +101,9 @@ def get_model(args):
             idx_graph=idx_local_graph)
     elif args.model == 'EEGNet':
         model = EEGNet(
-            n_classes=args.num_class, channels=args.channels,
-            nTime=args.target_rate*args.segment, dropout_rate=args.dropout)
+            n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate, input_size=args.input_shape,
+            kernLength=0.25 * args.target_rate
+        )
     elif args.model == 'DeepConvNet':
         model = DeepConvNet(
             n_classes=args.num_class, channels=args.channels,
@@ -113,24 +111,15 @@ def get_model(args):
     elif args.model == 'ShallowConvNet':
         model = ShallowConvNet(
             n_classes=args.num_class, channels=args.channels,
-            nTime=args.target_rate*args.segment, dropout_rate=args.dropout)
+            nTime=args.target_rate, dropout_rate=args.dropout)
     elif args.model == 'TSception':
         model = TSception(
             num_classes=args.num_class, input_size=args.input_shape,
             sampling_rate=args.sampling_rate, num_T=args.T, num_S=args.T,
             hidden=args.hidden, dropout_rate=args.dropout)
-    # elif args.model == 'EEGTCNet':
-    #     model = EEGTCNet(
-    #         n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate)
-    # elif args.model == 'MBEEG_SENet':
-    #     model = MBEEG_SENet(
-    #         n_classes=args.num_class, channels=args.channels,
-    #         sampling_rate=args.target_rate)
-    # elif args.model == 'EEGNetClassifier':
-    #     model = EEGNetClassifier(
-    #         n_classes=args.num_class, channels=args.channels,
-    #         sampling_rate=args.target_rate,
-    #         dropout_rate=args.dropout)
+    elif args.model == 'EEGTCNet':
+        model = EEGTCNet(
+            n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate, input_size=args.input_shape)
 
     return model
 

@@ -123,69 +123,71 @@ class ShallowConvNet(nn.Module):
         return x
 
 
-class EEGNet(nn.Module):
-    def initialBlocks(self, droup_rate, *args, **kwargs):
-        block1 = nn.Sequential(
-            nn.Conv2d(1, self.F1, (1, self.C1),
-                      padding=(0, self.C1 // 2), bias=False),
-            nn.BatchNorm2d(self.F1),
-            Conv2dWithConstraint(self.F1, self.F1 * self.D, (self.channels, 1),
-                                 padding=0, bias=False, max_norm=1,
-                                 groups=self.F1),
-            nn.BatchNorm2d(self.F1 * self.D),
-            nn.ELU(),
-            nn.AvgPool2d((1, 4), stride=4),
-            nn.Dropout(p=droup_rate))
-        block2 = nn.Sequential(
-            nn.Conv2d(self.F1 * self.D, self.F1 * self.D, (1, 22),
-                      padding=(0, 22 // 2), bias=False,
-                      groups=self.F1 * self.D),
-            nn.Conv2d(self.F1 * self.D, self.F2, (1, 1),
-                      stride=1, bias=False, padding=0),
-            nn.BatchNorm2d(self.F2),
-            nn.ELU(),
-            nn.AvgPool2d((1, 8), stride=8),
-            nn.Dropout(p=droup_rate)
-        )
-        return nn.Sequential(block1, block2)
-
-    def lastBlock(self, inF, outF, kernalSize, *args, **kwargs):
-        return nn.Sequential(
-            nn.Conv2d(inF, outF, kernalSize, *args, **kwargs))
-
-    def calculateOutSize(self, model, channels, nTime):
-        '''
-        Calculate the output based on input size.
-        model is from nn.Module and inputSize is a array.
-        '''
-        data = torch.rand(1, 1, channels, nTime)
-        model.eval()
-        out = model(data).shape
-        return out[2:]
-
-    def __init__(self, channels, nTime, n_classes=2,
-                 droup_rate=0.25, F1=8, D=2,
-                 C1=64, *args, **kwargs):
-        super(EEGNet, self).__init__()
-        self.F2 = D * F1
+class EEGNetModule(nn.Module):
+    def __init__(self, channels, F1, D, kernLength, dropout, input_size):
+        super(EEGNetModule, self).__init__()
         self.F1 = F1
         self.D = D
-        self.nTime = nTime
-        self.n_classes = n_classes
-        self.channels = channels
-        self.C1 = C1
+        self.F2 = D * F1
+        self.T = input_size[2]
+        self.kernLength = int(kernLength)
 
-        self.firstBlocks = self.initialBlocks(droup_rate)
-        self.fSize = self.calculateOutSize(self.firstBlocks, channels, nTime)
-        self.lastLayer = self.lastBlock(self.F2, n_classes, (1, self.fSize[1]))
+        # 第一阶段
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=F1, kernel_size=(channels, self.kernLength), groups=1,
+                               padding='same', bias=False)
+        self.batchnorm1 = nn.BatchNorm2d(num_features=F1)
+        # 深度卷积
+        self.depthwiseConv = nn.Conv2d(in_channels=F1, out_channels=self.F2, kernel_size=(channels, 1), groups=F1,
+                                       bias=False)
+        self.batchnorm2 = nn.BatchNorm2d(num_features=self.F2)
+        self.activation = nn.ELU()
+        self.avg_pool1 = nn.AvgPool2d((1, 4))
+        self.dropout1 = nn.Dropout(dropout)
+        # 可分离卷积
+        self.separableConv = nn.Conv2d(in_channels=self.F2, out_channels=self.F2, kernel_size=(1, 16), padding='same',
+                                       bias=False, groups=self.F2)
+        self.conv2 = nn.Conv2d(in_channels=self.F2, out_channels=self.F2, kernel_size=1, bias=False)
+        self.batchnorm3 = nn.BatchNorm2d(num_features=self.F2)
+        self.avg_pool2 = nn.AvgPool2d((1, 8))
+        self.dropout2 = nn.Dropout(dropout)
 
     def forward(self, x):
-        x = self.firstBlocks(x)
-        x = self.lastLayer(x)
-        x = torch.squeeze(x, 3)
-        x = torch.squeeze(x, 2)
-
+        # 定义前向传播
+        # (64, 1, 32, 800)
+        x = self.batchnorm1(self.conv1(x))  # (64,8,32,800)
+        x = self.activation(self.batchnorm2(self.depthwiseConv(x)))  # (64,16,1,800)
+        x = self.dropout1(self.avg_pool1(x))  # (64,16,1,200)
+        x = self.separableConv(x)
+        x = self.conv2(x)
+        x = self.activation(self.batchnorm3(x))
+        x = self.dropout2(self.avg_pool2(x))  # (64,16,1,25)
         return x
+
+
+class EEGNet(nn.Module):
+    def __init__(self, n_classes, input_size, sampling_rate, F1=8, kernLength=64, D=2, channels=32, dropout=0.25):
+        super(EEGNet, self).__init__()
+        self.F1 = F1
+        self.D = D
+        self.F2 = D * F1
+        self.T = input_size[2]
+        self.sampling_rate = sampling_rate
+        self.kernLength = int(kernLength)
+        # EEG数据处理模块
+        self.EEGNet_sep = EEGNetModule(channels=channels, F1=F1, D=D, kernLength=kernLength, dropout=dropout,
+                                       input_size=input_size)
+        # 分类器
+        self.flatten = nn.Flatten()
+        self.dense = nn.Linear(self.F2 * math.ceil(self.T / 32), n_classes)  # 这里T/32是因为有两次池化，每次都是T减少4倍
+
+    def forward(self, x):
+        # (64,1,32,800)
+        x = self.EEGNet_sep(x)
+        # (64,16,1,25)
+        # 分类器
+        x = self.flatten(x)  # (64,400)
+        x = self.dense(x)
+        return F.log_softmax(x, dim=1)
 
 
 class Conv2dWithConstraint(nn.Conv2d):
@@ -216,6 +218,104 @@ class LinearWithConstraint(nn.Linear):
         return super(LinearWithConstraint, self).forward(x)
 
 
+class TemporalBlock(nn.Module):
+    """
+        Temporal convolution layers
+    """
+
+    def __init__(self, n_inputs, n_outputs, kernel_size, stride, dilation, dropout=0.2):
+        super(TemporalBlock, self).__init__()
+        # 计算所需的填充以保持时间维度长度不变
+        padding = (kernel_size - 1) * dilation // 2
+        self.conv1 = nn.Conv1d(n_inputs, n_outputs, kernel_size,
+                               stride=stride, padding=padding, dilation=dilation)
+        self.bn1 = nn.BatchNorm1d(n_outputs)
+        self.conv2 = nn.Conv1d(n_outputs, n_outputs, kernel_size,
+                               stride=stride, padding=padding, dilation=dilation)
+        self.bn2 = nn.BatchNorm1d(n_outputs)
+
+        self.downsample = nn.Conv1d(n_inputs, n_outputs, 1) if n_inputs != n_outputs else None
+        self.elu = nn.ELU()
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x):
+        res = x if self.downsample is None else self.downsample(x)
+        out = self.conv1(x)
+        out = self.elu(out)
+        out = self.bn1(out)
+        out = self.dropout(out)
+        out = self.conv2(out)
+        out = self.elu(out)
+        out = self.bn2(out)
+
+        return self.elu(out + res)
+
+
+class TCNBlock(nn.Module):
+    """
+    Temporal convolution network with average pooling to reduce temporal dimension.
+    """
+
+    def __init__(self, num_inputs, num_channels, kernel_size=2, dropout=0.2, reduce_halve=False):
+        super(TCNBlock, self).__init__()
+        self.reduce_halve = reduce_halve
+        layers = []
+        num_levels = len(num_channels)
+        for i in range(num_levels):
+            dilation_size = 2 ** i
+            in_channels = num_inputs if i == 0 else num_channels[i - 1]
+            out_channels = num_channels[i]
+            layers.append(TemporalBlock(in_channels, out_channels, kernel_size, stride=1, dilation=dilation_size,
+                                        dropout=dropout))
+        self.network = nn.Sequential(*layers)
+        if self.reduce_halve:
+            self.avg_pool = nn.AvgPool1d(kernel_size=2, stride=2)
+
+    def forward(self, x):
+        x = self.network(x)
+        if self.reduce_halve:
+            x = self.avg_pool(x)
+        return x
+
+
+class EEGTCNet(nn.Module):
+    def __init__(self, input_size, n_classes, channels, sampling_rate, kernel_s=3, filt=5, dropout=0.3,
+                 F1=32, D=2):
+        super(EEGTCNet, self).__init__()
+        self.kernLength = int(0.25 * sampling_rate)
+        self.F2 = F1 * D
+        self.num_channels = [self.F2, self.F2]
+        self.n_classes = n_classes
+
+        self.EEGNet_sep = EEGNetModule(channels=channels, F1=F1, D=D, kernLength=self.kernLength, dropout=dropout,
+                                       input_size=input_size)
+        # self, num_inputs, num_channels, kernel_size = 2, dropout = 0.2, reduce_halve = False
+        self.TCN_block = TCNBlock(num_inputs=self.F2, num_channels=self.num_channels, kernel_size=kernel_s,
+                                  dropout=dropout, reduce_halve=True)
+        size = self.get_size_temporal(input_size)
+        self.dense = nn.Linear(size[-1] * self.F2, n_classes)
+        self.softmax = nn.Softmax(dim=1)
+
+    def get_size_temporal(self, input_size):
+        data = torch.randn((1, input_size[0], input_size[1], input_size[2]))
+        x = self.EEGNet_sep(data)
+        x = torch.squeeze(x, 2)
+        x = self.TCN_block(x)
+        size = x.size()
+        return size
+
+    def forward(self, x):
+        x = self.EEGNet_sep(x)
+        # x = x[:, :, -1, :]  # Selecting the last feature map as done in Lambda(lambda x: x[:,:,-1,:])(EEGNet_sep)
+        x = torch.squeeze(x, 2)
+        x = self.TCN_block(x)
+        # x = x[:, -1, :]  # Selecting the last timestep as done in Lambda(lambda x: x[:,-1,:])(outs)
+        x = x.view(x.size(0), -1)  # Flatten
+        x = self.dense(x)
+        x = self.softmax(x)
+        return x
+
+
 class TSception(nn.Module):
     def conv_block(self, in_chan, out_chan, kernel, step, pool):
         return nn.Sequential(
@@ -235,9 +335,9 @@ class TSception(nn.Module):
         self.Tception2 = self.conv_block(1, num_T, (1, int(self.inception_window[1] * sampling_rate)), 1, self.pool)
         self.Tception3 = self.conv_block(1, num_T, (1, int(self.inception_window[2] * sampling_rate)), 1, self.pool)
 
-        self.Sception1 = self.conv_block(num_T, num_S, (int(input_size[1]), 1), 1, int(self.pool*0.25))
+        self.Sception1 = self.conv_block(num_T, num_S, (int(input_size[1]), 1), 1, int(self.pool * 0.25))
         self.Sception2 = self.conv_block(num_T, num_S, (int(input_size[1] * 0.5), 1), (int(input_size[1] * 0.5), 1),
-                                         int(self.pool*0.25))
+                                         int(self.pool * 0.25))
         self.fusion_layer = self.conv_block(num_S, num_S, (3, 1), 1, 4)
         self.BN_t = nn.BatchNorm2d(num_T)
         self.BN_s = nn.BatchNorm2d(num_S)

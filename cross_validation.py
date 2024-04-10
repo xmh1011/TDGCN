@@ -294,29 +294,3 @@ class CrossValidation:
         file = open(self.text_file, 'a')
         file.write(str(content) + '\n')
         file.close()
-
-    def trial_wise_voting(self, act, pred, num_segment_per_trial, trial_in_fold):
-        """
-        this function does voting within each tiral to get the label of entire trial
-        param act: [num_sample] list
-        param pred: [num_sample] list
-        param num_segment_per_trial: how many samples per trial
-        param trial_in_fold: how many trials in this fold
-        return: trial-wise actual label and predicted label.
-        """
-        num_trial = int(len(act) / num_segment_per_trial)
-        assert num_trial == trial_in_fold
-        act_trial = np.reshape(act, (num_trial, num_segment_per_trial))
-        pred_trial = np.reshape(pred, (num_trial, num_segment_per_trial))
-
-        act_trial = np.mean(act_trial, axis=-1).tolist()
-        pred_vote = []
-        for trial in pred_trial:
-            index_0 = np.where(trial == 0)[0]
-            index_1 = np.where(trial == 1)[0]
-            if len(index_1) >= len(index_0):
-                label = 1
-            else:
-                label = 0
-            pred_vote.append(label)
-        return act_trial, pred_vote
