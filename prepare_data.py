@@ -37,7 +37,7 @@ class PrepareData:
         self.data_path = args.data_path
         self.label_type = args.label_type
         self.dataset = args.dataset
-        if self.dataset == 'WQJ':
+        if self.dataset == 'MEEG':
             self.original_order = ['Fp1', 'Fp2', 'AF3', 'AF4', 'Fz', 'F3', 'F4', 'F7', 'F8',
                                    'FC1', 'FC2', 'FC5', 'FC6', 'Cz', 'C3', 'C4', 'T7', 'T8',
                                    'CP1', 'CP2', 'CP5', 'CP6', 'Pz', 'P3', 'P4', 'P7', 'P8',
@@ -105,7 +105,7 @@ class PrepareData:
         data: (40, 32, 7680) label: (40, 4)
         """
         sub += 1
-        if self.dataset == 'WQJ':
+        if self.dataset == 'MEEG':
             sub_code = str('sample_' + str(sub) + '.dat')
         elif self.dataset == 'DEAP':
             if sub < 10:
@@ -234,7 +234,7 @@ class PrepareData:
             # expand one dimension for deep learning(CNNs)
             data = np.expand_dims(data, axis=-3)
 
-        if self.args.dataset == 'WQJ':
+        if self.args.dataset == 'MEEG':
             data = self.bandpass_filter(data=data, lowcut=self.args.bandpass[0], highcut=self.args.bandpass[1],
                                         fs=self.args.sampling_rate, order=5)
             data = self.notch_filter(data=data, fs=self.args.sampling_rate, Q=50)
