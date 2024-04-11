@@ -36,8 +36,12 @@ class ATDCGN(nn.Module):
         # 多头注意力相关参数
         self.model_dim = round(num_T / 2)
         self.num_heads = 8
-        self.window_size = 100
-        self.stride = 20
+        if sampling_rate == 200:
+            self.window_size = 100
+            self.stride = 20
+        else:
+            self.window_size = 64
+            self.stride = 16
         ###################
         hidden_features = input_size[2]
 

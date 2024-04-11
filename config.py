@@ -4,17 +4,17 @@ import argparse
 def set_config():
     parser = argparse.ArgumentParser()
     # Data
-    parser.add_argument('--dataset', type=str, default='DEAP', choices=['MEEG', 'DEAP'])
-    parser.add_argument('--data-path', type=str, default='/srv/xiaominghao/deap')
+    parser.add_argument('--dataset', type=str, default='MEEG', choices=['MEEG', 'DEAP'])
+    parser.add_argument('--data-path', type=str, default='/srv/xiaominghao/eeg-data')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
     parser.add_argument('--segment', type=int, default=4)  # segment length in seconds
     parser.add_argument('--overlap', type=float, default=0)
-    parser.add_argument('--sampling-rate', type=int, default=128)
-    parser.add_argument('--target-rate', type=int, default=128)
+    parser.add_argument('--sampling-rate', type=int, default=1000)
+    parser.add_argument('--target-rate', type=int, default=200)
     parser.add_argument('--trial-duration', type=int, default=59, help='trial duration in seconds')
-    parser.add_argument('--input-shape', type=tuple, default=(1, 32, 512))  # 输入形状 (1, 32, 512)
+    parser.add_argument('--input-shape', type=tuple, default=(1, 32, 800))  # 输入形状 (1, 32, 512)
     parser.add_argument('--data-format', type=str, default='eeg')
     parser.add_argument('--bandpass', type=tuple, default=(1, 50))
     parser.add_argument('--channels', type=int, default=32)
@@ -42,11 +42,11 @@ def set_config():
     parser.add_argument('--load-path-final', default='./save/final_model.pth')
     parser.add_argument('--save-model', type=bool, default=True)
     # Model Parameters
-    parser.add_argument('--model', type=str, default='ATDCGN', choices=['LGGNet', 'ATDCGN', 'EEGNet', 'DeepConvNet', 'ShallowConvNet', 'EEGTCNet', 'MBEEG_SENet', 'EEGNetClassifier'])
+    parser.add_argument('--model', type=str, default='ShallowConvNet', choices=['LGGNet', 'ATDCGN', 'EEGNet', 'DeepConvNet', 'ShallowConvNet', 'EEGTCNet', 'MBEEG_SENet', 'EEGNetClassifier'])
     parser.add_argument('--pool', type=int, default=16)
     parser.add_argument('--pool-step-rate', type=float, default=0.25)
     parser.add_argument('--T', type=int, default=64)
-    parser.add_argument('--graph-type', type=str, default='fro', choices=['fro', 'gen', 'hem', 'BL'])
+    parser.add_argument('--graph-type', type=str, default='BL', choices=['fro', 'gen', 'hem', 'BL'])
     parser.add_argument('--hidden', type=int, default=32)  # 隐藏层
 
     # Reproduce the result using the saved model

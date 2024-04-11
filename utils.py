@@ -107,14 +107,15 @@ def get_model(args):
     elif args.model == 'DeepConvNet':
         model = DeepConvNet(
             n_classes=args.num_class, channels=args.channels,
-            nTime=args.target_rate, dropout_rate=args.dropout)
+            nTime=args.input_shape[2], dropout_rate=args.dropout)
     elif args.model == 'ShallowConvNet':
         model = ShallowConvNet(
             n_classes=args.num_class, channels=args.channels,
-            nTime=args.target_rate, dropout_rate=args.dropout)
+            nTime=args.input_shape[2], dropout_rate=args.dropout)
     elif args.model == 'EEGTCNet':
         model = EEGTCNet(
-            n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate, input_size=args.input_shape)
+            n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate, input_size=args.input_shape)
 
     return model
 
