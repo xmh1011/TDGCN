@@ -375,76 +375,6 @@ class TCNet_Fusion(nn.Module):
         return output
 
 
-class SEBlock(nn.Module):
-    def __init__(self, channel, reduction_ratio=8):
-        super(SEBlock, self).__init__()
-        self.gap = nn.AdaptiveAvgPool2d(1)
-        self.fc = nn.Sequential(
-            nn.Linear(channel, channel // reduction_ratio, bias=False),
-            nn.ELU(inplace=True),
-            nn.Linear(channel // reduction_ratio, channel, bias=False),
-            nn.Sigmoid()
-        )
-
-    def forward(self, x):
-        scale = self.gap(x).squeeze(-1).squeeze(-1)
-        scale = self.fc(scale).unsqueeze(-1).unsqueeze(-1)
-        return x * scale
-
-
-class MBEEG_SENet(nn.Module):
-    def __init__(self, input_size, n_classes, channels, sampling_rate, D=2):
-        super(MBEEG_SENet, self).__init__()
-        self.EEGNet_sep1 = EEGNetModule(channels=channels, F1=4, D=D, kernLength=int(sampling_rate * 0.125), dropout=0,
-                                        input_size=input_size)
-        self.EEGNet_sep2 = EEGNetModule(channels=channels, F1=8, D=D, kernLength=int(sampling_rate * 0.25), dropout=0.1,
-                                        input_size=input_size)
-        self.EEGNet_sep3 = EEGNetModule(channels=channels, F1=16, D=D, kernLength=int(sampling_rate * 0.5), dropout=0.2,
-                                        input_size=input_size)
-
-        self.SE1 = SEBlock(channel=D * 4, reduction_ratio=4)  # Assuming channel count matches here
-        self.SE2 = SEBlock(channel=D * 8, reduction_ratio=4)
-        self.SE3 = SEBlock(channel=D * 16, reduction_ratio=2)
-
-        self.flatten = nn.Flatten()
-
-        size = self.get_size_temporal(input_size)
-
-        self.dense1 = nn.Linear(size[-1], n_classes)  # Adjust the size according to your SEBlock output
-        self.softmax = nn.Softmax(dim=1)
-
-    def get_size_temporal(self, input_size):
-        data = torch.randn((1, input_size[0], input_size[1], input_size[2]))
-        branch1 = self.EEGNet_sep1(data)
-        branch2 = self.EEGNet_sep2(data)
-        branch3 = self.EEGNet_sep3(data)
-        branch1 = self.SE1(branch1)
-        branch2 = self.SE2(branch2)
-        branch3 = self.SE3(branch3)
-        branch1 = self.flatten(branch1)
-        branch2 = self.flatten(branch2)
-        branch3 = self.flatten(branch3)
-        concatenated = torch.cat((branch1, branch2, branch3), dim=1)  # Concatenate along the feature dimension
-        size = concatenated.size()
-        return size
-
-    def forward(self, x):
-        # Assuming x is of shape (batch_size, 1, channels, sampling_rate)
-        branch1 = self.EEGNet_sep1(x)
-        branch2 = self.EEGNet_sep2(x)
-        branch3 = self.EEGNet_sep3(x)
-        branch1 = self.SE1(branch1)
-        branch2 = self.SE2(branch2)
-        branch3 = self.SE3(branch3)
-        branch1 = self.flatten(branch1)
-        branch2 = self.flatten(branch2)
-        branch3 = self.flatten(branch3)
-        concatenated = torch.cat((branch1, branch2, branch3), dim=1)  # Concatenate along the feature dimension
-        out = self.dense1(concatenated)
-        out = self.softmax(out)
-        return out
-
-
 class PowerLayer(nn.Module):
     """
     The power layer: calculates the log-transformed power of the data
@@ -614,6 +544,59 @@ class LGGNet(nn.Module):
         l2_reg = self.compute_l2_regularization()  # 计算L2正则化项
         loss = F.cross_entropy(logits, labels) + self.weight_decay * l2_reg  # 将L2正则化项添加到损失函数中
         return loss
+
+class TSception(nn.Module):
+    def conv_block(self, in_chan, out_chan, kernel, step, pool):
+        return nn.Sequential(
+            nn.Conv2d(in_channels=in_chan, out_channels=out_chan,
+                      kernel_size=kernel, stride=step),
+            nn.LeakyReLU(),
+            nn.AvgPool2d(kernel_size=(1, pool), stride=(1, pool)))
+
+    def __init__(self, num_classes, input_size, sampling_rate, num_T, num_S, hidden, dropout_rate):
+        # input_size: 1 x EEG channel x datapoint
+        super(TSception, self).__init__()
+        self.inception_window = [0.5, 0.25, 0.125]
+        self.pool = 8
+        # by setting the convolutional kernel being (1,lenght) and the strids being 1 we can use conv2d to
+        # achieve the 1d convolution operation
+        self.Tception1 = self.conv_block(1, num_T, (1, int(self.inception_window[0] * sampling_rate)), 1, self.pool)
+        self.Tception2 = self.conv_block(1, num_T, (1, int(self.inception_window[1] * sampling_rate)), 1, self.pool)
+        self.Tception3 = self.conv_block(1, num_T, (1, int(self.inception_window[2] * sampling_rate)), 1, self.pool)
+
+        self.Sception1 = self.conv_block(num_T, num_S, (int(input_size[1]), 1), 1, int(self.pool*0.25))
+        self.Sception2 = self.conv_block(num_T, num_S, (int(input_size[1] * 0.5), 1), (int(input_size[1] * 0.5), 1),
+                                         int(self.pool*0.25))
+        self.fusion_layer = self.conv_block(num_S, num_S, (3, 1), 1, 4)
+        self.BN_t = nn.BatchNorm2d(num_T)
+        self.BN_s = nn.BatchNorm2d(num_S)
+        self.BN_fusion = nn.BatchNorm2d(num_S)
+
+        self.fc = nn.Sequential(
+            nn.Linear(num_S, hidden),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate),
+            nn.Linear(hidden, num_classes)
+        )
+
+    def forward(self, x):
+        y = self.Tception1(x)
+        out = y
+        y = self.Tception2(x)
+        out = torch.cat((out, y), dim=-1)
+        y = self.Tception3(x)
+        out = torch.cat((out, y), dim=-1)
+        out = self.BN_t(out)
+        z = self.Sception1(out)
+        out_ = z
+        z = self.Sception2(out)
+        out_ = torch.cat((out_, z), dim=2)
+        out = self.BN_s(out_)
+        out = self.fusion_layer(out)
+        out = self.BN_fusion(out)
+        out = torch.squeeze(torch.mean(out, dim=-1), dim=-1)
+        out = self.fc(out)
+        return out
 
 
 class Aggregator():

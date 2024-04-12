@@ -5,7 +5,7 @@ def set_config():
     parser = argparse.ArgumentParser()
     # Data
     parser.add_argument('--dataset', type=str, default='MEEG', choices=['MEEG', 'DEAP'])
-    parser.add_argument('--data-path', type=str, default='/srv/xiaominghao/eeg-data')
+    parser.add_argument('--data-path', type=str, default='/data/xiaominghao/eeg-data')
     parser.add_argument('--subjects', type=int, default=32)
     parser.add_argument('--num-class', type=int, default=2, choices=[2, 3, 4])
     parser.add_argument('--label-type', type=str, default='A', choices=['A', 'V', 'D', 'L'])
@@ -42,9 +42,9 @@ def set_config():
     parser.add_argument('--load-path-final', default='./save/final_model.pth')
     parser.add_argument('--save-model', type=bool, default=True)
     # Model Parameters
-    parser.add_argument('--model', type=str, default='TCNet_Fusion',
+    parser.add_argument('--model', type=str, default='DeepConvNet',
                         choices=['LGGNet', 'ATDCGN', 'EEGNet', 'DeepConvNet', 'ShallowConvNet', 'EEGTCNet',
-                                 'MBEEG_SENet', 'EEGNetClassifier', 'TSception', 'TCNet_Fusion'])
+                                 'EEGNetClassifier', 'TSception', 'TCNet_Fusion', 'TSception'])
     parser.add_argument('--pool', type=int, default=16)
     parser.add_argument('--pool-step-rate', type=float, default=0.25)
     parser.add_argument('--T', type=int, default=64)

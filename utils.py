@@ -118,10 +118,10 @@ def get_model(args):
     elif args.model == 'TCNet_Fusion':
         model = TCNet_Fusion(
             input_size=args.input_shape, n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate)
-    elif args.model == 'MBEEG_SENet':
-        model = MBEEG_SENet(
-            input_size=args.input_shape, n_classes=args.num_class, channels=args.channels,
-            sampling_rate=args.target_rate)
+    elif args.model == "TSception":
+        model = TSception(
+            input_size=args.input_shape, num_classes=args.num_class, sampling_rate=args.target_rate,
+            num_T=args.T, num_S=args.T, hidden=args.hidden, dropout_rate=args.dropout)
 
     return model
 
