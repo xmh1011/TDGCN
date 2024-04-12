@@ -4,6 +4,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import config
+from einops.layers.torch import Rearrange
+import torch.nn.init as init
 
 _, os.environ['CUDA_VISIBLE_DEVICES'] = config.set_config()
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -190,14 +192,28 @@ class EEGNet(nn.Module):
         return F.log_softmax(x, dim=1)
 
 
+nonlinearity_dict = dict(relu=nn.ReLU(), elu=nn.ELU())
+
+
+class CausalConv1d(nn.Conv1d):
+    def __init__(self, in_channels, out_channels, kernel_size, stride=1, dilation=1,
+                 groups=1, bias=True):
+        super(CausalConv1d, self).__init__(
+            in_channels, out_channels, kernel_size=kernel_size, stride=stride,
+            dilation=dilation, groups=groups, bias=bias)
+        self.__padding = (kernel_size - 1) * dilation
+
+    def forward(self, x):
+        return super(CausalConv1d, self).forward(F.pad(x, (self.__padding, 0)))
+
+
 class Conv2dWithConstraint(nn.Conv2d):
-    def __init__(self, *args, doWeightNorm=True, max_norm=1, **kwargs):
+    def __init__(self, *args, max_norm=None, **kwargs):
         self.max_norm = max_norm
-        self.doWeightNorm = doWeightNorm
         super(Conv2dWithConstraint, self).__init__(*args, **kwargs)
 
     def forward(self, x):
-        if self.doWeightNorm:
+        if self.max_norm is not None:
             self.weight.data = torch.renorm(
                 self.weight.data, p=2, dim=0, maxnorm=self.max_norm
             )
@@ -205,115 +221,228 @@ class Conv2dWithConstraint(nn.Conv2d):
 
 
 class LinearWithConstraint(nn.Linear):
-    def __init__(self, *args, doWeightNorm=True, max_norm=1, **kwargs):
+    def __init__(self, *args, max_norm=None, **kwargs):
         self.max_norm = max_norm
-        self.doWeightNorm = doWeightNorm
         super(LinearWithConstraint, self).__init__(*args, **kwargs)
 
     def forward(self, x):
-        if self.doWeightNorm:
+        if self.max_norm is not None:
             self.weight.data = torch.renorm(
                 self.weight.data, p=2, dim=0, maxnorm=self.max_norm
             )
         return super(LinearWithConstraint, self).forward(x)
 
 
-class TemporalBlock(nn.Module):
-    """
-        Temporal convolution layers
-    """
-
-    def __init__(self, n_inputs, n_outputs, kernel_size, stride, dilation, dropout=0.2):
-        super(TemporalBlock, self).__init__()
-        # 计算所需的填充以保持时间维度长度不变
-        padding = (kernel_size - 1) * dilation // 2
-        self.conv1 = nn.Conv1d(n_inputs, n_outputs, kernel_size,
-                               stride=stride, padding=padding, dilation=dilation)
-        self.bn1 = nn.BatchNorm1d(n_outputs)
-        self.conv2 = nn.Conv1d(n_outputs, n_outputs, kernel_size,
-                               stride=stride, padding=padding, dilation=dilation)
-        self.bn2 = nn.BatchNorm1d(n_outputs)
-
-        self.downsample = nn.Conv1d(n_inputs, n_outputs, 1) if n_inputs != n_outputs else None
-        self.elu = nn.ELU()
-        self.dropout = nn.Dropout(dropout)
+class _TCNBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, kernel_size: int,
+                 dilation: int, dropout: float, activation: str = "relu"):
+        super(_TCNBlock, self).__init__()
+        self.conv1 = CausalConv1d(in_channels, out_channels, kernel_size,
+                                  dilation=dilation)
+        self.bn1 = nn.BatchNorm1d(out_channels, momentum=0.01, eps=0.001)
+        self.nonlinearity1 = nonlinearity_dict[activation]
+        self.drop1 = nn.Dropout(dropout)
+        self.conv2 = CausalConv1d(out_channels, out_channels, kernel_size,
+                                  dilation=dilation)
+        self.bn2 = nn.BatchNorm1d(out_channels, momentum=0.01, eps=0.001)
+        self.nonlinearity2 = nonlinearity_dict[activation]
+        self.drop2 = nn.Dropout(dropout)
+        if in_channels != out_channels:
+            self.project_channels = nn.Conv1d(in_channels, out_channels, 1)
+        else:
+            self.project_channels = nn.Identity()
+        self.final_nonlinearity = nonlinearity_dict[activation]
 
     def forward(self, x):
-        res = x if self.downsample is None else self.downsample(x)
+        residual = self.project_channels(x)
         out = self.conv1(x)
-        out = self.elu(out)
         out = self.bn1(out)
-        out = self.dropout(out)
+        out = self.nonlinearity1(out)
+        out = self.drop1(out)
         out = self.conv2(out)
-        out = self.elu(out)
         out = self.bn2(out)
-
-        return self.elu(out + res)
-
-
-class TCNBlock(nn.Module):
-    """
-    Temporal convolution network with average pooling to reduce temporal dimension.
-    """
-
-    def __init__(self, num_inputs, num_channels, kernel_size=2, dropout=0.2, reduce_halve=False):
-        super(TCNBlock, self).__init__()
-        self.reduce_halve = reduce_halve
-        layers = []
-        num_levels = len(num_channels)
-        for i in range(num_levels):
-            dilation_size = 2 ** i
-            in_channels = num_inputs if i == 0 else num_channels[i - 1]
-            out_channels = num_channels[i]
-            layers.append(TemporalBlock(in_channels, out_channels, kernel_size, stride=1, dilation=dilation_size,
-                                        dropout=dropout))
-        self.network = nn.Sequential(*layers)
-        if self.reduce_halve:
-            self.avg_pool = nn.AvgPool1d(kernel_size=2, stride=2)
-
-    def forward(self, x):
-        x = self.network(x)
-        if self.reduce_halve:
-            x = self.avg_pool(x)
-        return x
+        out = self.nonlinearity2(out)
+        out = self.drop2(out)
+        return self.final_nonlinearity(out + residual)
 
 
 class EEGTCNet(nn.Module):
-    def __init__(self, input_size, n_classes, channels, sampling_rate, kernel_s=3, filt=5, dropout=0.3,
-                 F1=32, D=2):
+    def __init__(self, n_classes: int, in_channels: int = 32, layers: int = 2, kernel_s: int = 4, filt: int = 12,
+                 dropout: float = 0.3, activation: str = 'relu', F1: int = 8, D: int = 2, kernLength: int = 32,
+                 dropout_eeg: float = 0.2
+                 ):
         super(EEGTCNet, self).__init__()
+        regRate = 0.25
+        numFilters = F1
+        F2 = numFilters * D
+
+        self.eegnet = nn.Sequential(
+            nn.Conv2d(1, F1, (1, kernLength), padding="same", bias=False),
+            nn.BatchNorm2d(F1, momentum=0.01, eps=0.001),
+            Conv2dWithConstraint(F1, F2, (in_channels, 1), bias=False, groups=F1,
+                                 max_norm=1),
+            nn.BatchNorm2d(F2, momentum=0.01, eps=0.001),
+            nn.ELU(),
+            nn.AvgPool2d((1, 8)),
+            nn.Dropout(dropout_eeg),
+            nn.Conv2d(F2, F2, (1, 16), padding="same", groups=F2, bias=False),
+            nn.Conv2d(F2, F2, 1, bias=False),
+            nn.BatchNorm2d(F2, momentum=0.01, eps=0.001),
+            nn.ELU(),
+            nn.AvgPool2d((1, 8)),
+            nn.Dropout(dropout_eeg),
+            Rearrange("b c 1 t -> b c t")
+        )
+
+        in_channels = [F2] + (layers - 1) * [filt]
+        dilations = [2 ** i for i in range(layers)]
+        self.tcn_blocks = nn.ModuleList([
+            _TCNBlock(in_ch, filt, kernel_size=kernel_s, dilation=dilation,
+                      dropout=dropout, activation=activation)
+            for in_ch, dilation in zip(in_channels, dilations)
+        ])
+
+        self.classifier = LinearWithConstraint(filt, n_classes, max_norm=regRate)
+        # 初始化函数
+        self.initialize_weights()
+
+    def initialize_weights(self):
+        for module in self.modules():
+            if hasattr(module, "weight") and module.weight is not None:
+                if "norm" not in module.__class__.__name__.lower():
+                    init.xavier_uniform_(module.weight)
+            if hasattr(module, "bias") and module.bias is not None:
+                init.constant_(module.bias, 0)
+
+    def forward(self, x):
+        x = self.eegnet(x)
+        for blk in self.tcn_blocks:
+            x = blk(x)
+        x = self.classifier(x[:, :, -1])
+        return x
+
+
+class TCNet_Fusion(nn.Module):
+    def __init__(self, input_size, n_classes, channels, sampling_rate, kernel_s=3,
+                 dropout=0.3, F1=24, D=2, dropout_eeg=0.3, layers=1, filt=12, activation='elu'):
+        super(TCNet_Fusion, self).__init__()
         self.kernLength = int(0.25 * sampling_rate)
-        self.F2 = F1 * D
-        self.num_channels = [self.F2, self.F2]
+        F2 = F1 * D
         self.n_classes = n_classes
 
-        self.EEGNet_sep = EEGNetModule(channels=channels, F1=F1, D=D, kernLength=self.kernLength, dropout=dropout,
+        self.EEGNet_sep = EEGNetModule(channels=channels, F1=F1, D=D, kernLength=self.kernLength, dropout=dropout_eeg,
                                        input_size=input_size)
-        # self, num_inputs, num_channels, kernel_size = 2, dropout = 0.2, reduce_halve = False
-        self.TCN_block = TCNBlock(num_inputs=self.F2, num_channels=self.num_channels, kernel_size=kernel_s,
-                                  dropout=dropout, reduce_halve=True)
+
+        in_channels = [F2] + (layers - 1) * [filt]
+        dilations = [2 ** i for i in range(layers)]
+        self.tcn_blocks = nn.ModuleList([
+            _TCNBlock(in_ch, filt, kernel_size=kernel_s, dilation=dilation,
+                      dropout=dropout, activation=activation)
+            for in_ch, dilation in zip(in_channels, dilations)
+        ])
         size = self.get_size_temporal(input_size)
-        self.dense = nn.Linear(size[-1] * self.F2, n_classes)
+        self.dense = nn.Linear(size[-1], n_classes)
         self.softmax = nn.Softmax(dim=1)
 
     def get_size_temporal(self, input_size):
         data = torch.randn((1, input_size[0], input_size[1], input_size[2]))
         x = self.EEGNet_sep(data)
-        x = torch.squeeze(x, 2)
-        x = self.TCN_block(x)
-        size = x.size()
+        # (1,48,1,25)
+        eeg_output = torch.squeeze(x, 2)
+        for blk in self.tcn_blocks:
+            tcn_output = blk(eeg_output)
+        con1_output = torch.cat((eeg_output, tcn_output), dim=1)  # 沿特征维度拼接
+        fc1_output = torch.flatten(eeg_output, start_dim=1)
+        fc2_output = torch.flatten(con1_output, start_dim=1)
+        # 再次Concatenation
+        con2_output = torch.cat((fc1_output, fc2_output), dim=1)
+        size = con2_output.size()
         return size
 
     def forward(self, x):
         x = self.EEGNet_sep(x)
-        # x = x[:, :, -1, :]  # Selecting the last feature map as done in Lambda(lambda x: x[:,:,-1,:])(EEGNet_sep)
-        x = torch.squeeze(x, 2)
-        x = self.TCN_block(x)
-        # x = x[:, -1, :]  # Selecting the last timestep as done in Lambda(lambda x: x[:,-1,:])(outs)
-        x = x.view(x.size(0), -1)  # Flatten
-        x = self.dense(x)
-        x = self.softmax(x)
-        return x
+        eeg_output = torch.squeeze(x, 2)
+        for blk in self.tcn_blocks:
+            tcn_output = blk(eeg_output)
+        con1_output = torch.cat((eeg_output, tcn_output), dim=1)  # 沿特征维度拼接
+        fc1_output = torch.flatten(eeg_output, start_dim=1)
+        fc2_output = torch.flatten(con1_output, start_dim=1)
+        # 再次Concatenation
+        con2_output = torch.cat((fc1_output, fc2_output), dim=1)
+        # Dense and Softmax
+        dense_output = self.dense(con2_output)
+        output = self.softmax(dense_output)
+        return output
+
+
+class SEBlock(nn.Module):
+    def __init__(self, channel, reduction_ratio=8):
+        super(SEBlock, self).__init__()
+        self.gap = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Sequential(
+            nn.Linear(channel, channel // reduction_ratio, bias=False),
+            nn.ELU(inplace=True),
+            nn.Linear(channel // reduction_ratio, channel, bias=False),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        scale = self.gap(x).squeeze(-1).squeeze(-1)
+        scale = self.fc(scale).unsqueeze(-1).unsqueeze(-1)
+        return x * scale
+
+
+class MBEEG_SENet(nn.Module):
+    def __init__(self, input_size, n_classes, channels, sampling_rate, D=2):
+        super(MBEEG_SENet, self).__init__()
+        self.EEGNet_sep1 = EEGNetModule(channels=channels, F1=4, D=D, kernLength=int(sampling_rate * 0.125), dropout=0,
+                                        input_size=input_size)
+        self.EEGNet_sep2 = EEGNetModule(channels=channels, F1=8, D=D, kernLength=int(sampling_rate * 0.25), dropout=0.1,
+                                        input_size=input_size)
+        self.EEGNet_sep3 = EEGNetModule(channels=channels, F1=16, D=D, kernLength=int(sampling_rate * 0.5), dropout=0.2,
+                                        input_size=input_size)
+
+        self.SE1 = SEBlock(channel=D * 4, reduction_ratio=4)  # Assuming channel count matches here
+        self.SE2 = SEBlock(channel=D * 8, reduction_ratio=4)
+        self.SE3 = SEBlock(channel=D * 16, reduction_ratio=2)
+
+        self.flatten = nn.Flatten()
+
+        size = self.get_size_temporal(input_size)
+
+        self.dense1 = nn.Linear(size[-1], n_classes)  # Adjust the size according to your SEBlock output
+        self.softmax = nn.Softmax(dim=1)
+
+    def get_size_temporal(self, input_size):
+        data = torch.randn((1, input_size[0], input_size[1], input_size[2]))
+        branch1 = self.EEGNet_sep1(data)
+        branch2 = self.EEGNet_sep2(data)
+        branch3 = self.EEGNet_sep3(data)
+        branch1 = self.SE1(branch1)
+        branch2 = self.SE2(branch2)
+        branch3 = self.SE3(branch3)
+        branch1 = self.flatten(branch1)
+        branch2 = self.flatten(branch2)
+        branch3 = self.flatten(branch3)
+        concatenated = torch.cat((branch1, branch2, branch3), dim=1)  # Concatenate along the feature dimension
+        size = concatenated.size()
+        return size
+
+    def forward(self, x):
+        # Assuming x is of shape (batch_size, 1, channels, sampling_rate)
+        branch1 = self.EEGNet_sep1(x)
+        branch2 = self.EEGNet_sep2(x)
+        branch3 = self.EEGNet_sep3(x)
+        branch1 = self.SE1(branch1)
+        branch2 = self.SE2(branch2)
+        branch3 = self.SE3(branch3)
+        branch1 = self.flatten(branch1)
+        branch2 = self.flatten(branch2)
+        branch3 = self.flatten(branch3)
+        concatenated = torch.cat((branch1, branch2, branch3), dim=1)  # Concatenate along the feature dimension
+        out = self.dense1(concatenated)
+        out = self.softmax(out)
+        return out
 
 
 class PowerLayer(nn.Module):
