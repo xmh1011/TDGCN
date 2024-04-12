@@ -114,8 +114,14 @@ def get_model(args):
             nTime=args.input_shape[2], dropout_rate=args.dropout)
     elif args.model == 'EEGTCNet':
         model = EEGTCNet(
-            n_classes=args.num_class, channels=args.channels,
-            sampling_rate=args.target_rate, input_size=args.input_shape)
+            n_classes=args.num_class, in_channels=args.channels, kernLength=int(args.target_rate * 0.25))
+    elif args.model == 'TCNet_Fusion':
+        model = TCNet_Fusion(
+            input_size=args.input_shape, n_classes=args.num_class, channels=args.channels, sampling_rate=args.target_rate)
+    elif args.model == 'MBEEG_SENet':
+        model = MBEEG_SENet(
+            input_size=args.input_shape, n_classes=args.num_class, channels=args.channels,
+            sampling_rate=args.target_rate)
 
     return model
 
